@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0"
+    android:orientation="vertical"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/maincolor" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp" >
+
+            <ImageView
+                android:id="@+id/btn_return"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/returnbutton" >
+            </ImageView>
+
+            <TextView
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#a70006" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/TitleText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="选择酒店" />
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/chuzhiList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_margin="10dp">
+    </ListView>
+
+</LinearLayout>

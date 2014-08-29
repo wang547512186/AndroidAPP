@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/maincolor"
+        android:stretchColumns="1" >
+
+        <TableRow>
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="48dp"
+                android:layout_height="48dp" 
+                android:src="@drawable/returnbutton"/>
+
+            <TextView 
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="选择日期"
+                android:textColor="#ffffff"
+                android:textSize="18sp"/>
+
+            <ImageView
+                android:id="@+id/date_ok"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="5dp" 
+                android:src="@drawable/ok"/>
+        </TableRow>
+    </TableLayout>
+
+    <CalendarView
+        android:id="@+id/calendarView1"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="20dp"/>
+
+</LinearLayout>
