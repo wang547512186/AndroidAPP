@@ -202,16 +202,10 @@ namespace WebService1
             return dbOperation.findMobilePhone(phone);
         }
 
-        [WebMethod(Description = "增加储值")]
-        public bool addUserChuzhi(string uid)
-        {
-            return dbOperation.addUserChuzhi(uid);
-        }
-
         [WebMethod(Description = "查找用户储值")]
-        public string[] getUserChuzhi(string username)
+        public string[] getUserChuzhi(string uid)
         {
-            return dbOperation.getUserChuzhi(username).ToArray();
+            return dbOperation.getUserChuzhi(uid).ToArray();
         }
 
         [WebMethod(Description = "修改用户储值")]
@@ -220,19 +214,17 @@ namespace WebService1
             return dbOperation.updateUserChuzhi(username, hotelid, money);
         }
 
-
-        [WebMethod(Description = "增加客主币")]
-        public bool addUserKezhu(string uid)
-        {
-            return dbOperation.addUserKezhu(uid);
-        }
-
         [WebMethod(Description = "查找用户客主币")]
         public string[] getUserKezhu(string uid)
         {
             return dbOperation.getUserKezhu(uid).ToArray();
         }
 
+        [WebMethod(Description = "增加客主币")]
+        public bool addUserKezhu(string uid)
+        {
+            return dbOperation.addUserKezhu(uid);
+        }
 
         [WebMethod(Description = "搜索商店")]
         public string[] findShops(string city, string shopname)
@@ -247,9 +239,9 @@ namespace WebService1
         }
 
         [WebMethod(Description = "查找储值记录")]
-        public string[] getChuzhihistory(string username, string hotelid)
+        public string[] getChuzhihistory(string uid, string hotelid)
         {
-            return dbOperation.getChuzhihistory(username, hotelid).ToArray();
+            return dbOperation.getChuzhihistory(uid, hotelid).ToArray();
         }
 
         [WebMethod(Description = "添加支付码")]
@@ -262,6 +254,12 @@ namespace WebService1
         public string[] getHotelMinPrice(string hotelid)
         {
             return dbOperation.getHotelMinPrice(hotelid).ToArray();
+        }
+
+        [WebMethod(Description = "查询客主币历史")]
+        public string[] getKezhuhistory(string uid)
+        {
+            return dbOperation.getKezhuhistory(uid).ToArray();
         }
 
     }
