@@ -1,0 +1,129 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/maincolor" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp" >
+
+            <ImageView
+                android:id="@+id/returnbtn"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/returnbutton" >
+            </ImageView>
+
+            <TextView
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#a70006" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/TitleText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="会员权益" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/normalboder" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="1，会员在联盟内全部单位享有会员待遇。" />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#cccccc"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="2，客主币（积分）在联盟内全部单位通积通兑。" />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#cccccc"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="3，积分或储值仅由给予积分或储值的单位负责。" />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#cccccc"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="4，使用积分或储值消费不开发票。" />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#cccccc"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="5，储值仅限于在同一投资主体的同系统单位内部使用。" />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#cccccc"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="6，会员发展会员可以按联盟规则获得1%佣金奖励。" />
+        <View android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#cccccc"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="7，会员发展联盟商家可以按联盟规则获得1%佣金奖励。" />
+        
+    </LinearLayout>
+
+</LinearLayout>

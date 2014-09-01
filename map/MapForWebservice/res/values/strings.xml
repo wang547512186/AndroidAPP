@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">"客主"</string>
+    <string name="title_activity_order_page">OrderPage</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="spin_prompt"> 选择时间 </string>
+
+    <string-array name="time">
+        <item>0:00~3:00</item>
+        <item>3:00~6:00</item>
+        <item>6:00~9:00</item>
+        <item>9:00~12:00</item>
+        <item>12:00~15:00</item>
+        <item>15:00~18:00</item>
+        <item>18:00~21:00</item>
+        <item>21:00~0:00</item>
+    </string-array>
+
+    <string name="sex_prompt"> 性别 </string>
+
+    <string-array name="sex">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+
+    <string name="title_activity_order_success">OrderSuccess</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_room_detail">RoomDetail</string>
+    <string name="title_activity_date_select">DateSelectActivity</string>
+    <string name="title_activity_change_info">ChangeInfo</string>
+    <string name="title_activity_user_kezhubi_detail">UserKezhubiDetail</string>
+    <string name="title_activity_user__chuzhi_detail">User_ChuzhiDetail</string>
+    <string name="title_activity_kezhu_pay">KezhuPay</string>
+    <string name="title_activity_chu_zhi_pay">ChuZhiPay</string>
+    <string name="title_activity_pay_confirm">PayConfirm</string>
+    <string name="title_activity_search_hotel">SearchHotel</string>
+    <string name="title_activity_chu_zhi_select">ChuZhiSelect</string>
+    <string name="title_activity_about_ke_zhu">AboutKeZhu</string>
+    <string name="title_activity_about_question">AboutQuestion</string>
+    <string name="title_activity_about_contact_us">AboutContactUs</string>
+    <string name="title_activity_user_register">User_register</string>
+    <string name="title_activity_first_enter_welcome">FirstEnterWelcome</string>
+    <string name="title_activity_user_setting">UserSetting</string>
+    <string name="title_activity_user_kezhu_center">UserKezhuCenter</string>
+    <string name="title_activity_about_suggest">AboutSuggest</string>
+    <string name="title_activity_user_message_read">UserMessageRead</string>
+    <string name="title_activity_user_invite">UserInvite</string>
+    <string name="title_activity_restaurant_information">RestaurantInformation</string>
+    <string name="title_activity_kezhu_pay_history_list">KezhuPayHistoryList</string>
+    <string name="title_activity_kezhu_return">KezhuReturn</string>
+    <string name="main_news">消息</string>
+    <string name="main_home">首页</string>
+    <string name="more">更多</string>
+    <string name="main_manage_date">时间</string>
+    <string name="main_friends">好友</string>
+    <string name="title_activity_tab">TabActivity</string>
+    <string name="title_activity_my_invited">MyInvited</string>
+    <string name="title_activity_user_equity">UserEquity</string>
+    <string name="title_activity_user_rules">UserRules</string>
+    <string name="title_activity_nearby">NearbyActivity</string>
+    <string name="title_activity_fast_pay">FastPay</string>
+
+</resources>
