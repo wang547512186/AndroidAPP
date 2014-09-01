@@ -141,9 +141,9 @@ namespace WebService1
 
 
         [WebMethod(Description = "增加用户消费记录")]
-        public bool addHotelhistory(string customeruserid, string customername, string address, string hotelname, string money, string moneykezhu, string returnkezhu, string chuzhi)
+        public bool addHotelhistory(string customeruserid, string customername, string hotelname, string money, string moneykezhu, string returnkezhu)
         {
-            return dbOperation.addHotelhistory(customeruserid, customername, address, hotelname, money, moneykezhu, returnkezhu, chuzhi);
+            return dbOperation.addHotelhistory(customeruserid, customername, hotelname, money, moneykezhu, returnkezhu);
         }
 
         [WebMethod(Description = "获取酒店房型")]
