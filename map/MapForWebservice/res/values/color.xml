@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="maincolor">#C4151C</color>
+    <color name="bgcolor">#F0F0F0</color>
+    <color name="secondtext">#6C6C6C</color>
+    <color name="boder">#CCCCCC</color>
+    <color name="moneycolor">#FF7700</color>
+    <color name="button_up">#C4151C</color>
+    <color name="button_down">#990105</color>
+    <color name="white">#ffffff</color>
+    <color name="titlecolor">#202020</color>
+    <color name="link">#002BFF</color>
+    <color name="redboder">#9A0000</color>
+   
+</resources>

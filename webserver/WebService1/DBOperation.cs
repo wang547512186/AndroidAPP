@@ -452,9 +452,9 @@ namespace WebService1
                 Dispose();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                list.Add(ex.Message.ToString());
             }
             return list;
         }
@@ -632,11 +632,16 @@ namespace WebService1
 
         public bool userRegister(string username, string nickename, string password, string email, int sexy)
         {
+            Guid guid = new Guid();
+            guid = Guid.NewGuid();
             try
             {
                 Open();
-                string sql = "insert into users (uid,username,nickname,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + Guid.NewGuid() + "','" + username + "','" + nickename + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','1','" + username + "') ";
+                string sql = "insert into users (uid,username,nickname,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + guid + "','" + username + "','" + nickename + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','1','" + username + "') ";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
+                cmd.ExecuteNonQuery();
+                sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + guid + "','500','97','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
+                cmd.CommandText = sql;
                 cmd.ExecuteNonQuery();
                 Dispose();
                 return true;
@@ -727,8 +732,9 @@ namespace WebService1
                 Dispose();
                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                list.Add(ex.Message.ToString());
             }
             return list;
             
@@ -791,12 +797,12 @@ namespace WebService1
 
 
 
-        public bool addHotelhistory(string customeruserid, string customername, string address, string hotelname, string money, string moneykezhu, string returnkezhu, string chuzhi)
+        public bool addHotelhistory(string customeruserid, string customername, string hotelname, string money, string moneykezhu, string returnkezhu)
         {
             try
             {
                 Open();
-                string sql = "insert into hotelhistory values('" + customeruserid + "','" + customername + "','" + address + "','" + hotelname + "','" + money + "','" + moneykezhu + "','" + returnkezhu + "','" + chuzhi + "','" + DateTime.Now + "')";
+                string sql = "insert into hotelhistory (hotelhistoryid,customeruserid,customername,hotelname,money,scorecustomer,moneykezhu,createtime) values('" + Guid.NewGuid() + "','" + customeruserid + "','" + customername + "','" + hotelname + "','" + money + "','" + returnkezhu + "','" + moneykezhu + "','" + DateTime.Now + "')";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
                 Dispose();
@@ -1117,7 +1123,11 @@ namespace WebService1
             try
             {
                 Open();
+<<<<<<< HEAD
+                string sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + new Guid(uid) + "','500','97','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
+=======
                 string sql = "insert into usermoney ( ) values('200','100','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
+>>>>>>> origin/master
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
                 Dispose();
