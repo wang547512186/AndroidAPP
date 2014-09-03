@@ -93,7 +93,7 @@ public class OrderPage extends Activity {
 		
 		totalPrice=Integer.valueOf(priceStr)*dayNum;
 		totalPriceText.setText(""+totalPrice+"  元 ");
-		Toast.makeText(OrderPage.this, priceStr+""+dayNum, Toast.LENGTH_LONG).show();
+//		Toast.makeText(OrderPage.this, priceStr+""+dayNum, Toast.LENGTH_LONG).show();
 		// 日期选择
 		// enterdate = (LinearLayout) findViewById(R.id.enterdate);
 		// leavedate = (LinearLayout) findViewById(R.id.leavedate);
@@ -175,7 +175,7 @@ public class OrderPage extends Activity {
 					Log.e("enterDate", enterDate);
 					Log.e("endDate", endDate);
 
-					if (mapdata.AddOrder(UserName, nickName, stayPerson,
+					if (mapdata.addOrder(UserName, nickName, stayPerson,
 							strHoteltype, ""+totalPrice, telephone, hotelName,
 							hotelAddress, enterDate, endDate).equals("true")) {
 						Dialog success = new AlertDialog.Builder(OrderPage.this)

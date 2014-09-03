@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -30,11 +31,13 @@ public class UserChuzhiCenter extends Activity {
 	private String hotelAddress;
 	private String hotelChuzhi;
 	private String uid;
+	private LinearLayout historyEmpty;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_chuzhi_center);
 		chuzhiList = (ListView) findViewById(R.id.chuzhiList);
+		historyEmpty = (LinearLayout) findViewById(R.id.historyEmpty);
 
 		Intent intent = getIntent();
 		userName = intent.getStringExtra("UserName");
@@ -116,7 +119,9 @@ public class UserChuzhiCenter extends Activity {
 		} catch (Exception e) {
 			Toast.makeText(this, "Êý¾ÝÒì³£", Toast.LENGTH_LONG).show();
 		}
-
+		if (!list.isEmpty()) {
+			historyEmpty.setVisibility(View.GONE);
+		}
 		return list;
 	}
 }

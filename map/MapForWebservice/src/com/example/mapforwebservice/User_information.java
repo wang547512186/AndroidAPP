@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.example.mapforwebservice.MainActivity.MyThread;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +20,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -23,16 +30,21 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class User_information extends Activity {
+	private Timer timer;
 	private ListView listview;
 	private List<Map<String, Object>> list;
 	private List<String> detail;
+	private List<String> testList;
 	private List<String> kezhudetail;
 	private MapData mapdata;
 	private String UserName;
@@ -60,21 +72,40 @@ public class User_information extends Activity {
 	private LinearLayout rulesLayout;
 	private TextView kezhuNum;
 	private TextView curUserName;
+	private ProgressDialog dialog;
 
 	private SharedPreferences sp;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_information);
-		mapdata = new MapData();
+
+		dialog = new ProgressDialog(this);
+		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
+		dialog.setMessage("正在加载");// 进度条
+		dialog.show();
+
+		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
+		returnbtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(User_information.this, MainActivity.class);
+				startActivity(intent);
+				finish();
+			}
+
+		});
+
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
 		UserName = sp.getString("userName", "");
 		uid = sp.getString("uid", "");
 		exitBtn = (Button) findViewById(R.id.exitBtn);
-
-		if (UserName.equals("") || uid.equals("")) {
-			exitBtn.setVisibility(View.GONE);
-		}
+		// if (UserName.equals("") || uid.equals("")) {
+		// exitBtn.setVisibility(View.GONE);
+		// }
 
 		userLayout = (LinearLayout) findViewById(R.id.userInfoLayout);
 		orderLayout = (LinearLayout) findViewById(R.id.orderLayout);
@@ -109,38 +140,51 @@ public class User_information extends Activity {
 
 		kezhuNum = (TextView) findViewById(R.id.kezhuNum);
 		curUserName = (TextView) findViewById(R.id.UserName);
-		// 判断是否登录
-		if (UserName.equals("")) {
-			userLayout.setVisibility(View.INVISIBLE);
-		} else {
-			userLayout.setVisibility(View.VISIBLE);
-			detail = mapdata.userInfor(UserName);
-			kezhudetail = mapdata.getUserKezhu(uid);
-			try {
 
-				// double totalkezhu = Double.valueOf(detail.get(7).toString())
-				// + Double.valueOf(detail.get(8).toString());
-				if (kezhudetail.size() != 0) {
-					totalkezhu = Double.valueOf(kezhudetail.get(0).toString());
-					kezhuNum.setText(totalkezhu + "");
-				} else {
-					totalkezhu = 0.00;
-					kezhuNum.setText(totalkezhu + "");
-				}
-
-				curUserName.setText(detail.get(1).toString());
-			} catch (Exception e) {
-				Editor editor = sp.edit();
-				editor.putString("userName", "");
-				editor.commit();
-				UserName = sp.getString("userName", "");
-				uid = sp.getString("uid", "");
-				userLayout.setVisibility(View.INVISIBLE);
-				exitBtn.setVisibility(View.GONE);
-				Log.e("catch~~~~~~~~UserName~~", UserName);
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				checkThread();
 			}
+		}, 6000);
 
-		}
+		MyThread thread = new MyThread();
+		Thread mThread = new Thread(thread);
+		mThread.start();
+
+		// 判断是否登录
+		// if (UserName.equals("")) {
+		// userLayout.setVisibility(View.INVISIBLE);
+		// } else {
+		// userLayout.setVisibility(View.VISIBLE);
+		// detail = mapdata.userInfor(UserName);
+		// kezhudetail = mapdata.getUserKezhu(uid);
+		// try {
+		//
+		// // double totalkezhu = Double.valueOf(detail.get(7).toString())
+		// // + Double.valueOf(detail.get(8).toString());
+		// if (kezhudetail.size() != 0) {
+		// totalkezhu = Double.valueOf(kezhudetail.get(0).toString());
+		// kezhuNum.setText(totalkezhu + "");
+		// } else {
+		// totalkezhu = 0.00;
+		// kezhuNum.setText(totalkezhu + "");
+		// }
+		//
+		// curUserName.setText(detail.get(1).toString());
+		// } catch (Exception e) {
+		// Editor editor = sp.edit();
+		// editor.putString("userName", "");
+		// editor.commit();
+		// UserName = sp.getString("userName", "");
+		// uid = sp.getString("uid", "");
+		// userLayout.setVisibility(View.INVISIBLE);
+		// exitBtn.setVisibility(View.GONE);
+		// Log.e("catch~~~~~~~~UserName~~", UserName);
+		// }
+		//
+		// }
 
 		noLoginLayout = (LinearLayout) findViewById(R.id.noLoginLayout);
 		changeBackground(noLoginLayout);
@@ -175,7 +219,6 @@ public class User_information extends Activity {
 				// TODO Auto-generated method stub
 				if (UserName.equals("")) {
 					turnToLogin();
-
 				} else {
 					Intent intent = new Intent(User_information.this,
 							User_order.class);
@@ -431,4 +474,115 @@ public class User_information extends Activity {
 		startActivity(intent);
 		finish();
 	}
+
+	// /线程
+	protected void checkThread() {
+		Message msg = new Message();
+		msg.what = 2;
+		mHandler.sendMessage(msg);
+	}
+
+	class MyThread implements Runnable {
+
+		public void run() {
+			// 执行数据操作，不涉及到UI
+			mapdata = new MapData();
+			Message msg = new Message();
+			try {
+				mapdata = new MapData();
+				testList = mapdata.selectProvince();
+				if (testList.isEmpty()) { // 无法连接数据库
+					msg.what = 3;
+				} else {
+					detail = mapdata.userInfor(UserName);
+					kezhudetail = mapdata.getUserKezhu(uid);
+					if (!detail.isEmpty() && !kezhudetail.isEmpty()) { // 成功读取数据
+						msg.what = 1;
+					} else {
+						msg.what = 4; // 数据库无数据(未登录)
+					}
+
+				}
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				msg.what = 2;
+			}
+			mHandler.sendMessage(msg); // 向Handler发送消息,更新UI
+		}
+	}
+
+	public Handler mHandler = new Handler() {
+
+		public void handleMessage(Message msg) {
+
+			switch (msg.what) {
+			case 1: // 成功
+				timer.cancel();
+				dialog.dismiss();
+				userLayout.setVisibility(View.VISIBLE);
+				totalkezhu = Double.valueOf(kezhudetail.get(0).toString());
+				kezhuNum.setText(totalkezhu + "");
+				curUserName.setText(detail.get(1).toString());
+				break;
+			case 2: // 网络异常
+				timer.cancel();
+				Dialog fail = new AlertDialog.Builder(User_information.this)
+						.setTitle("提示")
+						.setMessage("网络异常")
+						.setPositiveButton("确定",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										Intent intent = new Intent(
+												User_information.this,
+												MainActivity.class);
+										startActivity(intent);
+										User_information.this.finish();
+									}
+								}).create();
+				fail.show();
+				dialog.dismiss();
+				break;
+			case 3: // 无法连接服务器
+				timer.cancel();
+				Dialog fail2 = new AlertDialog.Builder(User_information.this)
+						.setTitle("提示")
+						.setMessage("无法连接服务器")
+						.setPositiveButton("确定",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										Intent intent = new Intent(
+												User_information.this,
+												MainActivity.class);
+										startActivity(intent);
+										User_information.this.finish();
+									}
+								}).create();
+				fail2.show();
+				dialog.dismiss();
+				break;
+			case 4: // 无数据
+				timer.cancel();
+				Editor editor = sp.edit();
+				editor.putString("userName", "");
+				editor.commit();
+				UserName = sp.getString("userName", "");
+				uid = sp.getString("uid", "");
+				userLayout.setVisibility(View.INVISIBLE);
+				exitBtn.setVisibility(View.GONE);
+				dialog.dismiss();
+				break;
+
+			}
+		};
+	};
+
 }

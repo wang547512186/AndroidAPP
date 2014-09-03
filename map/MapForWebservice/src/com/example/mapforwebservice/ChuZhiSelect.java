@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -36,11 +37,14 @@ public class ChuZhiSelect extends Activity {
 	private String hotelChuzhi;
 	private String uid;
 	private SharedPreferences sp;
+	private LinearLayout historyEmpty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chu_zhi_select);
+		
+		historyEmpty = (LinearLayout) findViewById(R.id.historyEmpty);
 		chuzhiList = (ListView) findViewById(R.id.chuzhiList);
 
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
@@ -121,7 +125,9 @@ public class ChuZhiSelect extends Activity {
 		} catch (Exception e) {
 			Toast.makeText(this, "Êý¾ÝÒì³£", Toast.LENGTH_LONG).show();
 		}
-
+		if (!list.isEmpty()) {
+			historyEmpty.setVisibility(View.GONE);
+		}
 		return list;
 	}
 

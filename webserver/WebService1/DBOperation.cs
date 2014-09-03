@@ -133,6 +133,7 @@ namespace WebService1
             {
                 list.Add(ex.ToString());
             }
+
             return list;
         }
 
@@ -172,9 +173,6 @@ namespace WebService1
                     list.Add(reader2["hotelkind"].ToString());
                 }
                 reader2.Close();
-
-
-
                 Dispose();
 
             }
@@ -221,27 +219,25 @@ namespace WebService1
         public List<string> selectProvince()
         {
             List<string> list = new List<string>();
-
+            Open();
+            string sql = "select distinct province from Citymap";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader reader = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select distinct province from Citymap";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader reader = cmd.ExecuteReader();
-
                 while (reader.Read())
                 {
                     //将结果集信息添加到返回向量中  
                     list.Add(reader[0].ToString());
                 }
-
+            }
+            catch (Exception ex)
+            {
+                list.Add(ex.ToString());
+            }
+            finally {
                 reader.Close();
                 Dispose();
-
-            }
-            catch (Exception)
-            {
-
             }
             return list;
         }
@@ -249,23 +245,27 @@ namespace WebService1
         public bool findCity(string province)
         {
             int i = 0;
+            Open();
+            string sql = "select * from Province where name='" + province + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader reader = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from Province where name='" + province + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader reader = cmd.ExecuteReader();
+                
                 if (reader.Read())
                 {
                     i = Convert.ToInt32(reader["hascity"]);
                 }
-                reader.Close();
-                Dispose();
 
             }
             catch (Exception)
             {
 
+            }
+            finally
+            {
+                reader.Close();
+                Dispose();
             }
             if (i == 1)
                 return true;
@@ -340,28 +340,7 @@ namespace WebService1
                 Dispose();
 
             }
-            //try
-            //{
-            //    Open();
-            //    string sql = "select * from Information where Type='" + type + "'";
-            //    SqlCommand cmd = new SqlCommand(sql, sqlCon);
-            //    SqlDataReader reader = cmd.ExecuteReader();
-
-            //    while (reader.Read())
-            //    {
-            //        //将结果集信息添加到返回向量中  
-            //        list.Add(reader[0].ToString());
-            //        list.Add(reader[1].ToString());
-            //        list.Add(reader[2].ToString());
-            //        list.Add(reader[3].ToString());
-            //        list.Add(reader[4].ToString());
-            //        list.Add(reader[5].ToString());
-            //    }
-
-            //    reader.Close();
-            //    Dispose();
-
-            //}
+          
             catch (Exception)
             {
 
@@ -403,29 +382,7 @@ namespace WebService1
         public List<string> findUserInfor(string username)
         {
             List<string> list = new List<string>();
-            //try
-            //{
-            //    Open();
-            //    string sql = "select * from [Member_users] where [username]='" + username + "'";
-            //    SqlCommand cmd = new SqlCommand(sql, sqlCon);
-            //    SqlDataReader reader = cmd.ExecuteReader();
-
-            //    if (reader.Read())
-            //    {
-            //        //将结果集信息添加到返回向量中  
-            //        list.Add(reader["username"].ToString());
-            //        list.Add(reader["nickname"].ToString());
-            //        list.Add(reader["password"].ToString());
-            //        list.Add(reader["mobilephone"].ToString());
-            //        list.Add(reader["addresspost"].ToString());
-            //        list.Add(reader["sexy"].ToString());
-            //        list.Add(reader["email"].ToString());
-            //    }
-
-            //    reader.Close();
-            //    Dispose();
-
-            //}
+           
 
             try
             {
@@ -452,20 +409,42 @@ namespace WebService1
                 Dispose();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                list.Add(ex.Message.ToString());
+
             }
             return list;
         }
 
 
-        public bool AddOrder(string username, string nickename, string stayperson, string roomtype, string price, string telephone, string hotelname, string hoteladdress, string begindate, string enddate)
+        public bool addOrder(string username, string nickename, string stayperson, string roomtype, string price, string telephone, string hotelname, string hoteladdress, string begindate, string enddate)
         {
             try
             {
+                int count=0;
                 Open();
-                string sql = "insert into [UserOrder] values ('" + username + "','" + nickename + "','" + stayperson + "','" + roomtype + "','" + price + "','" + telephone + "','" + hotelname + "','" + hoteladdress + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "','" + begindate + "','" + enddate + "')";
+                string orderidsql = String.Format("select count(*) from UserOrder where orderid like '{0:yyyyMMdd}%'", DateTime.Now);
+                SqlCommand orderidcmd = new SqlCommand(orderidsql, sqlCon);
+                SqlDataReader reader = orderidcmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    count = Int32.Parse(reader[0].ToString());
+                }
+                reader.Close();
+                Dispose();
+
+                string num = "";
+                int capacity = count.ToString().ToCharArray().Length;
+                for (int i = 0; i < 2 - capacity; i++)
+                {
+                    num += "0";
+                }
+                num += count.ToString();
+                
+                //日期+编号
+
+                Open();
+                string sql = "insert into UserOrder values ('" + DateTime.Now.ToString("yyyyMMdd")+ num + "','" + username + "','" + nickename + "','" + stayperson + "','" + roomtype + "','" + price + "','" + telephone + "','" + hotelname + "','" + hoteladdress + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "','" + begindate + "','" + enddate + "')";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
                 Dispose();
@@ -496,31 +475,33 @@ namespace WebService1
 
         public bool addMessage(string username, string title, string message)
         {
+            Open();
+            string sql = "insert into [message] values ('" + username + "','" + title + "','" + message + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "')";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-                Open();
-                string sql = "insert into [message] values ('" + username + "','" + title + "','" + message + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "')";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+
                 cmd.ExecuteNonQuery();
-                Dispose();
+
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
+            finally { Dispose(); }
         }
 
         public List<string> findMessage(string username)
         {
             List<string> list = new List<string>();
-
+            Open();
+            string sql = "select * from [message] where [username]='" + username + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader reader = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from [message] where [username]='" + username + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader reader = cmd.ExecuteReader();
+
 
                 while (reader.Read())
                 {
@@ -531,13 +512,16 @@ namespace WebService1
                     list.Add(reader[4].ToString());
                 }
 
-                reader.Close();
-                Dispose();
+
 
             }
             catch (Exception)
             {
 
+            }
+            finally {
+                reader.Close();
+                Dispose();
             }
             return list;
         }
@@ -546,12 +530,13 @@ namespace WebService1
         public List<string> getUserOrder(string username)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from UserOrder where username='" + username + "' order by ordertime desc";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from UserOrder where username='" + username + "' order by ordertime desc";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
                     list.Add(read["orderid"].ToString());
@@ -571,8 +556,7 @@ namespace WebService1
                     list.Add(enddate[0]);
 
                 }
-                read.Close();
-                Dispose();
+
                 //List<string> list = new List<string>();
                 //try
                 //{
@@ -600,26 +584,28 @@ namespace WebService1
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
         public bool findMobilePhone(string phone)
         {
-
+            Open();
+            string sql = "select mobilephone from users where mobilephone='" + phone + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            object obj = cmd.ExecuteScalar();
             try
             {
-                Open();
-                string sql = "select mobilephone from UserInfo where mobilephone='" + phone + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                object obj = cmd.ExecuteScalar();
+
                 if (obj != null)
                 {
-                    cmd.Dispose();
                     return true;
                 }
                 else
                 {
-                    cmd.Dispose();
                     return false;
                 }
             }
@@ -627,17 +613,20 @@ namespace WebService1
             {
                 return false;
             }
+            finally {
+                Dispose();
+            }
         }
-
 
         public bool userRegister(string username, string nickename, string password, string email, int sexy)
         {
             Guid guid = new Guid();
             guid = Guid.NewGuid();
+            password = MD5(password);
             try
             {
                 Open();
-                string sql = "insert into users (uid,username,nickname,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + guid + "','" + username + "','" + nickename + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','1','" + username + "') ";
+                string sql = "insert into users (uid,username,nickname,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + guid + "','" + username + "','" + nickename + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','" + sexy + "','" + username + "') ";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
                 sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + guid + "','500','97','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
@@ -656,47 +645,52 @@ namespace WebService1
         public bool userLogin(string name, string pwd)
         {
             string userpwd = "";
-            Open();
+            Open(); 
+            string sql = "select [password] from users where username='" + name + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                string sql = "select [password] from users where username='" + name + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+               
                 if (read.Read())
                 {
                     userpwd = read["password"].ToString();
                 }
-                read.Close();
-                Dispose();
-                if (userpwd ==MD5( pwd))
+                if (userpwd == MD5(pwd))
                     return true;
                 else
                     return false;
             }
             catch (Exception)
             {
-                Dispose();
                 return false;
+            }
+            finally
+            {
+                read.Close();
+                Dispose();
             }
 
         }
 
         public bool userPwdChange(string name, string pwd)
         {
+            Open();
+            pwd = MD5(pwd);
+            string sql = "update users set password='" + pwd + "' where username='" + name + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-                Open();
-                pwd = MD5(pwd);
-                string sql = "update users set password='" + pwd + "' where username='" + name + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+
                 cmd.ExecuteNonQuery();
-                Dispose();
+
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
+            finally { Dispose(); }
         }
 
         public static string MD5(string str)
@@ -713,12 +707,13 @@ namespace WebService1
         public List<string> userInfor(string name)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from users where username='" + name + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from users where username='" + name + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 if (read.Read())
                 {
                     list.Add(read["uid"].ToString());
@@ -729,12 +724,14 @@ namespace WebService1
                     list.Add(read["mobilephone"].ToString());
                     list.Add(read["birthdate"].ToString());
                 }
-                Dispose();
-               
+
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                list.Add(ex.Message.ToString());
+            }
+            finally {
+                Dispose();
             }
             return list;
             
@@ -745,12 +742,13 @@ namespace WebService1
         public List<string> getConsume(string customeruserid)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from hotelhistory where customeruserid='" + customeruserid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from hotelhistory where customeruserid='" + customeruserid + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
                     list.Add(read["hotelhistoryid"].ToString());
@@ -768,49 +766,79 @@ namespace WebService1
                     //list.Add(read["价格说明"].ToString());
 
                 }
-                read.Close();
-                Dispose();
+
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
 
         public bool updateUser(string type, string value, string username)
         {
+            Open();
+            string sql = "update users set  " + type + "='" + value + "' where username='" + username + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-                Open();
-                string sql = "update users set  " + type + "='" + value + "' where username='" + username + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+
                 cmd.ExecuteNonQuery();
 
-                Dispose();
                 return true;
             }
             catch
             {
                 return false;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+
+        public bool addHistory(string customeruserid, string customername, string hotelid, string hotelname, string money, string scorecustomer, string storedmoneycustomer) 
+        {
+            Open();
+            string sql = "insert into hotelhistory (customeruserid,customername,hotelid,hotelname,money,scorecustomer,storedmoneycustomer,createtime) values('" + customeruserid + "','" + customername + "','" + hotelid + "','" + hotelname + "','" + money + "','" + scorecustomer + "','" + storedmoneycustomer + "','" + DateTime.Now + "')";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                Dispose();
             }
         }
 
 
-
-        public bool addHotelhistory(string customeruserid, string customername, string hotelname, string money, string moneykezhu, string returnkezhu)
+        public bool addHotelhistory(string customeruserid, string customername, string address, string hotelname, string money, string moneykezhu, string returnkezhu, string chuzhi)
         {
+            Open();
+            string sql = "insert into hotelhistory values('" + customeruserid + "','" + customername + "','" + address + "','" + hotelname + "','" + money + "','" + moneykezhu + "','" + returnkezhu + "','" + chuzhi + "','" + DateTime.Now + "')";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-                Open();
-                string sql = "insert into hotelhistory (hotelhistoryid,customeruserid,customername,hotelname,money,scorecustomer,moneykezhu,createtime) values('" + Guid.NewGuid() + "','" + customeruserid + "','" + customername + "','" + hotelname + "','" + money + "','" + returnkezhu + "','" + moneykezhu + "','" + DateTime.Now + "')";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+
                 cmd.ExecuteNonQuery();
-                Dispose();
+
                 return true;
             }
             catch
             {
                 return false;
+            }
+            finally {
+                Dispose();
             }
         }
 
@@ -818,12 +846,13 @@ namespace WebService1
         public List<string> getRoomInfo(int hotelid)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from room,hotelinfo where room.hotelinfoid=hotelinfo.hotelinfoid  and hotelinfo.hotelid ='" + hotelid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from room,hotelinfo where room.hotelinfoid=hotelinfo.hotelinfoid  and hotelinfo.hotelid ='" + hotelid + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+                
                 while (read.Read())
                 {
                     list.Add(read["hotelinfoid"].ToString());
@@ -840,23 +869,27 @@ namespace WebService1
                     //list.Add(read["价格说明"].ToString());
 
                 }
-                read.Close();
-                Dispose();
+               
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
         public List<string> getHotelInfo()
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from hotelinfo";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from hotelinfo";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
 
@@ -886,11 +919,14 @@ namespace WebService1
                     list.Add(read["促销活动"].ToString());
                     list.Add(read["价格说明"].ToString());
                 }
-                read.Close();
-                Dispose();
+
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
@@ -898,12 +934,13 @@ namespace WebService1
         public List<string> getHotelInfoById(int hotelid)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from hotelinfo where hotelid='" + hotelid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from hotelinfo where hotelid='" + hotelid + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
 
@@ -933,23 +970,27 @@ namespace WebService1
                     list.Add(read["促销活动"].ToString());
                     list.Add(read["价格说明"].ToString());
                 }
-                read.Close();
-                Dispose();
+
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
         public List<string> getShopInfo()
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from shop ";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from shop ";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
                     list.Add(read["hotelid"].ToString());
@@ -972,23 +1013,27 @@ namespace WebService1
                     list.Add(read["价格说明"].ToString());
 
                 }
-                read.Close();
-                Dispose();
+                
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
         public List<string> getShopInfoById(string hotelid)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from shop where hotelid='" + hotelid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from shop where hotelid='" + hotelid + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
                     list.Add(read["hotelid"].ToString());
@@ -1011,23 +1056,28 @@ namespace WebService1
                     list.Add(read["价格说明"].ToString());
 
                 }
-                read.Close();
-                Dispose();
+
             }
             catch (Exception)
             { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
         public List<string> getUsemoney(int id)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from usermoney where id='" + id + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from usermoney where id='" + id + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
 
@@ -1037,11 +1087,14 @@ namespace WebService1
                     list.Add(read["joindate"].ToString());
 
                 }
-                read.Close();
-                Dispose();
+                
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
@@ -1049,12 +1102,13 @@ namespace WebService1
         public List<string> getUsemoneyhistory(int id)
         {
             List<string> list = new List<string>();
+            Open();
+            string sql = "select * from usermoneyhotel where uid='" + id + "' ";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                string sql = "select * from usermoneyhotel where uid='" + id + "' ";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+                
                 while (read.Read())
                 {
 
@@ -1064,43 +1118,50 @@ namespace WebService1
                     list.Add(read["inchuzhi"].ToString());
 
                 }
-                read.Close();
-                Dispose();
+                
             }
             catch (Exception)
             { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
         public bool updateUserChuzhi(string username, string hotelid, string money)
         {
+            Open();
+            string sql = "update usermoneyhotel set usermoneyhotel.scorechuzhi ='" + money + "' from usermoneyhotel,UserInfo  where usermoneyhotel.uid = UserInfo.Id and UserInfo.username='" + username + "' and  usermoneyhotel.hotelid ='" + hotelid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-                Open();
-                string sql = "update usermoneyhotel set usermoneyhotel.scorechuzhi ='" + money + "' from usermoneyhotel,UserInfo  where usermoneyhotel.uid = UserInfo.Id and UserInfo.username='" + username + "' and  usermoneyhotel.hotelid ='" + hotelid + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                cmd.ExecuteNonQuery();
 
-                Dispose();
+                cmd.ExecuteNonQuery();
                 return true;
             }
             catch
             {
                 return false;
             }
+            finally {
+                Dispose();
+            }
         }
 
         public List<string> getUserChuzhi(string uid)
         {
             List<string> list = new List<string>();
+            Open();
+
+            //string sqlSel = string.Format("select * from usermoneyhotel,UserInfo where usermoneyhotel.uid=UserInfo.Id and UserInfo.username='{0}'",username);
+            string sql = "select * from usermoneyhotel where uid='" + uid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                
-                //string sqlSel = string.Format("select * from usermoneyhotel,UserInfo where usermoneyhotel.uid=UserInfo.Id and UserInfo.username='{0}'",username);
-                string sql = "select * from usermoneyhotel where uid='" + uid + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+
                 while (read.Read())
                 {
                     list.Add(read["uid"].ToString());
@@ -1109,57 +1170,63 @@ namespace WebService1
                     //  list.Add(read["userid"].ToString());
 
                 }
-                read.Close();
-                Dispose();
-               
+
+
             }
             catch (Exception)
             { }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
         public bool addUserKezhu(string uid)
         {
+            Open();
+            string sql = "insert into usermoney ( ) values('" + new Guid(uid) + "','100','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-                Open();
-<<<<<<< HEAD
-                string sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + new Guid(uid) + "','500','97','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
-=======
-                string sql = "insert into usermoney ( ) values('200','100','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
->>>>>>> origin/master
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
-                Dispose();
                 return true;
             }
             catch
             {
                 return false;
             }
+            finally
+            {
+                Dispose();
+            }
         }
 
         public List<string> getUserKezhu(string uid)
         {
             List<string> list = new List<string>();
+            Open();
+            //string sqlSel = string.Format("select * from usermoneyhotel,UserInfo where usermoneyhotel.uid=UserInfo.Id and UserInfo.username='{0}'",username);
+            string sql = "select scorexiaofei from usermoney where uid='" + uid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                Open();
-                //string sqlSel = string.Format("select * from usermoneyhotel,UserInfo where usermoneyhotel.uid=UserInfo.Id and UserInfo.username='{0}'",username);
-                string sql = "select scorexiaofei from usermoney where uid='" + uid + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
-                while (read.Read())
+
+                if(read.Read())
                 {
                     list.Add(read[0].ToString());
                     //  list.Add(read["userid"].ToString());
 
                 }
-                read.Close();
-                Dispose();
+
             }
             catch (Exception)
             { list.Add("0.00"); }
+            finally {
+                read.Close();
+                Dispose();
+            }
             return list;
         }
 
@@ -1339,6 +1406,25 @@ namespace WebService1
             catch (Exception)
             { }
             return list;
+        }
+
+
+        public bool test(string id,string num)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                Open();
+                string sql = "insert into test values ('" + id + "','" + num + "')";
+                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+                cmd.ExecuteNonQuery();
+                Dispose();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
 

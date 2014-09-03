@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -26,11 +27,14 @@ public class UserKezhubiDetail extends Activity {
 
 	private String UserName = "";
 	private String uid = "";
+	private LinearLayout historyEmpty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_kezhubi_detail);
+		
+		historyEmpty = (LinearLayout) findViewById(R.id.historyEmpty);
 		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
 		returnbtn.setOnClickListener(new OnClickListener() {
 
@@ -80,7 +84,10 @@ public class UserKezhubiDetail extends Activity {
 				map.put("kezhubi2", orderlist.get(i * 5 + 3).toString());
 				list.add(map);
 			}
-
+		}
+		
+		if (!list.isEmpty()) {
+			historyEmpty.setVisibility(View.GONE);
 		}
 		return list;
 	}
