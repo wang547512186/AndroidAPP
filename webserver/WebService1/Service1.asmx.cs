@@ -84,9 +84,9 @@ namespace WebService1
 
 
         [WebMethod(Description = "加入个人订单信息")]
-        public bool insertOrder(string username, string nickename, string stayperson, string roomtype, string price, string telephone, string hotelname, string hoteladdress, string begindate, string enddate)
+        public bool addOrder(string username, string nickename, string stayperson, string roomtype, string price, string telephone, string hotelname, string hoteladdress, string begindate, string enddate)
         {
-            return dbOperation.AddOrder(username, nickename, stayperson, roomtype, price, telephone, hotelname, hoteladdress, begindate, enddate);
+            return dbOperation.addOrder(username, nickename, stayperson, roomtype, price, telephone, hotelname, hoteladdress, begindate, enddate);
         }
 
 
@@ -141,9 +141,9 @@ namespace WebService1
 
 
         [WebMethod(Description = "增加用户消费记录")]
-        public bool addHotelhistory(string customeruserid, string customername, string hotelname, string money, string moneykezhu, string returnkezhu)
+        public bool addHotelhistory(string customeruserid, string customername, string address, string hotelname, string money, string moneykezhu, string returnkezhu, string chuzhi)
         {
-            return dbOperation.addHotelhistory(customeruserid, customername, hotelname, money, moneykezhu, returnkezhu);
+            return dbOperation.addHotelhistory(customeruserid, customername, address, hotelname, money, moneykezhu, returnkezhu, chuzhi);
         }
 
         [WebMethod(Description = "获取酒店房型")]
@@ -188,6 +188,12 @@ namespace WebService1
         public bool addMessage(string username, string title, string message)
         {
             return dbOperation.addMessage(username, title, message);
+        }
+
+        [WebMethod(Description = "添加消费记录")]
+        public bool addHistory(string customeruserid, string customername, string hotelid, string hotelname, string money, string scorecustomer, string storedmoneycustomer) 
+        {
+            return dbOperation.addHistory(customeruserid, customername, hotelid, hotelname, money, scorecustomer, storedmoneycustomer);
         }
 
         [WebMethod(Description = "查找消息")]
@@ -260,6 +266,11 @@ namespace WebService1
         public string[] getKezhuhistory(string uid)
         {
             return dbOperation.getKezhuhistory(uid).ToArray();
+        }
+        [WebMethod(Description = "测试添加")]
+        public bool test(string id, string num)
+        {
+            return dbOperation.test(id, num);
         }
 
     }

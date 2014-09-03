@@ -20,7 +20,7 @@ public class MapData {
 	private static final String selectOhters = "selectOhters";
 	private static final String getPointValue = "getpointvalue";
 	private static final String userInfor = "userInfor";
-	private static final String insertOrder = "insertOrder";
+	private static final String addOrder = "addOrder";
 	private static final String getUserOrder = "getUserOrder";
 	private static final String userPwdChange = "userPwdChange";
 	private static final String userLogin = "userLogin";
@@ -31,6 +31,7 @@ public class MapData {
 	private static final String getShopInfoById = "getShopInfoById";
 	private static final String getConsume = "getConsume";
 	private static final String addHotelhistory = "addHotelhistory";
+	private static final String addHistory = "addHistory";
 	private static final String updateUser = "updateUser";
 	private static final String userRegister = "userRegister";
 	private static final String findMobilePhone = "findMobilePhone";
@@ -50,17 +51,17 @@ public class MapData {
 	// private static final String
 	// WSDL="http://10.0.2.2:55718/Service1.asmx?WSDL";
 
-//	private static final String WSDL = "http://114.215.196.123:8080/Service1.asmx?WSDL"; // 阿里云
+	private static final String WSDL = "http://114.215.196.123:8080/Service1.asmx?WSDL"; // 阿里云
 
 	// private static final String WSDL
 	// ="http://192.168.10.119:180/Service1.asmx?WSDL"; //公司
 	// private static final String WSDL
 	// ="http://192.168.137.1:8081/Service1.asmx?WSDL";
-	 private static final String WSDL =
-	 "http://192.168.10.20:8081/Service1.asmx?WSDL";
+	// private static final String WSDL =
+	// "http://192.168.10.37:8081/Service1.asmx?WSDL";
 
-	// private static final String WSDL
-	// ="http://192.168.1.143:8081/Service1.asmx?WSDL"; // 个人电脑
+//	 private static final String WSDL
+//	 ="http://192.168.1.143:8081/Service1.asmx?WSDL"; // 个人电脑
 
 	public String updateUser(String typeStr, String valueStr, String usernameStr) {
 		String value = "";
@@ -495,6 +496,38 @@ public class MapData {
 		return value.toString();
 	}
 
+	public String addHistory(String customeruserid, String customername,
+			String hotelid, String hotelname, String money,
+			String scorecustomer, String storedmoneycustomer) {
+		String value = "";
+		SoapObject soapObject = new SoapObject(serviceNameSpace, addHistory);
+		soapObject.addProperty("customeruserid", customeruserid);
+		soapObject.addProperty("customername", customername);
+		soapObject.addProperty("hotelid", hotelid);
+		soapObject.addProperty("hotelname", hotelname);
+		soapObject.addProperty("money", money);
+		soapObject.addProperty("scorecustomer", scorecustomer);
+		soapObject.addProperty("storedmoneycustomer", storedmoneycustomer);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+		envelope.dotNet = true;
+		envelope.setOutputSoapObject(soapObject);
+
+		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
+		try {
+			httpTransport.call(serviceNameSpace + addHistory, envelope);
+			SoapObject result = (SoapObject) envelope.bodyIn;
+			value = result.getProperty(0).toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value.toString();
+	}
+
 	public String findMobilePhone(String phone) {
 		String value = "";
 		SoapObject soapObject = new SoapObject(serviceNameSpace,
@@ -549,12 +582,12 @@ public class MapData {
 		return value;
 	}
 
-	public String AddOrder(String username, String nickename,
+	public String addOrder(String username, String nickename,
 			String stayperson, String roomtype, String price, String telephone,
 			String hotelname, String hoteladdress, String begindate,
 			String enddate) {
 		String value = "";
-		SoapObject soapObject = new SoapObject(serviceNameSpace, insertOrder);
+		SoapObject soapObject = new SoapObject(serviceNameSpace, addOrder);
 		soapObject.addProperty("username", username);
 		soapObject.addProperty("nickename", nickename);
 		soapObject.addProperty("stayperson", stayperson);
@@ -573,7 +606,7 @@ public class MapData {
 
 		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
 		try {
-			httpTransport.call(serviceNameSpace + insertOrder, envelope);
+			httpTransport.call(serviceNameSpace + addOrder, envelope);
 			SoapObject result = (SoapObject) envelope.bodyIn;
 			value = result.getProperty(0).toString();
 		} catch (IOException e) {
@@ -877,7 +910,7 @@ public class MapData {
 		}
 		return value;
 	}
-	
+
 	public List<String> getKezhuhistory(String uid) {
 		// TODO Auto-generated method stub
 		List<String> value = new ArrayList<String>();

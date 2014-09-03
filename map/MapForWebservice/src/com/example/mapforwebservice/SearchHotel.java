@@ -103,6 +103,8 @@ public class SearchHotel extends Activity {
 						.getItemAtPosition(position);
 				String hotelname = map.get("title");
 				String hoteladdress = map.get("address");
+				String hotelId = map.get("hotelId");
+				intent.putExtra("strHotelId", hotelId);
 				intent.putExtra("strHotelName", hotelname);
 				intent.putExtra("strHotelAddress", hoteladdress);
 				SearchHotel.this.setResult(RESULT_OK, intent);
@@ -151,6 +153,7 @@ public class SearchHotel extends Activity {
 		for (int i = 0; i < m; i++) {
 			map = new HashMap<String, Object>();
 			map.put("img", R.drawable.hotel1);
+			map.put("hotelId", orderlist.get(i * 5 + 0).toString());
 			map.put("title", orderlist.get(i * 5 + 1).toString());
 			map.put("address", orderlist.get(i * 5 + 3).toString());
 			list.add(map);

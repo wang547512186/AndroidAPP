@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class MyInvited extends Activity {
@@ -20,11 +21,13 @@ public class MyInvited extends Activity {
 	private MapData mapdata;
 	List<String> data = new ArrayList<String>();
 	private String UserName;
+	private LinearLayout historyEmpty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_invited);
+		historyEmpty = (LinearLayout) findViewById(R.id.historyEmpty);
 		mapdata = new MapData();
 
 		Bundle bundle = this.getIntent().getExtras();
@@ -55,6 +58,9 @@ public class MyInvited extends Activity {
 
 	private List<String> getData() {
 
+		if (!data.isEmpty()) {
+			historyEmpty.setVisibility(View.GONE);
+		}
 		return data;
 	}
 }

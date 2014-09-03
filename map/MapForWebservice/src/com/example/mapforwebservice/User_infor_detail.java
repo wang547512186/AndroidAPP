@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -59,22 +62,41 @@ public class User_infor_detail extends Activity {
 		TextView user_sex = (TextView) findViewById(R.id.user_sex);
 		TextView user_email = (TextView) findViewById(R.id.user_email);
 		TextView user_phone = (TextView) findViewById(R.id.user_phone);
-		usernameStr = detail.get(1).toString().trim();
-		if (detail.get(4).toString().equals("1")) {
-			usersexStr = "男";
-		}
-		if (detail.get(4).toString().equals("0")) {
-			usersexStr = "女";
-		}
-		useremailStr = detail.get(3).toString().trim();
-//		useraddressStr = detail.get(4).toString().trim();
-		userphoneStr = detail.get(5).toString().trim();
+		try {
+			usernameStr = detail.get(1).toString().trim();
+			if (detail.get(4).toString().equals("1")) {
+				usersexStr = "男";
+			}
+			if (detail.get(4).toString().equals("0")) {
+				usersexStr = "女";
+			}
+			useremailStr = detail.get(3).toString().trim();
+			// useraddressStr = detail.get(4).toString().trim();
+			userphoneStr = detail.get(5).toString().trim();
 
-		user_name.setText(usernameStr);
-		user_sex.setText(usersexStr);
-		user_email.setText(useremailStr);
-//		user_address.setText(useraddressStr);
-		user_phone.setText(userphoneStr);
+			user_name.setText(usernameStr);
+			user_sex.setText(usersexStr);
+			user_email.setText(useremailStr);
+			// user_address.setText(useraddressStr);
+			user_phone.setText(userphoneStr);
+
+		} catch (Exception e) {
+			Dialog fail = new AlertDialog.Builder(User_infor_detail.this)
+					.setTitle("提示").setMessage("网络异常,请稍后再试")
+					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							Intent intent = new Intent();
+							intent.setClass(User_infor_detail.this, User_information.class);
+							startActivity(intent);
+							finish();
+						}
+					}).create();
+			fail.show();
+
+		}
 
 		// listview.setAdapter(new ArrayAdapter<String>(this,
 		// android.R.layout.simple_expandable_list_item_1,getData()));
