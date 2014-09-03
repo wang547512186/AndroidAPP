@@ -27,7 +27,8 @@ public class User_login extends Activity {
 	// private Button loginfalse;
 	private MapData mapdata;
 	private SharedPreferences sp;
-    private List<String> userinfor=new ArrayList<String>();
+	private List<String> userinfor = new ArrayList<String>();
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_login);
@@ -43,7 +44,6 @@ public class User_login extends Activity {
 		// loginfalse=(Button)findViewById(R.id.loginfalse);
 		mapdata = new MapData();
 
-		
 		registerBtn.setOnClickListener(new OnClickListener() {
 			// 注册
 			@Override
@@ -77,47 +77,113 @@ public class User_login extends Activity {
 							.setTitle("登录").setMessage("请填写完整!")
 							.setPositiveButton("确定", null).create();
 					fail.show();
+				} else if (loginname.getText().toString().length() != 11) {
+					Dialog fail = new AlertDialog.Builder(User_login.this)
+							.setTitle("登录").setMessage("手机号码格式不正确!")
+							.setPositiveButton("确定", null).create();
+					fail.show();
 				} else {
-					if (mapdata.userLogin(loginname.getText().toString(),
-							loginpwd.getText().toString()).equals("true")) {
-						((PointValue) getApplication()).setUserName(loginname
-								.getText().toString());
+					if (mapdata.hasMobilephone(loginname.getText().toString())
+							.equals("0")) {
 						Dialog fail = new AlertDialog.Builder(User_login.this)
 								.setTitle("登录")
-								.setMessage("登录成功!")
+								.setMessage("手机号不存在，请重新填写手机号!")
 								.setPositiveButton("确定",
 										new DialogInterface.OnClickListener() {
 											@Override
 											public void onClick(
-													DialogInterface dialog,
-													int which) {
+													DialogInterface arg0,
+													int arg1) {
 												// TODO Auto-generated method
 												// stub
-												Editor editor = sp.edit();
-												editor.putString("userName",
-														loginname.getText()
-																.toString()
-																.trim());
-												userinfor=mapdata.userInfor(loginname.getText()
-																.toString()
-																.trim());
-												editor.putString("uid", userinfor.get(0).toString());
-												editor.commit();
 												Intent intent = new Intent();
 												intent.setClass(
 														User_login.this,
-														User_information.class);
+														UserChangeMobile.class);
 												startActivity(intent);
 												User_login.this.finish();
-												// finish();
 											}
 										}).create();
 						fail.show();
-					} else {
+					} else if (mapdata.hasMobilephone(
+							loginname.getText().toString()).equals("2")) {
 						Dialog fail = new AlertDialog.Builder(User_login.this)
-								.setTitle("登录").setMessage("用户名或密码不正确!")
+								.setTitle("登录")
+								.setMessage("手机号重复,请修改手机号码!")
+								.setPositiveButton("确定",
+										new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(
+													DialogInterface arg0,
+													int arg1) {
+												// TODO Auto-generated method
+												// stub
+												Intent intent = new Intent();
+												intent.setClass(
+														User_login.this,
+														UserChangeMobile.class);
+												startActivity(intent);
+												User_login.this.finish();
+											}
+										}).create();
+						fail.show();
+					} else if (mapdata.hasMobilephone(
+							loginname.getText().toString()).equals("9")) {
+						Dialog fail = new AlertDialog.Builder(User_login.this)
+								.setTitle("登录").setMessage("网络有误,请重试!")
 								.setPositiveButton("确定", null).create();
 						fail.show();
+					} else {
+						if (mapdata.userLogin(loginname.getText().toString(),
+								loginpwd.getText().toString()).equals("true")) {
+							((PointValue) getApplication())
+									.setUserName(loginname.getText().toString());
+							Dialog fail = new AlertDialog.Builder(
+									User_login.this)
+									.setTitle("登录")
+									.setMessage("登录成功!")
+									.setPositiveButton(
+											"确定",
+											new DialogInterface.OnClickListener() {
+												@Override
+												public void onClick(
+														DialogInterface dialog,
+														int which) {
+													// TODO Auto-generated
+													// method
+													// stub
+													Editor editor = sp.edit();
+													editor.putString(
+															"userName",
+															loginname.getText()
+																	.toString()
+																	.trim());
+													userinfor = mapdata
+															.userInfor(loginname
+																	.getText()
+																	.toString()
+																	.trim());
+													editor.putString("uid",
+															userinfor.get(0)
+																	.toString());
+													editor.commit();
+													Intent intent = new Intent();
+													intent.setClass(
+															User_login.this,
+															User_information.class);
+													startActivity(intent);
+													User_login.this.finish();
+													// finish();
+												}
+											}).create();
+							fail.show();
+						} else {
+							Dialog fail = new AlertDialog.Builder(
+									User_login.this).setTitle("登录")
+									.setMessage("用户名或密码不正确!")
+									.setPositiveButton("确定", null).create();
+							fail.show();
+						}
 					}
 				}
 

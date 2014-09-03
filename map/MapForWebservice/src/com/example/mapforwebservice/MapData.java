@@ -49,6 +49,8 @@ public class MapData {
 	private static final String getKezhuhistory = "getKezhuhistory";
 	private static final String AddFastPayCode = "AddFastPayCode";
 	private static final String getHotelMinPrice = "getHotelMinPrice";
+	private static final String hasMobilephone="hasMobilephone";
+	private static final String userMobileSet="userMobileSet";
 	// private static final String
 	// WSDL="http://10.0.2.2:55718/Service1.asmx?WSDL";
 
@@ -1132,6 +1134,58 @@ public class MapData {
 			e.printStackTrace();
 		}
 		return value;
+	}
+	
+	public String hasMobilephone(String mobilephone) {
+		String value = "";
+		SoapObject soapObject = new SoapObject(serviceNameSpace, hasMobilephone);
+		soapObject.addProperty("mobilephone", mobilephone);
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+		envelope.dotNet = true;
+		envelope.setOutputSoapObject(soapObject);
+
+		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
+		try {
+			httpTransport.call(serviceNameSpace + hasMobilephone, envelope);
+			SoapObject result = (SoapObject) envelope.bodyIn;
+			value = result.getProperty(0).toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value.toString();
+	}
+	
+	public String userMobileSet(String idcard, String mobilephone, String cardnumber) {
+		String value = "";
+		SoapObject soapObject = new SoapObject(serviceNameSpace, userMobileSet);
+		soapObject.addProperty("idcard", idcard);
+		soapObject.addProperty("mobilephone", mobilephone);
+		soapObject.addProperty("cardnumber", cardnumber);
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+		envelope.dotNet = true;
+		envelope.setOutputSoapObject(soapObject);
+
+		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
+		try {
+			httpTransport.call(serviceNameSpace + userMobileSet, envelope);
+			SoapObject result = (SoapObject) envelope.bodyIn;
+			value = result.getProperty(0).toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value.toString();
 	}
 
 }
