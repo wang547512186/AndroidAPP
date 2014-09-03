@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/bgcolor"
+    android:orientation="vertical"
     tools:context="${relativePackage}.${activityClass}" >
 
     <FrameLayout
@@ -35,13 +35,45 @@
             android:gravity="center"
             android:text="积分明细" />
     </FrameLayout>
-    
+
+    <LinearLayout
+        android:id="@+id/historyEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <ImageView 
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/bad_face"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="#ffffff"
+                android:gravity="center"
+                android:text="暂无返客主币记录"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cccccc" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/kezhubiList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:layout_margin="10dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" >
     </ListView>
-    
 
 </LinearLayout>

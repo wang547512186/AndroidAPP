@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeoutException;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,26 +76,29 @@ import com.baidu.platform.comapi.basestruct.GeoPoint;
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 @SuppressLint("NewApi")
 public class MainActivity extends Activity implements OnTabChangeListener {
+	private Timer timer;
 	BMapManager mBMapMan = null;
 	MapView mMapView = null;
 	private PopupWindow popupwindow;
 	private View viewCache = null;
 	private View popupInfo = null;
+	private List<String> testList;
 	// private View popupRight = null;
 	private TextView popupText = null;
-	private List<String> detail;
+	private List<String> detail = null;
+	private List<String> autoTextList = null;
 	private ImageView myloc;
 	private MapData mapdata;
-	private List<String> searchlist;
-	private List<String> shoppoints;
-	private List<String> locations;
-	private List<String> hotelpoints;
-	private List<String> coffees;
-	private List<String> foodpoints;
-	private List<String> printshoppoints;
-	private List<String> carpoints;
-	private List<String> supermarketpoints;
-	private List<String> searchpoints;
+	private List<String> searchlist = null;
+	private List<String> shoppoints = null;
+	private List<String> locations = null;
+	private List<String> hotelpoints = null;
+	private List<String> coffees = null;
+	private List<String> foodpoints = null;
+	private List<String> printshoppoints = null;
+	private List<String> carpoints = null;
+	private List<String> supermarketpoints = null;
+	private List<String> searchpoints = null;
 	private ImageButton imgbt;
 	private ListView listview;
 	private static TextView selectcity;
@@ -115,9 +120,8 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 	private SharedPreferences sp;
 	private String userName;
 	private PopupOverlay pop;
-
-	// 定位
-	public LocationClient mLocationClient = null;
+	private ProgressDialog dialog;
+	public LocationClient mLocationClient = null; // 定位
 	public MyLocationListenner myListener = new MyLocationListenner();
 	public Button ReLBSButton = null;
 	public static String TAG = "msg";
@@ -126,6 +130,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 	@SuppressLint("NewApi")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
@@ -134,6 +139,13 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		mBMapMan.init(null);
 		// 注意：请在试用setContentView前初始化BMapManager对象，否则会报错
 		setContentView(R.layout.activity_main);
+		// 进度条
+
+		dialog = new ProgressDialog(this);
+		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
+		dialog.setMessage("正在加载");// 进度条
+		dialog.show();
+		// /开启线程
 
 		// 搜索
 		search_btn = (Button) findViewById(R.id.search_btn);
@@ -162,34 +174,6 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		// ///搜索框效果
 		// searchLayout = (TableLayout) findViewById(R.id.search_layout);
 
-		searchtext = (AutoCompleteTextView) findViewById(R.id.search_text);
-		searchtext.setDropDownWidth(dm.widthPixels * 3 / 4);
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, getName());
-		searchtext.setAdapter(arrayAdapter);
-
-		// searchtext.setAdapter(arrayAdapter);
-		// searchtext.setOnFocusChangeListener(new OnFocusChangeListener() {
-		//
-		// @Override
-		// public void onFocusChange(View v, boolean hasFocus) {
-		// // TODO Auto-generated method stub
-		// if (hasFocus) {
-		// searchLayout.setAlpha(1);
-		// } else {
-		// searchLayout.setAlpha((float) 0.7);
-		// // 隐藏输入法
-		// InputMethodManager imm = (InputMethodManager) getApplicationContext()
-		// .getSystemService(Context.INPUT_METHOD_SERVICE);
-		// // 显示或者隐藏输入法
-		// imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-		// }
-		//
-		// }
-		//
-		// });
-
-		// 设置失去焦点
 		final MapView bmapsView = (MapView) findViewById(R.id.bmapsView);
 		bmapsView.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -296,7 +280,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 							Intent intent = new Intent(MainActivity.this,
 									FastPay.class);
 							startActivity(intent);
-//							finish();
+							// finish();
 						}
 
 						// if (popupwindow != null && popupwindow.isShowing()) {
@@ -310,27 +294,9 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 
 					}
 				});
-		mapdata = new MapData();
-		locations = mapdata.selectall(curCityString.substring(0,
-				curCityString.length() - 1));
-		hotelpoints = mapdata.selectOhters("1",
-				curCityString.substring(0, curCityString.length() - 1));
-		foodpoints = mapdata.selectOhters("2",
-				curCityString.substring(0, curCityString.length() - 1));
-		printshoppoints = mapdata.selectOhters("文印店",
-				curCityString.substring(0, curCityString.length() - 1));
-		carpoints = mapdata.selectOhters("汽修",
-				curCityString.substring(0, curCityString.length() - 1));
-		supermarketpoints = mapdata.selectOhters("超市",
-				curCityString.substring(0, curCityString.length() - 1));
-		coffees = mapdata.selectOhters("咖啡店",
-				curCityString.substring(0, curCityString.length() - 1));
 
-		shoppoints = mapdata.getShopInfo();
-		// searchpoints=mapdata.selectOhters(searchtext.getText().toString());
-		showalladdress();
-
-		// new Thread(new MyThread()).start();
+		searchtext = (AutoCompleteTextView) findViewById(R.id.search_text);
+		searchtext.setDropDownWidth(dm.widthPixels * 3 / 4);
 
 		// 定位
 		mLocationClient = new LocationClient(this);
@@ -352,33 +318,101 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 				else
 					Log.d("msg", "locClient is null or not started");
 
-				// MapController mMapController = mMapView.getController();
-				//
-				// mMapController.setCenter(MyLocation);// 设置地图中心点
-				// mMapController.setZoom(17);// 设置地图zoom级别
-				// mMapView.refresh();
-				// showMylocation();
-				// Toast.makeText(MainActivity.this,
-				// String.valueOf(latitude) + String.valueOf(longitude),
-				// Toast.LENGTH_SHORT).show();
-
 			}
 
 		});
+
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				checkThread();
+			}
+		}, 7000);
+
+		MyThread thread = new MyThread();
+		Thread mThread = new Thread(thread);
+		mThread.start();
 	}
 
-	// private void showMylocation() {
-	// Drawable mark = getResources().getDrawable(R.drawable.icon_gcoding);
-	// // 创建IteminizedOverlay
-	// OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
-	//
-	// OverlayItem item = new OverlayItem(MyLocation, "item", "item");
-	// itemOverlay.addItem(item);
-	//
-	// mMapView.getOverlays().clear();
-	// mMapView.getOverlays().add(itemOverlay);
-	// mMapView.refresh();
-	// }
+	protected void checkThread() {
+		Message msg = new Message();
+		msg.what = 2;
+		mHandler.sendMessage(msg);
+	}
+
+	class MyThread implements Runnable {
+
+		public void run() {
+			// 执行数据操作，不涉及到UI
+
+			Message msg = new Message();
+			try {
+
+				mapdata = new MapData();
+				testList = mapdata.selectProvince();
+				if (testList.isEmpty()) {
+					msg.what = 3;
+				} else {
+					autoTextList = getName();
+					locations = mapdata.selectall(curCityString.substring(0,
+							curCityString.length() - 1));
+					hotelpoints = mapdata.selectOhters("1", curCityString
+							.substring(0, curCityString.length() - 1));
+					foodpoints = mapdata.selectOhters("2", curCityString
+							.substring(0, curCityString.length() - 1));
+					printshoppoints = mapdata.selectOhters("文印店", curCityString
+							.substring(0, curCityString.length() - 1));
+					carpoints = mapdata.selectOhters("汽修", curCityString
+							.substring(0, curCityString.length() - 1));
+					supermarketpoints = mapdata.selectOhters("超市",
+							curCityString.substring(0,
+									curCityString.length() - 1));
+					coffees = mapdata.selectOhters("咖啡店", curCityString
+							.substring(0, curCityString.length() - 1));
+					shoppoints = mapdata.getShopInfo();
+					showalladdress();
+					msg.what = 1;
+				}
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				msg.what = 2;
+			}
+			mHandler.sendMessage(msg); // 向Handler发送消息,更新UI
+		}
+	}
+
+	public Handler mHandler = new Handler() {
+
+		public void handleMessage(Message msg) {
+
+			switch (msg.what) {
+			case 1:
+				timer.cancel();
+				ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+						MainActivity.this,
+						android.R.layout.simple_dropdown_item_1line,
+						autoTextList);
+				searchtext.setAdapter(arrayAdapter);
+				dialog.dismiss();
+				break;
+			case 2:
+				timer.cancel();
+				Toast.makeText(MainActivity.this, "网络异常", Toast.LENGTH_LONG)
+						.show();
+				dialog.dismiss();
+				break;
+			case 3:
+				timer.cancel();
+				Toast.makeText(MainActivity.this, "服务器异常,读取数据失败", Toast.LENGTH_LONG)
+						.show();
+				dialog.dismiss();
+				break;
+
+			}
+		};
+	};
 
 	@Override
 	protected void onDestroy() {
@@ -973,41 +1007,41 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		}
 	}
 
-	Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-			PointXValue = ((PointValue) getApplicationContext())
-					.getPointXValue();
-			PointYValue = ((PointValue) getApplicationContext())
-					.getPointYValue();
-			MapController mMapController = mMapView.getController();
-			// 得到mMapView的控制权,可以用它控制和驱动平移和缩放
-			GeoPoint point = new GeoPoint(PointXValue, PointYValue);
-			// GeoPoint point =new GeoPoint((int)(39.910683*
-			// 1E6),(int)(116.411348* 1E6));
-			// 用给定的经纬度构造一个GeoPoint，单位是微度 (度 * 1E6)
-			mMapController.setCenter(point);// 设置地图中心点
-			// mMapController.setZoom(17);//设置地图zoom级别
-			super.handleMessage(msg);
-		}
-	};
+	// Handler handler = new Handler() {
+	// public void handleMessage(Message msg) {
+	// PointXValue = ((PointValue) getApplicationContext())
+	// .getPointXValue();
+	// PointYValue = ((PointValue) getApplicationContext())
+	// .getPointYValue();
+	// MapController mMapController = mMapView.getController();
+	// // 得到mMapView的控制权,可以用它控制和驱动平移和缩放
+	// GeoPoint point = new GeoPoint(PointXValue, PointYValue);
+	// // GeoPoint point =new GeoPoint((int)(39.910683*
+	// // 1E6),(int)(116.411348* 1E6));
+	// // 用给定的经纬度构造一个GeoPoint，单位是微度 (度 * 1E6)
+	// mMapController.setCenter(point);// 设置地图中心点
+	// // mMapController.setZoom(17);//设置地图zoom级别
+	// super.handleMessage(msg);
+	// }
+	// };
 
-	public class MyThread implements Runnable {
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			while (true) {
-				try {
-					Thread.sleep(10000);// 线程暂停10秒，单位毫秒
-					Message message = new Message();
-					message.what = 1;
-					handler.sendMessage(message);// 发送消息
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+	// public class MyThread implements Runnable {
+	// @Override
+	// public void run() {
+	// // TODO Auto-generated method stub
+	// while (true) {
+	// try {
+	// Thread.sleep(10000);// 线程暂停10秒，单位毫秒
+	// Message message = new Message();
+	// message.what = 1;
+	// handler.sendMessage(message);// 发送消息
+	// } catch (InterruptedException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+	// }
 
 	private void initmPopupWindowView() {
 		// TODO Auto-generated method stub
@@ -1168,9 +1202,10 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		try {
 			for (int i = 0; i < sums; i++) {
 				//
-				
+
 				String LatLon = searchpoints.get(i * 5 + 4);
-				if(LatLon.equals("")||LatLon.equals("anyType{}")||LatLon.isEmpty()){
+				if (LatLon.equals("") || LatLon.equals("anyType{}")
+						|| LatLon.isEmpty()) {
 					continue;
 				}
 				double mLat = Double.valueOf(LatLon.split(",")[0].toString());

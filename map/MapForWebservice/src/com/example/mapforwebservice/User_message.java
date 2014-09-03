@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ public class User_message extends Activity {
 	public Vibrator vibrator;
 	private SoundPool soundPool;
 	private String UserName;
+	private LinearLayout historyEmpty;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,7 +53,7 @@ public class User_message extends Activity {
 		UserName = intent.getStringExtra("UserName");
 		mapdata = new MapData();
 		messagelist = mapdata.findMessage(UserName);
-
+		historyEmpty = (LinearLayout) findViewById(R.id.historyEmpty);
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		// 测试
 		sharedPreferences = getSharedPreferences("setting_state",
@@ -106,61 +108,62 @@ public class User_message extends Activity {
 		});
 
 		// 测试
-//		Button testBtn = (Button) findViewById(R.id.testBtn);
-//		testBtn.setOnClickListener(new OnClickListener() {
+		// Button testBtn = (Button) findViewById(R.id.testBtn);
+		// testBtn.setOnClickListener(new OnClickListener() {
 
-//			@Override
-//			public void onClick(View arg0) {
-//				if (switch1_state) { // 通知栏提示
-//					// 定义NotificationManager
-//					String ns = Context.NOTIFICATION_SERVICE;
-//					NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-//					// 定义通知栏展现的内容信息
-//					int icon = R.drawable.app_icon;
-//					CharSequence tickerText = "您有新消息";
-//					long when = System.currentTimeMillis();
-//					Notification notification = new Notification(icon,
-//							tickerText, when);
-//					notification.flags |= Notification.FLAG_AUTO_CANCEL;
-//					Context context = getApplicationContext();
-//
-//					CharSequence contentTitle = "新消息";
-//
-//					CharSequence contentText = "点击查看详情";
-//
-//					Intent notificationIntent = new Intent(User_message.this,
-//							User_message.class);
-//					PendingIntent contentIntent = PendingIntent.getActivity(
-//							User_message.this, 0, notificationIntent, 0);
-//
-//					notification.setLatestEventInfo(context, contentTitle,
-//							contentText, contentIntent);
-//
-//					// 用mNotificationManager的notify方法通知用户生成标题栏消息通知
-//
-//					mNotificationManager.notify(1, notification);
-//				} else {
-//
-//				}
-//
-//				if (switch2_state) { // 声音
-//					soundPool = new SoundPool(10, AudioManager.STREAM_RING, 5);
-//					soundPool.load(User_message.this, R.raw.sound_msg, 1);
-//					soundPool.play(1, 1, 1, 0, 0, 1);
-//				} else {
-//
-//				}
-//
-//				if (switch3_state) {// / 震动
-//
-//					vibrator.vibrate(new long[] { 100, 200, 100, 200 }, -1);
-//				} else {
-//
-//					vibrator.vibrate(new long[] { 100, 0, 100, 0 }, -1);
-//				}
-//			}
-//
-//		});
+		// @Override
+		// public void onClick(View arg0) {
+		// if (switch1_state) { // 通知栏提示
+		// // 定义NotificationManager
+		// String ns = Context.NOTIFICATION_SERVICE;
+		// NotificationManager mNotificationManager = (NotificationManager)
+		// getSystemService(ns);
+		// // 定义通知栏展现的内容信息
+		// int icon = R.drawable.app_icon;
+		// CharSequence tickerText = "您有新消息";
+		// long when = System.currentTimeMillis();
+		// Notification notification = new Notification(icon,
+		// tickerText, when);
+		// notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		// Context context = getApplicationContext();
+		//
+		// CharSequence contentTitle = "新消息";
+		//
+		// CharSequence contentText = "点击查看详情";
+		//
+		// Intent notificationIntent = new Intent(User_message.this,
+		// User_message.class);
+		// PendingIntent contentIntent = PendingIntent.getActivity(
+		// User_message.this, 0, notificationIntent, 0);
+		//
+		// notification.setLatestEventInfo(context, contentTitle,
+		// contentText, contentIntent);
+		//
+		// // 用mNotificationManager的notify方法通知用户生成标题栏消息通知
+		//
+		// mNotificationManager.notify(1, notification);
+		// } else {
+		//
+		// }
+		//
+		// if (switch2_state) { // 声音
+		// soundPool = new SoundPool(10, AudioManager.STREAM_RING, 5);
+		// soundPool.load(User_message.this, R.raw.sound_msg, 1);
+		// soundPool.play(1, 1, 1, 0, 0, 1);
+		// } else {
+		//
+		// }
+		//
+		// if (switch3_state) {// / 震动
+		//
+		// vibrator.vibrate(new long[] { 100, 200, 100, 200 }, -1);
+		// } else {
+		//
+		// vibrator.vibrate(new long[] { 100, 0, 100, 0 }, -1);
+		// }
+		// }
+		//
+		// });
 
 	}
 
@@ -169,16 +172,17 @@ public class User_message extends Activity {
 		int m = messagelist.size() / 4;
 		list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
-		if (!messagelist.isEmpty()) {
-			for (int i = 0; i < m; i++) {
-				map = new HashMap<String, Object>();
-				map.put("img", R.drawable.hotel1);
-				map.put("messagetitle", messagelist.get(i * 4 + 1).toString());
-				map.put("messagetext", messagelist.get(i * 4 + 2).toString());
-				map.put("messagedate", messagelist.get(i * 4 + 3).toString());
-				list.add(map);
+		for (int i = 0; i < m; i++) {
+			map = new HashMap<String, Object>();
+			map.put("img", R.drawable.hotel1);
+			map.put("messagetitle", messagelist.get(i * 4 + 1).toString());
+			map.put("messagetext", messagelist.get(i * 4 + 2).toString());
+			map.put("messagedate", messagelist.get(i * 4 + 3).toString());
+			list.add(map);
 
-			}
+		}
+		if (!list.isEmpty()) {
+			historyEmpty.setVisibility(View.GONE);
 		}
 
 		return list;

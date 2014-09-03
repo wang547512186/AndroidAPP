@@ -43,7 +43,7 @@ public class User_register extends Activity {
 	private EditText userEmail;
 	private LinearLayout checkLayout;
 	private LinearLayout nocheckLayout;
-
+	private LinearLayout phoneCheckLayout;
 	private String inviteNumberString;
 	private String registerNameString;
 	private String registerPwdString;
@@ -68,7 +68,9 @@ public class User_register extends Activity {
 		checkLayout.setVisibility(View.GONE);
 		nocheckLayout = (LinearLayout) findViewById(R.id.nocheckLayout);
 		nocheckLayout.setVisibility(View.GONE);
-
+		phoneCheckLayout = (LinearLayout) findViewById(R.id.phoneCheckLayout);
+		phoneCheckLayout.setVisibility(View.GONE);
+		
 		registerName = (EditText) findViewById(R.id.registerName);
 		registerPwd = (EditText) findViewById(R.id.registerPwd);
 		registerPwd2 = (EditText) findViewById(R.id.registerPwd2);
@@ -100,7 +102,7 @@ public class User_register extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				if (s.length() != 0) {
+				if (s.length() >= 11) {
 					if (mapdata.findMobilePhone(
 							inviteNumber.getText().toString()).equals("false")) {
 						checkLayout.setVisibility(View.GONE);
@@ -113,6 +115,34 @@ public class User_register extends Activity {
 				} else {
 					checkLayout.setVisibility(View.GONE);
 					nocheckLayout.setVisibility(View.GONE);
+				}
+			}
+		});
+		
+		registerName.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				if (s.length() >= 11) {
+					if (mapdata.findMobilePhone(
+							registerName.getText().toString()).equals("true")) {
+						phoneCheckLayout.setVisibility(View.VISIBLE);
+					} else {
+						phoneCheckLayout.setVisibility(View.GONE);
+					}
+				} else {
+					phoneCheckLayout.setVisibility(View.GONE);
 				}
 			}
 		});
@@ -159,12 +189,19 @@ public class User_register extends Activity {
 								.setMessage("两次密码输入不相同!")
 								.setPositiveButton("确定", null).create();
 						fail2.show();
-					} else {
+					} else if(mapdata.findMobilePhone(
+							registerName.getText().toString()).equals("true")) {
+						Dialog fail2 = new AlertDialog.Builder(
+								User_register.this).setTitle("提示")
+								.setMessage("该号码已注册!")
+								.setPositiveButton("确定", null).create();
+						fail2.show();
+					}else {
 						String resultString = mapdata.userRegister(
 								registerNameString, userNicknameString,
 								registerPwdString, userEmailString, SexString);
 
-						Log.e("resultString", resultString);
+						Log.e("SexString", SexString);
 						if (resultString.equals("true")) {
 							Dialog dialog = new AlertDialog.Builder(
 									User_register.this)
