@@ -27,7 +27,7 @@ namespace WebService1
 
         //private String ConServerStr = @"Data Source=nengyu1234.xicp.net,1434;Initial Catalog=StockManage;Integrated Security=True";
         //private String ConServerStr = @"Data Source=nengyu1234.xicp.net,1434;Initial Catalog=MemberData;UID=sa;Password=1234";
-        private String ConServerStr = @"Data Source=localhost;Initial Catalog=StockManage;Integrated Security=True";
+        private String ConServerStr = @"Data Source=localhost,1434;Initial Catalog=StockManage;Integrated Security=True";
         //private String ConServerStr = @"Data Source=localhost;Initial Catalog=MemberData;Integrated Security=True";
         //默认构造函数  
         public DBOperation()
