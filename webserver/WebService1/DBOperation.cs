@@ -1130,10 +1130,10 @@ namespace WebService1
             return list;
         }
 
-        public bool updateUserChuzhi(string username, string hotelid, string money)
+        public bool updateUserChuzhi(string uid, string hotelid, string money)
         {
             Open();
-            string sql = "update usermoneyhotel set usermoneyhotel.scorechuzhi ='" + money + "' from usermoneyhotel,UserInfo  where usermoneyhotel.uid = UserInfo.Id and UserInfo.username='" + username + "' and  usermoneyhotel.hotelid ='" + hotelid + "'";
+            string sql = "update usermoneyhotel set scorechuzhi ='" + money + "' where hotelid='"+ hotelid +"' and uid='"+ uid +"'" ;
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
@@ -1146,6 +1146,26 @@ namespace WebService1
                 return false;
             }
             finally {
+                Dispose();
+            }
+        }
+        public bool updateUserKezhu(string uid, string money)
+        {
+            Open();
+            string sql = "update usermoney set scorexiaofei ='" + money + "' where uid='" + uid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            try
+            {
+
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
                 Dispose();
             }
         }
@@ -1426,6 +1446,55 @@ namespace WebService1
                 return false;
             }
         }
+
+        public string hasMobilephone(string mobilephone)
+        {
+            string results;
+            Open();
+            string sql = "select mobilephone from users where mobilephone='" + mobilephone + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                sql = "select @@rowcount ";
+                cmd.CommandText = sql;
+                int count = (int)cmd.ExecuteScalar();
+                if (count == 0)
+                    results = "0";
+                else if (count == 1)
+                    results = "1";
+                else
+                    results = "2";
+            }
+            catch
+            {
+                results = "9";
+            }
+            Dispose();
+            return results;
+        }
+
+
+        public bool userMobileSet(string idcard, string mobilephone, string cardnumber)
+        {
+            Open();
+            string sql = "update users set mobile='" + mobilephone + "' where idcard='" + idcard + "' and cardnumber='" + cardnumber + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+
 
 
     }

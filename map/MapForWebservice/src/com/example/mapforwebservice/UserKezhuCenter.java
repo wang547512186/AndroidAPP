@@ -18,7 +18,6 @@ public class UserKezhuCenter extends Activity {
 	private LinearLayout kezhuHistoryLayout;
 	private String UserName;
 	private String uid;
-	private LinearLayout giftLayout;
 	private List<String> detail;
 	private MapData mapdata;
 	
@@ -95,16 +94,6 @@ public class UserKezhuCenter extends Activity {
 				finish();
 			}
 
-		});
-		giftLayout = (LinearLayout) findViewById(R.id.giftLayout);
-		User_information.changeBackground(giftLayout);
-		giftLayout.setOnClickListener(new OnClickListener() {
-			// /ÑûÇë½±Àø
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-			}
 		});
 
 	}

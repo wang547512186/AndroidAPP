@@ -59,7 +59,7 @@ public class KezhuPay extends Activity {
 		mapdata = new MapData();
 		detail = mapdata.userInfor(userName);
 		List<String> kezhudetail = mapdata.getUserKezhu(uid);
-		if (!detail.isEmpty()&&!kezhudetail.isEmpty()) {
+		if (!detail.isEmpty() && !kezhudetail.isEmpty()) {
 			fkezhu = Double.valueOf(kezhudetail.get(0).toString());
 			// ykezhu = Double.valueOf(detail.get(8).toString().trim());
 			nickName = detail.get(1).toString().trim();
@@ -159,34 +159,33 @@ public class KezhuPay extends Activity {
 			String hotelidString = strHotelId;
 			String hotelnameString = strHotelName;
 			String moneyDouble = "0";
-			Double scorecustomerDouble = Double.valueOf(requestKezhu.getText().toString())*(-1);
-			String scorecustomer=String.valueOf(scorecustomerDouble);
+			Double scorecustomerDouble = Double.valueOf(requestKezhu.getText()
+					.toString()) * (-1);
+			String scorecustomer = String.valueOf(scorecustomerDouble);
 			String storedmoneycustomerDouble = "0";
-//Log.e("uidString", uidString);
-//Log.e("customernameString", customernameString);
-//Log.e("hotelidString", hotelidString);
-//Log.e("hotelnameString", hotelnameString);
-//Log.e("moneyDouble", moneyDouble);
-//Log.e("scorecustomerDouble", scorecustomerDouble);
-//Log.e("storedmoneycustomerDouble", storedmoneycustomerDouble);
+			// Log.e("uidString", uidString);
+			// Log.e("customernameString", customernameString);
+			// Log.e("hotelidString", hotelidString);
+			// Log.e("hotelnameString", hotelnameString);
+			// Log.e("moneyDouble", moneyDouble);
+			// Log.e("scorecustomerDouble", scorecustomerDouble);
+			// Log.e("storedmoneycustomerDouble", storedmoneycustomerDouble);
 
 			mapdata = new MapData();
-			String isAddhistory = mapdata.addHistory( uidString,  customernameString,
-					hotelidString,  hotelnameString,  moneyDouble,
-					scorecustomer,  storedmoneycustomerDouble);
+			String isAddhistory = mapdata.addHistory(uidString,
+					customernameString, hotelidString, hotelnameString,
+					moneyDouble, scorecustomer, storedmoneycustomerDouble);
 			// /////支付成功
 			if (isAddhistory.equals("true")) {
-				String resultString="true";
-//				if (requestKezhuNumber < fkezhu) {
-//					resultString = mapdata.updateUser("fkezhu",
-//							String.valueOf(fkezhu - requestKezhuNumber),
-//							userName);
-//				} else {
-//					mapdata.updateUser("fkezhu", "0", userName);
-//					resultString = mapdata.updateUser("ykezhu", String
-//							.valueOf(ykezhu + fkezhu - requestKezhuNumber),
-//							userName);
-//				}
+				String resultString = "false";
+				// if (requestKezhuNumber < fkezhu) {
+				resultString = mapdata.updateUserKezhu(uidString, String.valueOf(fkezhu - requestKezhuNumber));
+				// } else {
+				// mapdata.updateUser("fkezhu", "0", userName);
+				// resultString = mapdata.updateUser("ykezhu", String
+				// .valueOf(ykezhu + fkezhu - requestKezhuNumber),
+				// userName);
+				// }
 				if (resultString.equals("true")) {
 					Dialog dialog2 = new AlertDialog.Builder(KezhuPay.this)
 							.setTitle("支付结果")

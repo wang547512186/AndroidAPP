@@ -215,9 +215,14 @@ namespace WebService1
         }
 
         [WebMethod(Description = "修改用户储值")]
-        public bool updateUserChuzhi(string username, string hotelid, string money)
+        public bool updateUserChuzhi(string uid, string hotelid, string money)
         {
-            return dbOperation.updateUserChuzhi(username, hotelid, money);
+            return dbOperation.updateUserChuzhi(uid, hotelid, money);
+        }
+        [WebMethod(Description = "修改用户客主币")]
+        public bool updateUserKezhu(string uid, string money)
+        {
+            return dbOperation.updateUserKezhu(uid, money);
         }
 
         [WebMethod(Description = "查找用户客主币")]
@@ -271,6 +276,18 @@ namespace WebService1
         public bool test(string id, string num)
         {
             return dbOperation.test(id, num);
+        }
+
+        [WebMethod(Description = "判断当前电话号码是否存在,或者号码存在两个一样的")]
+        public string hasMobilephone(string mobile)
+        {
+            return dbOperation.hasMobilephone(mobile);
+        }
+
+        [WebMethod(Description = "根据卡号身份证号更改手机号")]
+        public bool userMobileSet(string idcard, string mobilephone, string cardnumber)
+        {
+            return dbOperation.userMobileSet(idcard, mobilephone, cardnumber);
         }
 
     }

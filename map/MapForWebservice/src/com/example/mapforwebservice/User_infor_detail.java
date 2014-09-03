@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -129,61 +130,24 @@ public class User_infor_detail extends Activity {
 		});
 		User_information.changeBackground(btn_changeInfo);
 
+		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
+		returnbtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(User_infor_detail.this, User_information.class);
+				startActivity(intent);
+				User_infor_detail.this.finish();
+			}
+
+		});
+		
 	}
 
-	// private List<Map<String, Object>> getData(){
-	// list=new ArrayList<Map<String,Object>>();
-	// Map<String,Object> map=new HashMap<String,Object>();
-	// map.put("title", "性别");
-	// if(detail.get(9).toString().equals("1"))
-	// {
-	// map.put("value", "男");
-	// }
-	// if(detail.get(9).toString().equals("0"))
-	// {
-	// map.put("value", "女");
-	// }
-	// list.add(map);
-	//
-	// map=new HashMap<String,Object>();
-	// map.put("title", "旅馆名字");
-	// map.put("value", detail.get(7).toString());
-	// list.add(map);
-	//
-	// map=new HashMap<String,Object>();
-	// map.put("title", "我的邮箱");
-	// map.put("value", detail.get(6).toString());
-	// list.add(map);
-	//
-	// map=new HashMap<String,Object>();
-	// map.put("title", "我的地址");
-	// map.put("value", detail.get(10).toString());
-	// list.add(map);
-	//
-	// map=new HashMap<String,Object>();
-	// map.put("title", "我的电话");
-	// map.put("value", detail.get(12).toString());
-	// list.add(map);
-	//
-	// map=new HashMap<String,Object>();
-	// map.put("title", "最后登录");
-	// map.put("value", detail.get(3).toString());
-	// list.add(map);
-	//
-	// map=new HashMap<String,Object>();
-	// map.put("title", "最后活跃");
-	// map.put("value", detail.get(4).toString());
-	// list.add(map);
-	//
-	// return list;
-	// }
-	// class user_itemOnClickListener implements OnItemClickListener{
-	// public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-	// long arg3) {
-	// // TODO Auto-generated method stub
-	// }
-	// }
-
+	
+	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {

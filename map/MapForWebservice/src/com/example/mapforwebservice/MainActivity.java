@@ -328,7 +328,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 			public void run() {
 				checkThread();
 			}
-		}, 7000);
+		}, 10000);
 
 		MyThread thread = new MyThread();
 		Thread mThread = new Thread(thread);

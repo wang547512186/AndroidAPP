@@ -38,9 +38,11 @@ public class MyInvited extends Activity {
 			data = null;
 		}
 		myInviteListView = (ListView) findViewById(R.id.myInviteListView);
+		
+		try {
 		myInviteListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_expandable_list_item_1, getData()));
-
+		} catch (Exception e) {}
 		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
 		returnbtn.setOnClickListener(new OnClickListener() {
 

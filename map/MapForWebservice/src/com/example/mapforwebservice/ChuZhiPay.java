@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract.CommonDataKinds.Nickname;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +33,9 @@ public class ChuZhiPay extends Activity {
 	private Double requestChuzhiNumber;
 	private SharedPreferences sp;
 	private String userName = "";
+	private String nickName = "";
 	private String userPwd = "";
+	private String uid = "";
 	private MapData mapdata;
 	private List<String> detail;
 	private static final int RESULT_FAIL = 1;
@@ -45,14 +48,16 @@ public class ChuZhiPay extends Activity {
 
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
 		userName = sp.getString("userName", "");
+		uid = sp.getString("uid", "");
 		mapdata = new MapData();
 		detail = mapdata.userInfor(userName);
 		if (!detail.isEmpty()) {
-//			userPwd = detail.get(2).toString().trim();
+			nickName = detail.get(1).toString().trim();
 		}
 
 		Intent intent = getIntent();
 		hotelId = intent.getStringExtra("hotelId");
+		
 		// Toast.makeText(ChuZhiPay.this,hotelId, Toast.LENGTH_LONG).show();
 		hotelNameStr = intent.getStringExtra("hotelname");
 		hotelChuzhiStr = intent.getStringExtra("hotelchuzhi");
@@ -118,15 +123,16 @@ public class ChuZhiPay extends Activity {
 			mapdata = new MapData();
 			requestChuzhiNumber = Double.valueOf('-'+requestChuzhi.getText()
 					.toString());
-			String isUpdateChuzhi = mapdata.updateUserChuzhi(userName, hotelId,
+			String isUpdateChuzhi = mapdata.updateUserChuzhi(uid, hotelId,
 					String.valueOf(chuzhi + requestChuzhiNumber));
+//			Toast.makeText(ChuZhiPay.this,uid+"|"+hotelId+"|"+ String.valueOf(chuzhi + requestChuzhiNumber), Toast.LENGTH_LONG).show();
 			if (isUpdateChuzhi.equals("true")) {
 
 				mapdata = new MapData();
 				try {
-					mapdata.addChuzhihistory(userName, hotelId,String.valueOf(requestChuzhiNumber));
+					mapdata.addHistory(uid, nickName, hotelId, hotelNameStr, "0","0", String.valueOf(requestChuzhiNumber));
 				} catch (Exception e) {
-					Toast.makeText(ChuZhiPay.this,userName+hotelId+String.valueOf(requestChuzhiNumber), Toast.LENGTH_LONG).show();
+//					Toast.makeText(ChuZhiPay.this,userName+hotelId+String.valueOf(requestChuzhiNumber), Toast.LENGTH_LONG).show();
 				}
 
 				Dialog dialog2 = new AlertDialog.Builder(ChuZhiPay.this)

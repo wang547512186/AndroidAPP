@@ -43,6 +43,7 @@ public class MapData {
 	private static final String addUserKezhu = "addUserKezhu";
 	private static final String findShops = "findShops";
 	private static final String updateUserChuzhi = "updateUserChuzhi";
+	private static final String updateUserKezhu = "updateUserKezhu";
 	private static final String addChuzhihistory = "addChuzhihistory";
 	private static final String getChuzhihistory = "getChuzhihistory";
 	private static final String getKezhuhistory = "getKezhuhistory";
@@ -57,8 +58,8 @@ public class MapData {
 	// ="http://192.168.10.119:180/Service1.asmx?WSDL"; //公司
 	// private static final String WSDL
 	// ="http://192.168.137.1:8081/Service1.asmx?WSDL";
-	// private static final String WSDL =
-	// "http://192.168.10.37:8081/Service1.asmx?WSDL";
+//	 private static final String WSDL =
+//	 "http://192.168.10.37:8081/Service1.asmx?WSDL";   
 
 //	 private static final String WSDL
 //	 ="http://192.168.1.143:8081/Service1.asmx?WSDL"; // 个人电脑
@@ -91,11 +92,11 @@ public class MapData {
 		return value;
 	}
 
-	public String updateUserChuzhi(String username, String hotelid, String money) {
+	public String updateUserChuzhi(String uid, String hotelid, String money) {
 		String value = "";
 		SoapObject soapObject = new SoapObject(serviceNameSpace,
 				updateUserChuzhi);
-		soapObject.addProperty("username", username);
+		soapObject.addProperty("uid", uid);
 		soapObject.addProperty("hotelid", hotelid);
 		soapObject.addProperty("money", money);
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -106,6 +107,33 @@ public class MapData {
 		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
 		try {
 			httpTransport.call(serviceNameSpace + updateUserChuzhi, envelope);
+			// SoapObject result=(SoapObject)envelope.getResponse();
+			SoapObject result = (SoapObject) envelope.bodyIn;
+			// citys.add(result.toString());
+			value = result.getProperty(0).toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value;
+	}
+	public String updateUserKezhu(String uid,String money) {
+		String value = "";
+		SoapObject soapObject = new SoapObject(serviceNameSpace,
+				updateUserKezhu);
+		soapObject.addProperty("uid", uid);
+		soapObject.addProperty("money", money);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+		envelope.dotNet = true;
+		envelope.setOutputSoapObject(soapObject);
+
+		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
+		try {
+			httpTransport.call(serviceNameSpace + updateUserKezhu, envelope);
 			// SoapObject result=(SoapObject)envelope.getResponse();
 			SoapObject result = (SoapObject) envelope.bodyIn;
 			// citys.add(result.toString());

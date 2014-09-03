@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ChangeInfo extends Activity {
@@ -132,6 +133,19 @@ public class ChangeInfo extends Activity {
 			}
 		});
 
+		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
+		returnbtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(ChangeInfo.this, User_infor_detail.class);
+				intent.putExtra("UserName", UserName);
+				startActivity(intent);
+				ChangeInfo.this.finish();
+			}
+
+		});
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

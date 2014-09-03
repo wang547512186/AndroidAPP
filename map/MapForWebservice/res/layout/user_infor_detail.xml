@@ -5,29 +5,35 @@
     android:background="@color/bgcolor"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/maincolor" >
 
-        <TableLayout
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp" >
+
+            <ImageView
+                android:id="@+id/returnbtn"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/returnbutton" >
+            </ImageView>
+
+            <TextView
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#a70006" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/TitleText"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@color/maincolor"
-            android:orientation="horizontal"
-            android:stretchColumns="0" >
-
-            <TableRow>
-
-                <TextView
-                    android:layout_height="45dp"
-                    android:gravity="center"
-                    android:text="个人信息"
-                    android:textColor="#ffffff"
-                    android:textSize="24sp" />
-            </TableRow>
-        </TableLayout>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="个人信息" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
