@@ -87,8 +87,7 @@
                     android:layout_weight="1"
                     android:background="#ffffff"
                     android:gravity="center_vertical"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword" />
+                    android:imeOptions="actionNext"/>
             </LinearLayout>
 
             <TextView
@@ -124,8 +123,7 @@
                     android:layout_weight="1"
                     android:background="#ffffff"
                     android:gravity="center_vertical"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword" />
+                    android:imeOptions="actionNext" />
             </LinearLayout>
 
            <TextView

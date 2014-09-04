@@ -52,54 +52,94 @@ public class UserChangeMobile extends Activity {
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-			if (fillMobilephone.getText().toString().length() == 11) {
-				String result = mapdata.userMobileSet(fillIdcard.getText()
-						.toString(), fillMobilephone.getText().toString(),
-						fillCardnum.getText().toString());
-				if (result.equals("true")) {
-					Dialog dialog = new AlertDialog.Builder(
-							UserChangeMobile.this)
-							.setTitle("提示")
-							.setMessage("修改成功!")
-							.setPositiveButton("确定",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											// TODO Auto-generated
-											// method
-											// stub
-											Intent intent = new Intent(
-													UserChangeMobile.this,
-													User_login.class);
-											startActivity(intent);
-											UserChangeMobile.this.finish();
-										}
-									}).create();
-					dialog.show();
-				} else {
-					if (mapdata.findMobilePhone(
-							fillMobilephone.getText().toString())
-							.equals("true")) {
+			if (fillMobilephone.getText().toString().equals("")
+					|| fillCardnum.getText().toString().equals("")
+					|| fillIdcard.getText().toString().equals("")) {
+				Dialog fail = new AlertDialog.Builder(UserChangeMobile.this)
+						.setTitle("修改").setMessage("请填写完整!")
+						.setPositiveButton("确定", null).create();
+				fail.show();
+			} else {
+				if (fillMobilephone.getText().toString().length() == 11) {
+					String result = mapdata.userMobileSet(fillIdcard.getText()
+							.toString(), fillMobilephone.getText().toString(),
+							fillCardnum.getText().toString());
+					if (result.equals("true")) {
 						Dialog dialog = new AlertDialog.Builder(
-								UserChangeMobile.this).setTitle("提示")
-								.setMessage("手机号码已经存在请重新填写")
-								.setPositiveButton("确定", null).create();
+								UserChangeMobile.this)
+								.setTitle("提示")
+								.setMessage("修改成功!")
+								.setPositiveButton("确定",
+										new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												// TODO Auto-generated
+												// method
+												// stub
+												Intent intent = new Intent(
+														UserChangeMobile.this,
+														User_login.class);
+												startActivity(intent);
+												UserChangeMobile.this.finish();
+											}
+										}).create();
 						dialog.show();
 					} else {
-						Dialog dialog = new AlertDialog.Builder(
-								UserChangeMobile.this).setTitle("提示")
-								.setMessage("信息填写不正确")
-								.setPositiveButton("确定", null).create();
-						dialog.show();
+						if (mapdata.findMobilePhone(
+								fillMobilephone.getText().toString()).equals(
+								"true")) {
+							Dialog dialog = new AlertDialog.Builder(
+									UserChangeMobile.this).setTitle("提示")
+									.setMessage("手机号码已经存在请重新填写")
+									.setPositiveButton("确定", null).create();
+							dialog.show();
+						} else {
+							if (mapdata.userMobileSet(
+									fillIdcard.getText().toString(),
+									fillMobilephone.getText().toString(),
+									fillCardnum.getText().toString()).equals(
+									"true")) {
+								Dialog dialog = new AlertDialog.Builder(
+										UserChangeMobile.this)
+										.setTitle("提示")
+										.setMessage("修改成功")
+										.setPositiveButton(
+												"确定",
+												new DialogInterface.OnClickListener() {
+													@Override
+													public void onClick(
+															DialogInterface dialog,
+															int which) {
+														// TODO Auto-generated
+														// method
+														// stub
+														Intent intent = new Intent(
+																UserChangeMobile.this,
+																User_login.class);
+														startActivity(intent);
+														UserChangeMobile.this
+																.finish();
+													}
+												}).create();
+								dialog.show();
+							} else {
+								Dialog dialog = new AlertDialog.Builder(
+										UserChangeMobile.this).setTitle("提示")
+										.setMessage("信息填写不正确")
+										.setPositiveButton("确定", null).create();
+								dialog.show();
+							}
+						}
 					}
+				} else {
+					Dialog dialog = new AlertDialog.Builder(
+							UserChangeMobile.this).setTitle("提示")
+							.setMessage("手机号码填写不正确")
+							.setPositiveButton("确定", null).create();
+					dialog.show();
 				}
-			} else {
-				Dialog dialog = new AlertDialog.Builder(UserChangeMobile.this)
-						.setTitle("提示").setMessage("手机号码填写不正确")
-						.setPositiveButton("确定", null).create();
-				dialog.show();
 			}
 		}
 

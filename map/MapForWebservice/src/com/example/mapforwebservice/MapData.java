@@ -54,14 +54,14 @@ public class MapData {
 	// private static final String
 	// WSDL="http://10.0.2.2:55718/Service1.asmx?WSDL";
 
-	private static final String WSDL = "http://114.215.196.123:8080/Service1.asmx?WSDL"; // 阿里云
+//	private static final String WSDL = "http://114.215.196.123:8080/Service1.asmx?WSDL"; // 阿里云
 
 	// private static final String WSDL
 	// ="http://192.168.10.119:180/Service1.asmx?WSDL"; //公司
 	// private static final String WSDL
 	// ="http://192.168.137.1:8081/Service1.asmx?WSDL";
-//	 private static final String WSDL =
-//	 "http://192.168.10.37:8081/Service1.asmx?WSDL";   
+	 private static final String WSDL =
+	 "http://192.168.10.37:8081/Service1.asmx?WSDL";   
 
 //	 private static final String WSDL
 //	 ="http://192.168.1.143:8081/Service1.asmx?WSDL"; // 个人电脑
@@ -1139,7 +1139,7 @@ public class MapData {
 	public String hasMobilephone(String mobilephone) {
 		String value = "";
 		SoapObject soapObject = new SoapObject(serviceNameSpace, hasMobilephone);
-		soapObject.addProperty("mobilephone", mobilephone);
+		soapObject.addProperty("mobile", mobilephone);
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);

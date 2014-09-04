@@ -127,7 +127,7 @@ public class User_login extends Activity {
 											}
 										}).create();
 						fail.show();
-					} else if (mapdata.hasMobilephone(
+					} else if (mapdata.hasMobilephone(     
 							loginname.getText().toString()).equals("9")) {
 						Dialog fail = new AlertDialog.Builder(User_login.this)
 								.setTitle("µÇÂ¼").setMessage("ÍøÂçÓĞÎó,ÇëÖØÊÔ!")
