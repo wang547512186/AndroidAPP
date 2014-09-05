@@ -3,6 +3,7 @@ package com.example.mapforwebservice;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -199,7 +200,7 @@ public class User_register extends Activity {
 					}else {
 						String resultString = mapdata.userRegister(
 								registerNameString, userNicknameString,
-								registerPwdString, userEmailString, SexString);
+								registerPwdString, userEmailString, SexString,inviteNumberString);
 
 						Log.e("SexString", SexString);
 						if (resultString.equals("true")) {
@@ -219,7 +220,7 @@ public class User_register extends Activity {
 													// stub
 													Editor editor = sp.edit();
 													editor.putString(
-															"userName",
+															"userPhone",
 															registerName
 																	.getText()
 																	.toString()

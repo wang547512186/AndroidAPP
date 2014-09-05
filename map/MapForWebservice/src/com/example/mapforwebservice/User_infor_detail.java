@@ -24,7 +24,7 @@ public class User_infor_detail extends Activity {
 	private List<Map<String, Object>> list;
 	private List<String> detail;
 	private MapData mapdata;
-	private String UserName;
+	private String userPhone;
 	private LinearLayout passwordLayout;
 	private TextView btn_changeInfo;
 	private String usernameStr;
@@ -37,9 +37,9 @@ public class User_infor_detail extends Activity {
 		setContentView(R.layout.user_infor_detail);
 		// listview=(ListView)findViewById(R.id.userinfor);
 		Intent intent = getIntent();
-		UserName = intent.getStringExtra("UserName");
+		userPhone = intent.getStringExtra("userPhone");
 		mapdata = new MapData();
-		detail = mapdata.userInfor(UserName);
+		detail = mapdata.userInfor(userPhone);
 
 		passwordLayout = (LinearLayout) findViewById(R.id.passwordLayout);
 		passwordLayout.setOnClickListener(new OnClickListener() {
@@ -50,7 +50,7 @@ public class User_infor_detail extends Activity {
 				Intent intent = new Intent(User_infor_detail.this,
 						User_password.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("UserName", UserName);
+				bundle.putString("userPhone", userPhone);
 				intent.putExtras(bundle);
 				startActivity(intent);
 				// User_infor_detail.this.finish();
@@ -117,7 +117,7 @@ public class User_infor_detail extends Activity {
 				Intent intent = new Intent(User_infor_detail.this,
 						ChangeInfo.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("UserName", UserName);
+				bundle.putString("userPhone", userPhone);
 				bundle.putString("usernameStr", usernameStr);
 				bundle.putString("usersexStr", usersexStr);
 				bundle.putString("useremailStr", useremailStr);

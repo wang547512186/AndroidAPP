@@ -15,34 +15,31 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MyInvited extends Activity {
-	private ListView myInviteListView;
 	private MapData mapdata;
-	List<String> data = new ArrayList<String>();
-	private String UserName;
-	private LinearLayout historyEmpty;
+	List<String> dataList = new ArrayList<String>();
+	private String userPhone;
+	private String myInvitedNum = "0";
+	private TextView myInvitedTotal;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_invited);
-		historyEmpty = (LinearLayout) findViewById(R.id.historyEmpty);
+		myInvitedTotal = (TextView) findViewById(R.id.myInvitedTotal);
 		mapdata = new MapData();
-
 		Bundle bundle = this.getIntent().getExtras();
-		UserName = bundle.getString("UserName");
+		userPhone = bundle.getString("userPhone");
 		try {
-			data = mapdata.findInvitePhone(UserName);
+			dataList = mapdata.findInvitePhone(userPhone);
+			myInvitedNum = dataList.get(0).toString();
 		} catch (Exception e) {
-			data = null;
 		}
-		myInviteListView = (ListView) findViewById(R.id.myInviteListView);
-		
-		try {
-		myInviteListView.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_expandable_list_item_1, getData()));
-		} catch (Exception e) {}
+
+		myInvitedTotal.setText(myInvitedNum);
+
 		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
 		returnbtn.setOnClickListener(new OnClickListener() {
 
@@ -58,11 +55,4 @@ public class MyInvited extends Activity {
 		});
 	}
 
-	private List<String> getData() {
-
-		if (!data.isEmpty()) {
-			historyEmpty.setVisibility(View.GONE);
-		}
-		return data;
-	}
 }

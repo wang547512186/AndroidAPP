@@ -16,7 +16,7 @@ import android.widget.TextView;
 public class PayConfirm extends Activity {
 	private static final int RESULT_FAIL = 1;
 	private static final int RESULT_SUCCESS = 2;
-	private String userName;
+	private String userPhone;
 	private String ActivityName;
 
 	@Override
@@ -25,7 +25,7 @@ public class PayConfirm extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.pay_confirm);
 		Intent intent = getIntent();
-		userName = intent.getStringExtra("userName");
+		userPhone = intent.getStringExtra("userPhone");
 		ActivityName = intent.getStringExtra("ActivityName");
 		Button payConfirmBtn = (Button) findViewById(R.id.payConfirmBtn);
 		payConfirmBtn.setOnClickListener(new OnClickListener() {
@@ -35,8 +35,8 @@ public class PayConfirm extends Activity {
 				TextView payPwdText = (TextView) findViewById(R.id.payPwdText);
 				String inputString = payPwdText.getText().toString();
 				MapData mapData=new MapData();
-				mapData.userLogin(userName, inputString);
-				if (mapData.userLogin(userName, inputString).equals("true")) {
+				mapData.userLogin(userPhone, inputString);
+				if (mapData.userLogin(userPhone, inputString).equals("true")) {
 					returnSuccess();
 				} else {
 					Dialog dialog = new AlertDialog.Builder(PayConfirm.this)

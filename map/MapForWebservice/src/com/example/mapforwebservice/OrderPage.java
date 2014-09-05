@@ -48,7 +48,7 @@ public class OrderPage extends Activity {
 	private MapData mapdata;
 	// private String dateStr;
 	private SharedPreferences sp;
-	private String UserName;
+	private String userPhone;
 	private String nickName;
 	private String hotelName;
 	private String hotelAddress;
@@ -66,12 +66,12 @@ public class OrderPage extends Activity {
 		setContentView(R.layout.order_page);
 		mapdata = new MapData();
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
-		UserName = sp.getString("userName", "");
+		userPhone = sp.getString("userPhone", "");
 		phoneName = (EditText) findViewById(R.id.phoneName);
 		phoneNumber = (EditText) findViewById(R.id.phoneNumber);
 		
-		if (!UserName.equals("")) {
-			detail = mapdata.userInfor(UserName);
+		if (!userPhone.equals("")) {
+			detail = mapdata.userInfor(userPhone);
 			nickName = detail.get(1).toString().trim();
 			phoneName.setText(detail.get(1).toString().trim());
 			phoneNumber.setText(detail.get(5).toString().trim());
@@ -156,7 +156,7 @@ public class OrderPage extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) { // /Î´µÇÂ¼
+				if (userPhone.equals("")) { // /Î´µÇÂ¼
 					Dialog fail = new AlertDialog.Builder(OrderPage.this)
 							.setTitle("ÌáÊ¾").setMessage("ÇëÏÈµÇÂ¼")
 							.setPositiveButton("È·¶¨", null).create();
@@ -164,7 +164,7 @@ public class OrderPage extends Activity {
 				} else { // ÒÑµÇÂ¼
 					stayPerson = phoneName.getText().toString();
 					telephone = phoneNumber.getText().toString();
-					Log.e("UserName", UserName);
+					Log.e("userPhone", userPhone);
 					Log.e("nickName", nickName);
 					Log.e("stayPerson", stayPerson);
 					Log.e("strHoteltype", strHoteltype);
@@ -175,7 +175,7 @@ public class OrderPage extends Activity {
 					Log.e("enterDate", enterDate);
 					Log.e("endDate", endDate);
 
-					if (mapdata.addOrder(UserName, nickName, stayPerson,
+					if (mapdata.addOrder(userPhone, nickName, stayPerson,
 							strHoteltype, ""+totalPrice, telephone, hotelName,
 							hotelAddress, enterDate, endDate).equals("true")) {
 						Dialog success = new AlertDialog.Builder(OrderPage.this)

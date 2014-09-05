@@ -33,7 +33,7 @@ public class KezhuPay extends Activity {
 	private TextView hoteladdress;
 	private TextView kezhubiText;
 	private String nickName = "";
-	private String userName = "";
+	private String userPhone = "";
 	private String uid = "";
 	private String userPwd = "";
 	private Double fkezhu = 0.0;
@@ -54,10 +54,10 @@ public class KezhuPay extends Activity {
 		requestKezhu = (EditText) findViewById(R.id.requestKezhu);
 
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
-		userName = sp.getString("userName", "");
+		userPhone = sp.getString("userPhone", "");
 		uid = sp.getString("uid", "");
 		mapdata = new MapData();
-		detail = mapdata.userInfor(userName);
+		detail = mapdata.userInfor(userPhone);
 		List<String> kezhudetail = mapdata.getUserKezhu(uid);
 		if (!detail.isEmpty() && !kezhudetail.isEmpty()) {
 			fkezhu = Double.valueOf(kezhudetail.get(0).toString());
@@ -128,7 +128,7 @@ public class KezhuPay extends Activity {
 					} else {
 						Intent intent = new Intent(KezhuPay.this,
 								PayConfirm.class);
-						intent.putExtra("userName", userName);
+						intent.putExtra("userPhone", userPhone);
 						intent.putExtra("ActivityName", "KezhuPay");
 						startActivityForResult(intent, 2);
 

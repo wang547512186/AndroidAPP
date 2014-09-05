@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="附近" />
+            android:text="分类" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
-                android:paddingBottom="10dp"
+                android:paddingBottom="5dp"
                 android:paddingTop="10dp" >
 
                 <TableRow
@@ -180,105 +180,12 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:padding="10dp"
-                            android:src="@drawable/ic_near_bath" />
+                            android:src="@drawable/ic_near_adu" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="洗浴城"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp" >
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="80dp"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:background="#FF6666"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_near_hair" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="美容美发"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:background="#3399CC"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_near_wine" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="茶楼酒吧"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:background="#CC6600"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_near_photo" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="婚庆摄影"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:background="#999999"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_near_leg" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="桑拿足浴"
+                            android:text="其他"
                             android:textColor="#ffffff" />
                     </LinearLayout>
                 </TableRow>
@@ -291,8 +198,16 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:background="@color/bgcolor" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" 
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:text="附近商家"
+                android:textColor="@color/secondtext"/>
 
             <ListView
                 android:id="@+id/nearList"

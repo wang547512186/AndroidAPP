@@ -77,7 +77,7 @@ public class User_login extends Activity {
 							.setTitle("登录").setMessage("请填写完整!")
 							.setPositiveButton("确定", null).create();
 					fail.show();
-				} else if (loginname.getText().toString().length() != 11) {
+				} else if (loginname.getText().toString().length() < 11) {
 					Dialog fail = new AlertDialog.Builder(User_login.this)
 							.setTitle("登录").setMessage("手机号码格式不正确!")
 							.setPositiveButton("确定", null).create();
@@ -154,7 +154,7 @@ public class User_login extends Activity {
 													// stub
 													Editor editor = sp.edit();
 													editor.putString(
-															"userName",
+															"userPhone",
 															loginname.getText()
 																	.toString()
 																	.trim());

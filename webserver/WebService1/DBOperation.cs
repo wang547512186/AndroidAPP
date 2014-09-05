@@ -27,8 +27,8 @@ namespace WebService1
 
         //private String ConServerStr = @"Data Source=nengyu1234.xicp.net,1434;Initial Catalog=StockManage;Integrated Security=True";
         //private String ConServerStr = @"Data Source=nengyu1234.xicp.net,1434;Initial Catalog=MemberData;UID=sa;Password=1234";
-        //private String ConServerStr = @"Data Source=localhost,1434;Initial Catalog=StockManage;Integrated Security=True";
-        private String ConServerStr = @"Data Source=localhost,1434;Initial Catalog=MemberData;Integrated Security=True";
+        private String ConServerStr = @"Data Source=localhost;Initial Catalog=StockManage;Integrated Security=True";
+        //private String ConServerStr = @"Data Source=localhost;Initial Catalog=MemberData;Integrated Security=True";
         //默认构造函数  
         public DBOperation()
         {
@@ -456,27 +456,30 @@ namespace WebService1
             }
         }
 
-        public bool AddUser(string username, string nickename, string userpwd, string mobilephone, string addresspost, string sexy, string email, string fkezhu, string ykezhu, string invitephone)
+       
+        public bool addMessage(string username, string title, string message)
         {
+            Open();
+            string sql = "insert into [message] values ('" + username + "','" + title + "','" + message + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "')";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-                Open();
-                string sql = "insert into [UserInfo] values ('" + username + "','" + nickename + "','" + userpwd + "','" + mobilephone + "','" + addresspost + "','" + sexy + "','" + email + "','" + fkezhu + "','" + ykezhu + "','" + invitephone + "')";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+
                 cmd.ExecuteNonQuery();
-                Dispose();
+
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
+            finally { Dispose(); }
         }
 
-        public bool addMessage(string username, string title, string message)
+        public bool addUserChuzhi(string uid, string hotelid,string hoteltotalid,string scorechuzhi)
         {
             Open();
-            string sql = "insert into [message] values ('" + username + "','" + title + "','" + message + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "')";
+            string sql = "insert into [usermoneyhotel] (usermoneyhotelid,uid,groupid,totaluserid,hotelid,hoteltotalid,scorechuzhi,createtime) values ('" + Guid.NewGuid() + "','" + uid + "','200','00000000-0000-0000-0000-000000000000','" + hotelid + "','" + hoteltotalid + "','" + scorechuzhi + "','" + DateTime.Now + "')";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
@@ -557,30 +560,7 @@ namespace WebService1
 
                 }
 
-                //List<string> list = new List<string>();
-                //try
-                //{
-                //    Open();
-                //    string sql = "select * from roomorder where customername='" + username + "'";
-                //    SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                //    SqlDataReader read = cmd.ExecuteReader();
-                //    while (read.Read())
-                //    {
-                //        list.Add(read["商家名称"].ToString());       //0     
-                //        list.Add(read["房型"].ToString());           //1
-                //        list.Add(read["addressHotel"].ToString());   //2
-                //        string[] begindate = read["begindate"].ToString().Split(' ');
-                //        list.Add(begindate[0]);      //3
-                //        string[] enddate = read["enddate"].ToString().Split(' ');
-                //        list.Add(enddate[0]);        //4
-                //        list.Add(read["入住人"].ToString().Trim());         //5
-                //        list.Add(read["mobilephone"].ToString().Trim());    //6
-                //        string[] price=read["价格"].ToString().Split(';');
-                //        list.Add(price[0]);           //7
-                //    }
-                //    read.Close();
-                //    Dispose();
-
+             
             }
             catch (Exception)
             { }
@@ -618,7 +598,7 @@ namespace WebService1
             }
         }
 
-        public bool userRegister(string username, string nickename, string password, string email, int sexy)
+        public bool userRegister(string username, string nickename, string password, string email, int sexy, Int64 hotelid)
         {
             Guid guid = new Guid();
             guid = Guid.NewGuid();
@@ -626,10 +606,10 @@ namespace WebService1
             try
             {
                 Open();
-                string sql = "insert into users (uid,username,nickname,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + guid + "','" + username + "','" + nickename + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','" + sexy + "','" + username + "') ";
+                string sql = "insert into users (uid,username,nickname,hotelid,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + guid + "','" + username + "','" + nickename + "','" + hotelid + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','" + sexy + "','" + username + "') ";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
-                sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + guid + "','500','97','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
+                sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + guid + "','200','" + hotelid + "','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
                 cmd.CommandText = sql;
                 cmd.ExecuteNonQuery();
                 Dispose();
@@ -704,27 +684,28 @@ namespace WebService1
             return ret;
         }
 
-        public List<string> userInfor(string name)
+        public List<string> userInfor(string mobilephone)
         {
             List<string> list = new List<string>();
             Open();
-            string sql = "select * from users where username='" + name + "'";
+            string sql = "select * from users where mobilephone='" + mobilephone + "' and groupid='200'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             SqlDataReader read = cmd.ExecuteReader();
             try
             {
-
-                if (read.Read())
+                if (!mobilephone.Equals(""))
                 {
-                    list.Add(read["uid"].ToString());
-                    list.Add(read["nickname"].ToString());
-                    list.Add(read["password"].ToString());
-                    list.Add(read["email"].ToString());
-                    list.Add(read["sexy"].ToString());
-                    list.Add(read["mobilephone"].ToString());
-                    list.Add(read["birthdate"].ToString());
+                    if (read.Read())
+                    {
+                        list.Add(read["uid"].ToString());
+                        list.Add(read["nickname"].ToString());
+                        list.Add(read["password"].ToString());
+                        list.Add(read["email"].ToString());
+                        list.Add(read["sexy"].ToString());
+                        list.Add(read["mobilephone"].ToString());
+                        list.Add(read["birthdate"].ToString());
+                    }
                 }
-
 
             }
             catch (Exception)
@@ -735,6 +716,32 @@ namespace WebService1
             }
             return list;
             
+        }
+
+        public List<string> hotelshopInfo(string hotelid)
+        {
+            List<string> list = new List<string>();
+            Open();
+            string sql = "select * from hotel where hotelid='" + hotelid + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
+            try
+            {
+                if (read.Read())
+                {
+                    list.Add(read["hotelname"].ToString());
+                    list.Add(read["hoteltotalid"].ToString());
+                }
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                Dispose();
+            }
+            return list;
+
         }
 
 
@@ -1137,9 +1144,10 @@ namespace WebService1
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {
-
-                cmd.ExecuteNonQuery();
-                return true;
+                if ((int)cmd.ExecuteNonQuery() != 0)
+                    return true;
+                else
+                    return false;
             }
             catch
             {
@@ -1202,6 +1210,33 @@ namespace WebService1
             return list;
         }
 
+        public List<string> getChuzhiById(string uid, int hotelid)
+        {
+            List<string> list = new List<string>();
+            Open();
+            string sql = "select * from usermoneyhotel where uid='" + uid + "' and hotelid='" + hotelid + "' ";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
+            try
+            {
+                if (read.Read())
+                {
+                    list.Add(read["scorechuzhi"].ToString());
+
+                }
+
+
+            }
+            catch (Exception)
+            { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
+            return list;
+        }
+
         public bool addUserKezhu(string uid)
         {
             Open();
@@ -1250,31 +1285,26 @@ namespace WebService1
             return list;
         }
 
-        public List<string> findInvitePhone(string username)
+        public List<string> findInvitePhone(string mobilephone)
         {
-            string mobilephone = "";
+            
             List<string> list = new List<string>();
+            Open();
             try
             {
-                Open();
-                string sql = "select mobilephone from UserInfo where username='" + username + "'";
+                
+                string sql = "select * from users where hotelid='" + mobilephone + "'";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
-                if (read.Read())
-                    mobilephone = read["mobilephone"].ToString();
-                read.Close();
-                sql = "select mobilephone from UserInfo where invitephone='" + mobilephone + "'";
-                cmd = new SqlCommand(sql, sqlCon);
-                read = cmd.ExecuteReader();
-                while (read.Read())
-                {
-                    list.Add(read["mobilephone"].ToString());
-                }
-                read.Close();
-                cmd.Dispose();
+                cmd.ExecuteNonQuery();
+                sql = "select @@rowcount";
+                cmd.CommandText = sql;
+                int count = (int)cmd.ExecuteScalar();
+                list.Add(count.ToString());
+                
             }
             catch (Exception)
             { }
+            Dispose();
             return list;
         }
         public List<string> findShops(string city, string shopname)
@@ -1447,6 +1477,34 @@ namespace WebService1
             }
         }
 
+        public string managerLogin(string username, string password)
+        {
+            Open();
+            string sql = "select hotelid from users where username='" + username + "' and password='" + MD5(password) + "' and groupid=100 ";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
+            try
+            {
+                if (read.Read())
+                {
+                    return read["hotelid"].ToString();
+                }
+                else 
+                {
+                    return "false";
+                }
+                
+            }
+            catch (Exception)
+            {
+                return "false";
+            }
+            finally {
+                read.Close();
+                Dispose();
+            }
+        }
+
         public string hasMobilephone(string mobilephone)
         {
             string results;
@@ -1475,10 +1533,12 @@ namespace WebService1
         }
 
 
+
+
         public bool userMobileSet(string idcard, string mobilephone, string cardnumber)
         {
             Open();
-            string sql = "update users set mobilephone='" + mobilephone + "' where idcard='" + idcard + "' and cardnumber='" + cardnumber + "'";
+            string sql = "update users set mobile='" + mobilephone + "' where idcard='" + idcard + "' and cardnumber='" + cardnumber + "'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             try
             {

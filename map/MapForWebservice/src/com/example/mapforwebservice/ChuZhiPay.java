@@ -32,7 +32,7 @@ public class ChuZhiPay extends Activity {
 	private EditText requestChuzhi;
 	private Double requestChuzhiNumber;
 	private SharedPreferences sp;
-	private String userName = "";
+	private String userPhone = "";
 	private String nickName = "";
 	private String userPwd = "";
 	private String uid = "";
@@ -47,10 +47,10 @@ public class ChuZhiPay extends Activity {
 		setContentView(R.layout.chu_zhi_pay);
 
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
-		userName = sp.getString("userName", "");
+		userPhone = sp.getString("userPhone", "");
 		uid = sp.getString("uid", "");
 		mapdata = new MapData();
-		detail = mapdata.userInfor(userName);
+		detail = mapdata.userInfor(userPhone);
 		if (!detail.isEmpty()) {
 			nickName = detail.get(1).toString().trim();
 		}
@@ -106,7 +106,7 @@ public class ChuZhiPay extends Activity {
 					dialog.show();
 				} else {
 					Intent intent = new Intent(ChuZhiPay.this, PayConfirm.class);
-					intent.putExtra("userName", userName);
+					intent.putExtra("userPhone", userPhone);
 					intent.putExtra("ActivityName", "ChuZhiPay");
 					startActivityForResult(intent, 3);
 				}

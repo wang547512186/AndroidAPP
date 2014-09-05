@@ -22,16 +22,16 @@ public class User_password extends Activity {
 	private Button pwdtrue;
 	private Button pwdfalse;
 	private MapData mapdata;
-	private String UserName;
+	private String userPhone;
 //	private String UserPwd;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_password);
 		Intent intent = getIntent();
-		UserName = intent.getStringExtra("UserName");
+		userPhone = intent.getStringExtra("userPhone");
 		mapdata = new MapData();
-		detail = mapdata.userInfor(UserName);
+		detail = mapdata.userInfor(userPhone);
 //		UserPwd = detail.get(2).toString();
 
 		oldpwds = (EditText) findViewById(R.id.oldpwds);
@@ -79,12 +79,12 @@ public class User_password extends Activity {
 						.setMessage("两次密码输入不一致").setPositiveButton("确定", null)
 						.show();
 			} else {
-				if (!mapdata.userLogin(UserName, oldpwds.getText().toString()).equals("true")) {
+				if (!mapdata.userLogin(userPhone, oldpwds.getText().toString()).equals("true")) {
 					new AlertDialog.Builder(User_password.this).setTitle("失败")
 							.setMessage("原密码输入错误")
 							.setPositiveButton("确定", null).show();
 				} else {
-					mapdata.userPwdChange(UserName, newpwds.getText()
+					mapdata.userPwdChange(userPhone, newpwds.getText()
 							.toString());
 					new AlertDialog.Builder(User_password.this)
 							.setTitle("成功")

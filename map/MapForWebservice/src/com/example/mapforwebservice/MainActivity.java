@@ -118,7 +118,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 	String shopStyle;
 	String price = "0";
 	private SharedPreferences sp;
-	private String userName;
+	private String userPhone;
 	private PopupOverlay pop;
 	private ProgressDialog dialog;
 	public LocationClient mLocationClient = null; // 定位
@@ -134,7 +134,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
-		userName = sp.getString("userName", "");
+		userPhone = sp.getString("userPhone", "");
 		mBMapMan = new BMapManager(getApplication());
 		mBMapMan.init(null);
 		// 注意：请在试用setContentView前初始化BMapManager对象，否则会报错
@@ -266,11 +266,11 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 				});
 		tabHost.getTabWidget().getChildAt(2)
 				.setOnClickListener(new OnClickListener() {
-					// 客主币支付
+					// 快捷支付
 					@Override
 					public void onClick(View v) {
 						tabHost.setCurrentTab(2);
-						if (userName.equals("")) {
+						if (userPhone.equals("")) {
 							Intent intent = new Intent(MainActivity.this,
 									User_login.class);
 							startActivity(intent);

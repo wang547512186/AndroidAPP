@@ -60,5 +60,6 @@
     <string name="title_activity_user_rules">UserRules</string>
     <string name="title_activity_nearby">NearbyActivity</string>
     <string name="title_activity_fast_pay">FastPay</string>
+    <string name="title_activity_user_change_mobile">UserChangeMobile</string>
 
 </resources>

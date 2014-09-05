@@ -60,7 +60,7 @@ public class UserChangeMobile extends Activity {
 						.setPositiveButton("È·¶¨", null).create();
 				fail.show();
 			} else {
-				if (fillMobilephone.getText().toString().length() == 11) {
+				if (fillMobilephone.getText().toString().length() >= 11) {
 					String result = mapdata.userMobileSet(fillIdcard.getText()
 							.toString(), fillMobilephone.getText().toString(),
 							fillCardnum.getText().toString());

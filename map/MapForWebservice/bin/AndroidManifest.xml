@@ -178,8 +178,6 @@
         </activity>
         <activity android:name=".UserChuzhiCenter" >
         </activity>
-        <activity android:name=".UserChangeMobile" >
-        </activity>
         <activity
             android:name=".OrderPage"
             android:label="@string/title_activity_order_page"
@@ -404,6 +402,10 @@
         <activity
             android:name=".FastPay"
             android:label="@string/title_activity_fast_pay" >
+        </activity>
+        <activity
+            android:name=".UserChangeMobile"
+            android:label="@string/title_activity_user_change_mobile" >
         </activity>
     </application>
 

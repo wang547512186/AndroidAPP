@@ -43,16 +43,16 @@ public class User_message extends Activity {
 	private boolean switch3_state;
 	public Vibrator vibrator;
 	private SoundPool soundPool;
-	private String UserName;
+	private String userPhone;
 	private LinearLayout historyEmpty;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_message);
 		Intent intent = getIntent();
-		UserName = intent.getStringExtra("UserName");
+		userPhone = intent.getStringExtra("userPhone");
 		mapdata = new MapData();
-		messagelist = mapdata.findMessage(UserName);
+		messagelist = mapdata.findMessage(userPhone);
 		historyEmpty = (LinearLayout) findViewById(R.id.historyEmpty);
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		// ≤‚ ‘

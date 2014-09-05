@@ -97,9 +97,9 @@ namespace WebService1
         }
 
         [WebMethod(Description = "注册用户")]
-        public bool userRegister(string username, string nickename, string password, string email, int sexy)
+        public bool userRegister(string username, string nickename, string password, string email, int sexy,Int64 hotelid)
         {
-            return dbOperation.userRegister(username, nickename, password, email, sexy);
+            return dbOperation.userRegister(username, nickename, password, email, sexy, hotelid);
         }
 
 
@@ -109,6 +109,12 @@ namespace WebService1
             return dbOperation.userLogin(username, userpwd);
         }
 
+        [WebMethod(Description = "商家登录信息")]
+        public string managerLogin(string username, string password)
+        {
+            return dbOperation.managerLogin(username, password);
+        }
+
         [WebMethod(Description = "更改个人密码")]
         public bool userPwdChange(string username, string userpwd)
         {
@@ -116,9 +122,14 @@ namespace WebService1
         }
 
         [WebMethod(Description = "用户信息获取")]
-        public string[] userInfor(string username)
+        public string[] userInfor(string mobilephone)
         {
-            return dbOperation.userInfor(username).ToArray();
+            return dbOperation.userInfor(mobilephone).ToArray();
+        }
+        [WebMethod(Description = "商家信息获取")]
+        public string[] hotelshopInfo(string hotelid)
+        {
+            return dbOperation.hotelshopInfo(hotelid).ToArray();
         }
 
         [WebMethod(Description = "获取其他商店信息")]
@@ -146,6 +157,12 @@ namespace WebService1
             return dbOperation.addHotelhistory(customeruserid, customername, address, hotelname, money, moneykezhu, returnkezhu, chuzhi);
         }
 
+        [WebMethod(Description = "添加用户储值")]
+        public bool addUserChuzhi(string uid, string hotelid, string hoteltotalid, string scorechuzhi)
+        {
+            return dbOperation.addUserChuzhi( uid,  hotelid, hoteltotalid, scorechuzhi);
+        }
+
         [WebMethod(Description = "获取酒店房型")]
         public string[] getRoomInfo(int hotelid)
         {
@@ -166,9 +183,9 @@ namespace WebService1
         }
 
         [WebMethod(Description = "查找用户邀请的会员")]
-        public string[] findInvitePhone(string username)
+        public string[] findInvitePhone(string mobilephone)
         {
-            return dbOperation.findInvitePhone(username).ToArray();
+            return dbOperation.findInvitePhone(mobilephone).ToArray();
         }
 
 
@@ -178,11 +195,12 @@ namespace WebService1
             return dbOperation.getHotelInfoById(hotelid).ToArray();
         }
 
-        [WebMethod(Description = "注册")]
-        public bool AddUser(string username, string nickename, string userpwd, string mobilephone, string addresspost, string sexy, string email, string fkezhu, string ykezhu, string invitephone)
+        [WebMethod(Description = "通过ID获取储值")]
+        public string[] getChuzhiById(string uid,int hotelid)
         {
-            return dbOperation.AddUser(username, nickename, userpwd, mobilephone, addresspost, sexy, email, fkezhu, ykezhu, invitephone);
+            return dbOperation.getChuzhiById(uid, hotelid).ToArray();
         }
+       
 
         [WebMethod(Description = "添加消息")]
         public bool addMessage(string username, string title, string message)

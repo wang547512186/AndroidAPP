@@ -27,7 +27,7 @@ public class User_order extends Activity {
 	private List<String> orderlist;
 	private MapData mapdata;
 
-	private String UserName = "";
+	private String userPhone = "";
 	private String orderId;
 	private String hotelName;
 	private String roomStyle;
@@ -57,10 +57,10 @@ public class User_order extends Activity {
 
 		});
 		Intent intent = getIntent();
-		UserName = intent.getStringExtra("UserName");
+		userPhone = intent.getStringExtra("userPhone");
 
 		mapdata = new MapData();
-		orderlist = mapdata.getUserOrder(UserName);
+		orderlist = mapdata.getUserOrder(userPhone);
 		listview = (ListView) findViewById(R.id.userorderlist);
 		SimpleAdapter adapter = new SimpleAdapter(this, getData(),
 				R.layout.user_order_list_item,

@@ -47,7 +47,7 @@ public class User_information extends Activity {
 	private List<String> testList;
 	private List<String> kezhudetail;
 	private MapData mapdata;
-	private String UserName;
+	private String userPhone;
 	private String uid;
 	private String nickName;
 	private String fkezhu;
@@ -100,7 +100,7 @@ public class User_information extends Activity {
 		});
 
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
-		UserName = sp.getString("userName", "");
+		userPhone = sp.getString("userPhone", "");
 		uid = sp.getString("uid", "");
 		exitBtn = (Button) findViewById(R.id.exitBtn);
 		// if (UserName.equals("") || uid.equals("")) {
@@ -207,7 +207,7 @@ public class User_information extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(User_information.this,
 						User_infor_detail.class);
-				intent.putExtra("UserName", UserName);
+				intent.putExtra("userPhone", userPhone);
 				startActivity(intent);
 				User_information.this.finish();
 			}
@@ -217,12 +217,12 @@ public class User_information extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) {
+				if (userPhone.equals("")) {
 					turnToLogin();
 				} else {
 					Intent intent = new Intent(User_information.this,
 							User_order.class);
-					intent.putExtra("UserName", UserName);
+					intent.putExtra("userPhone", userPhone);
 					startActivity(intent);
 				}
 			}
@@ -232,13 +232,13 @@ public class User_information extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) {
+				if (userPhone.equals("")) {
 					turnToLogin();
 
 				} else {
 					Intent intent = new Intent(User_information.this,
 							UserChuzhiCenter.class);
-					intent.putExtra("UserName", UserName);
+					intent.putExtra("userPhone", userPhone);
 					intent.putExtra("uid", uid);
 					startActivity(intent);
 				}
@@ -260,13 +260,13 @@ public class User_information extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) {
+				if (userPhone.equals("")) {
 					turnToLogin();
 
 				} else {
 					Intent intent = new Intent(User_information.this,
 							User_message.class);
-					intent.putExtra("UserName", UserName);
+					intent.putExtra("userPhone", userPhone);
 					startActivity(intent);
 				}
 			}
@@ -277,12 +277,12 @@ public class User_information extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) {
+				if (userPhone.equals("")) {
 					turnToLogin();
 				} else {
 					Intent intent = new Intent(User_information.this,
 							UserKezhuCenter.class);
-					intent.putExtra("UserName", UserName);
+					intent.putExtra("userPhone", userPhone);
 					intent.putExtra("uid", uid);
 					startActivity(intent);
 				}
@@ -326,12 +326,12 @@ public class User_information extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) {
+				if (userPhone.equals("")) {
 					turnToLogin();
 
 				} else {
 					mapdata = new MapData();
-					detail = mapdata.userInfor(UserName);
+					detail = mapdata.userInfor(userPhone);
 					// nickName = detail.get(1).toString();
 					// Double kezhuNumber = Double.valueOf(detail.get(7)
 					// .toString())
@@ -357,7 +357,7 @@ public class User_information extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) {
+				if (userPhone.equals("")) {
 					turnToLogin();
 				} else {
 					Intent intent = new Intent(User_information.this,
@@ -372,13 +372,13 @@ public class User_information extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (UserName.equals("")) {
+				if (userPhone.equals("")) {
 					turnToLogin();
 
 				} else {
 					Intent intent = new Intent(User_information.this,
 							MyInvited.class);
-					intent.putExtra("UserName", UserName);
+					intent.putExtra("userPhone", userPhone);
 					startActivity(intent);
 				}
 			}
@@ -494,7 +494,7 @@ public class User_information extends Activity {
 				if (testList.isEmpty()) { // 无法连接数据库
 					msg.what = 3;
 				} else {
-					detail = mapdata.userInfor(UserName);
+					detail = mapdata.userInfor(userPhone);
 					kezhudetail = mapdata.getUserKezhu(uid);
 					if (!detail.isEmpty() && !kezhudetail.isEmpty()) { // 成功读取数据
 						msg.what = 1;
@@ -572,9 +572,9 @@ public class User_information extends Activity {
 			case 4: // 无数据
 				timer.cancel();
 				Editor editor = sp.edit();
-				editor.putString("userName", "");
+				editor.putString("userPhone", "");
 				editor.commit();
-				UserName = sp.getString("userName", "");
+				userPhone = sp.getString("userPhone", "");
 				uid = sp.getString("uid", "");
 				userLayout.setVisibility(View.INVISIBLE);
 				exitBtn.setVisibility(View.GONE);

@@ -88,7 +88,7 @@ public class detail_information extends Activity {
 	private ViewPager imageViewPager;
 	private AtomicInteger atomicInteger = new AtomicInteger(0);
 	private SharedPreferences sp;
-	private String UserName;
+	private String userPhone;
 	// 日期
 	private String dateString = "";
 	private TextView startText;
@@ -107,7 +107,7 @@ public class detail_information extends Activity {
 		setContentView(R.layout.detail_information);
 
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
-		UserName = sp.getString("userName", "");
+		userPhone = sp.getString("userPhone", "");
 
 		Bundle bundle = this.getIntent().getExtras();
 		hotelId = bundle.getString("hotelId");
@@ -469,7 +469,7 @@ public class detail_information extends Activity {
 	class hotel_itemOnClickListener implements OnItemClickListener {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
-			if (UserName.equals("")) {
+			if (userPhone.equals("")) {
 				Dialog fail = new AlertDialog.Builder(detail_information.this)
 						.setTitle("未登录")
 						.setMessage("尊敬的用户,请先登录")

@@ -36,43 +36,30 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/historyEmpty"
+        android:id="@+id/myInvitedLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:layout_height="150dp"
+        android:background="@drawable/bg_kezhu"
         android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" >
-
-            <ImageView 
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="10dp"
-                android:src="@drawable/bad_face"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:background="#ffffff"
-                android:gravity="center"
-                android:text="您还没有会员"
-                android:textSize="16sp" />
-        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#cccccc" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:text="我的会员数"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
 
-    <ListView
-        android:id="@+id/myInviteListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp" >
-    </ListView>
+        <TextView
+            android:id="@+id/myInvitedTotal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="#ffffff"
+            android:textSize="65sp" />
+    </LinearLayout>
 
 </LinearLayout>

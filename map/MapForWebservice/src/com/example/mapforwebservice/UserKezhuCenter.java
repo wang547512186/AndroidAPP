@@ -16,7 +16,7 @@ import android.widget.TextView;
 public class UserKezhuCenter extends Activity {
 	private LinearLayout kezhuDetailLayout;
 	private LinearLayout kezhuHistoryLayout;
-	private String UserName;
+	private String userPhone;
 	private String uid;
 	private List<String> detail;
 	private MapData mapdata;
@@ -30,13 +30,13 @@ public class UserKezhuCenter extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_kezhu_center);
 		Intent intent = getIntent();
-		UserName = intent.getStringExtra("UserName");
+		userPhone = intent.getStringExtra("userPhone");
 		uid = intent.getStringExtra("uid");
 		returnKezhuText = (TextView)findViewById(R.id.returnKezhuText);
 		rewardKezhuText = (TextView) findViewById(R.id.rewardKezhuText);
 		totalKezhuText = (TextView)findViewById(R.id.totalKezhuText);
 		mapdata = new MapData();
-		detail = mapdata.userInfor(UserName);
+		detail = mapdata.userInfor(userPhone);
 		List<String> kezhudetail = mapdata.getUserKezhu(uid);
 		if (!detail.isEmpty()&&!kezhudetail.isEmpty()) {
 			Double totalkezhu= Double.valueOf(kezhudetail.get(0).toString());
@@ -62,7 +62,7 @@ public class UserKezhuCenter extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(UserKezhuCenter.this,
 						UserKezhubiDetail.class);
-				intent.putExtra("UserName", UserName);
+				intent.putExtra("userPhone", userPhone);
 				intent.putExtra("uid", uid);
 				startActivity(intent);
 			}
@@ -76,7 +76,7 @@ public class UserKezhuCenter extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(UserKezhuCenter.this,
 						KezhuPayHistoryList.class);
-				intent.putExtra("UserName", UserName);
+				intent.putExtra("userPhone", userPhone);
 				intent.putExtra("uid", uid);
 				startActivity(intent);
 			}

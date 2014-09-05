@@ -27,12 +27,11 @@ public class FastPay extends Activity {
 	private MapData mapdata;
 	private List<String> detail;
 	private SharedPreferences sp;
-	private String userName = "";
+	private String userPhone = "";
 	private Button matchingCodeBtn;
 	private TextView matchingCodeText;
 	private TextView confirmText;
 	private static String matchCodeString = "";
-	String userPhone = "";
 	private ProgressDialog dialog;
 
 	@Override
@@ -47,13 +46,13 @@ public class FastPay extends Activity {
 
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
 		mapdata = new MapData();
-		userName = sp.getString("userName", "");
-		if (userName.equals("")) {
+		userPhone = sp.getString("userPhone", "");
+		if (userPhone.equals("")) {
 			Intent intent = new Intent(FastPay.this, MainActivity.class);
 			startActivity(intent);
 			finish();
 		} else {
-			detail = mapdata.userInfor(userName);
+			detail = mapdata.userInfor(userPhone);
 		}
 		confirmText = (TextView) findViewById(R.id.confirmText);
 		matchingCodeText = (TextView) findViewById(R.id.matchingCodeText);
@@ -112,7 +111,7 @@ public class FastPay extends Activity {
 				mapdata = new MapData();
 				int i = 0;
 				while (true) {
-					if (mapdata.AddFastPayCode(userName,matchCodeString).equals("true")){
+					if (mapdata.AddFastPayCode(userPhone,matchCodeString).equals("true")){
 						msg.what = 1;
 						break;
 					}

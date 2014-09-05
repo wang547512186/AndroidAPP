@@ -289,12 +289,12 @@ public class MapData {
 		return value;
 	}
 
-	public List<String> findInvitePhone(String username) {
+	public List<String> findInvitePhone(String mobilephone) {
 		// TODO Auto-generated method stub
 		List<String> value = new ArrayList<String>();
 		SoapObject soapObject = new SoapObject(serviceNameSpace,
 				findInvitePhone);
-		soapObject.addProperty("username", username);
+		soapObject.addProperty("mobilephone", mobilephone);
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 		envelope.dotNet = true;
@@ -408,11 +408,11 @@ public class MapData {
 		return value;
 	}
 
-	public List<String> userInfor(String username) {
+	public List<String> userInfor(String mobilephone) {
 		// TODO Auto-generated method stub
 		List<String> value = new ArrayList<String>();
 		SoapObject soapObject = new SoapObject(serviceNameSpace, userInfor);
-		soapObject.addProperty("username", username);
+		soapObject.addProperty("mobilephone", mobilephone);
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 		envelope.dotNet = true;
@@ -438,7 +438,7 @@ public class MapData {
 	}
 
 	public String userRegister(String username, String nickename,
-			String password, String email, String sexy) {
+			String password, String email, String sexy,String hotelid) {
 		String value = "";
 		SoapObject soapObject = new SoapObject(serviceNameSpace, userRegister);
 		soapObject.addProperty("username", username);
@@ -446,6 +446,7 @@ public class MapData {
 		soapObject.addProperty("password", password);
 		soapObject.addProperty("email", email);
 		soapObject.addProperty("sexy", sexy);
+		soapObject.addProperty("hotelid", hotelid);
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 		envelope.dotNet = true;
@@ -1135,7 +1136,6 @@ public class MapData {
 		}
 		return value;
 	}
-	
 	public String hasMobilephone(String mobilephone) {
 		String value = "";
 		SoapObject soapObject = new SoapObject(serviceNameSpace, hasMobilephone);
