@@ -24,6 +24,7 @@ public class User_login extends Activity {
 	private EditText loginpwd;
 	private Button logintrue;
 	private Button registerBtn;
+	private Button oldregisterBtn;
 	// private Button loginfalse;
 	private MapData mapdata;
 	private SharedPreferences sp;
@@ -54,6 +55,21 @@ public class User_login extends Activity {
 				finish();
 			}
 		});
+
+		oldregisterBtn = (Button) findViewById(R.id.oldregisterBtn);
+		oldregisterBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(User_login.this,
+						User_oldregister.class);
+				startActivity(intent);
+				finish();
+			}
+
+		});
+
 		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
 		returnbtn.setOnClickListener(new OnClickListener() {
 
@@ -87,23 +103,8 @@ public class User_login extends Activity {
 							.equals("0")) {
 						Dialog fail = new AlertDialog.Builder(User_login.this)
 								.setTitle("登录")
-								.setMessage("手机号不存在，请重新填写手机号!")
-								.setPositiveButton("确定",
-										new DialogInterface.OnClickListener() {
-											@Override
-											public void onClick(
-													DialogInterface arg0,
-													int arg1) {
-												// TODO Auto-generated method
-												// stub
-												Intent intent = new Intent();
-												intent.setClass(
-														User_login.this,
-														UserChangeMobile.class);
-												startActivity(intent);
-												User_login.this.finish();
-											}
-										}).create();
+								.setMessage("手机号不存在，请重新填写手机号,若无账号请进行注册!")
+								.setPositiveButton("确定", null).create();
 						fail.show();
 					} else if (mapdata.hasMobilephone(
 							loginname.getText().toString()).equals("2")) {
@@ -127,7 +128,7 @@ public class User_login extends Activity {
 											}
 										}).create();
 						fail.show();
-					} else if (mapdata.hasMobilephone(     
+					} else if (mapdata.hasMobilephone(
 							loginname.getText().toString()).equals("9")) {
 						Dialog fail = new AlertDialog.Builder(User_login.this)
 								.setTitle("登录").setMessage("网络有误,请重试!")
