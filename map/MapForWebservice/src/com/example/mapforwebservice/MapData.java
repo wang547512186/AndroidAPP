@@ -24,7 +24,6 @@ public class MapData {
 	private static final String getUserOrder = "getUserOrder";
 	private static final String userPwdChange = "userPwdChange";
 	private static final String userLogin = "userLogin";
-	private static final String getHotelInfo = "getHotelInfo";
 	private static final String getHotelInfoById = "getHotelInfoById";
 	private static final String getRoomInfo = "getRoomInfo";
 	private static final String getShopInfo = "getShopInfo";
@@ -737,33 +736,6 @@ public class MapData {
 		return value;
 	}
 
-	public List<String> getHotelInfo() {
-		// TODO Auto-generated method stub
-		List<String> value = new ArrayList<String>();
-		SoapObject soapObject = new SoapObject(serviceNameSpace, getHotelInfo);
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		envelope.dotNet = true;
-		envelope.setOutputSoapObject(soapObject);
-
-		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
-		try {
-			httpTransport.call(serviceNameSpace + getHotelInfo, envelope);
-			SoapObject result = (SoapObject) envelope.getResponse();
-			int count = result.getPropertyCount();
-			for (int index = 0; index < count; index++) {
-				value.add(result.getProperty(index).toString());
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return value;
-	}
 
 	public List<String> getUserOrder(String username) {
 		// TODO Auto-generated method stub

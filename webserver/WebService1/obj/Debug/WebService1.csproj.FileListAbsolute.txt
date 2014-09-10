@@ -12,3 +12,7 @@ C:\Users\zai\Desktop\WebService1\WebService1\bin\WebService1.dll
 C:\Users\zai\Desktop\WebService1\WebService1\bin\WebService1.pdb
 C:\Users\zai\Desktop\WebService1\WebService1\obj\Debug\WebService1.dll
 C:\Users\zai\Desktop\WebService1\WebService1\obj\Debug\WebService1.pdb
+E:\GitHub\AndroidAPP\webserver\WebService1\bin\WebService1.dll
+E:\GitHub\AndroidAPP\webserver\WebService1\bin\WebService1.pdb
+E:\GitHub\AndroidAPP\webserver\WebService1\obj\Debug\WebService1.dll
+E:\GitHub\AndroidAPP\webserver\WebService1\obj\Debug\WebService1.pdb

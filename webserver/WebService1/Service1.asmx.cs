@@ -76,12 +76,6 @@ namespace WebService1
         }
 
 
-        [WebMethod(Description = "查找个人信息数据")]
-        public string[] findUserInfor(string username)
-        {
-            return dbOperation.findUserInfor(username).ToArray();
-        }
-
 
         [WebMethod(Description = "加入个人订单信息")]
         public bool addOrder(string username, string nickename, string stayperson, string roomtype, string price, string telephone, string hotelname, string hoteladdress, string begindate, string enddate)
@@ -169,12 +163,6 @@ namespace WebService1
             return dbOperation.getRoomInfo(hotelid).ToArray();
         }
 
-
-        [WebMethod(Description = "获取酒店信息")]
-        public string[] getHotelInfo()
-        {
-            return dbOperation.getHotelInfo().ToArray();
-        }
 
         [WebMethod(Description = "通过ID获取其他商店信息")]
         public string[] getShopInfoById(string hotelid)
