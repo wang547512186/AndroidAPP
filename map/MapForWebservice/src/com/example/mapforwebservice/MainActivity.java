@@ -1445,6 +1445,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 			OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
 			double mLat = location.getLatitude();
 			double mLon = location.getLongitude();
+			curCityString=location.getCity();
 			GeoPoint p = new GeoPoint((int) (mLat * 1E6), (int) (mLon * 1E6));
 			OverlayItem item = new OverlayItem(p, "item", "item");
 			itemOverlay.addItem(item);

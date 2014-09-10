@@ -5,7 +5,8 @@
     <string name="title_activity_order_page">OrderPage</string>
     <string name="hello_world">Hello world!</string>
     <string name="spin_prompt"> 选择时间 </string>
-    <string name="notice_register">请填写你拥有的实体卡编号以及身份证号，同时输入手机号，填写的手机号作为APP用户名就行登陆，同时注册后初始密码默认为6个0，请登陆后及时修改.</string>
+    <string name="notice_register">请填写实体卡的卡号以及您的身份证号码，同时输出手机号，手机号一旦填写则不可修改，请仔细填写后确认</string>
+    <string name="notice_changemobile">请填写实体卡的卡号以及您的身份证号码，同时输出手机号，手机号一旦填写则不可修改，请仔细填写后确认</string>
 
     <string-array name="time">
         <item>0:00~3:00</item>
@@ -62,5 +63,6 @@
     <string name="title_activity_nearby">NearbyActivity</string>
     <string name="title_activity_fast_pay">FastPay</string>
     <string name="title_activity_user_change_mobile">UserChangeMobile</string>
+    <string name="title_activity_user_old_register">User_oldregister</string>
 
 </resources>

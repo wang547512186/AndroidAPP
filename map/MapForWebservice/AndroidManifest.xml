@@ -407,6 +407,10 @@
             android:name=".UserChangeMobile"
             android:label="@string/title_activity_user_change_mobile" >
         </activity>
+        <activity
+            android:name=".User_oldregister"
+            android:label="@string/title_activity_user_old_register" >
+        </activity>
     </application>
 
 </manifest>

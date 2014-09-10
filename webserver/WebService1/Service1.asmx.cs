@@ -91,9 +91,9 @@ namespace WebService1
         }
 
         [WebMethod(Description = "注册用户")]
-        public bool userRegister(string username, string nickename, string password, string email, int sexy,Int64 hotelid)
+        public bool userRegister(string mobilephone, string nickename, string password, string email, int sexy, Int64 hotelid, string addressidcard, string idcard, string birthdate)
         {
-            return dbOperation.userRegister(username, nickename, password, email, sexy, hotelid);
+            return dbOperation.userRegister(mobilephone,nickename,password,email,sexy,hotelid,addressidcard, idcard,birthdate);
         }
 
 
@@ -104,9 +104,9 @@ namespace WebService1
         }
 
         [WebMethod(Description = "商家登录信息")]
-        public string managerLogin(string username, string password)
+        public string[] managerLogin(string username, string password)
         {
-            return dbOperation.managerLogin(username, password);
+            return dbOperation.managerLogin(username, password).ToArray();
         }
 
         [WebMethod(Description = "更改个人密码")]
@@ -183,13 +183,7 @@ namespace WebService1
             return dbOperation.getHotelInfoById(hotelid).ToArray();
         }
 
-        [WebMethod(Description = "通过ID获取储值")]
-        public string[] getChuzhiById(string uid,int hotelid)
-        {
-            return dbOperation.getChuzhiById(uid, hotelid).ToArray();
-        }
        
-
         [WebMethod(Description = "添加消息")]
         public bool addMessage(string username, string title, string message)
         {
@@ -249,10 +243,11 @@ namespace WebService1
             return dbOperation.findShops(city, shopname).ToArray();
         }
 
+
         [WebMethod(Description = "添加储值记录")]
-        public bool addChuzhihistory(string username, string hotelid, string number)
+        public bool addChuzhihistory(string uid, string hotelid, string money, string serviceuserid)
         {
-            return dbOperation.addChuzhihistory(username, hotelid, number);
+            return dbOperation.addChuzhihistory(uid, hotelid, money, serviceuserid);
         }
 
         [WebMethod(Description = "查找储值记录")]

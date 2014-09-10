@@ -27,7 +27,7 @@ namespace WebService1
 
         //private String ConServerStr = @"Data Source=nengyu1234.xicp.net,1434;Initial Catalog=StockManage;Integrated Security=True";
         //private String ConServerStr = @"Data Source=nengyu1234.xicp.net,1434;Initial Catalog=MemberData;UID=sa;Password=1234";
-        private String ConServerStr = @"Data Source=localhost;Initial Catalog=StockManage;Integrated Security=True";
+        private String ConServerStr = @"Data Source=localhost;Initial Catalog=kezhu;Integrated Security=True";
         //private String ConServerStr = @"Data Source=localhost;Initial Catalog=MemberData;Integrated Security=True";
         //默认构造函数  
         public DBOperation()
@@ -220,7 +220,7 @@ namespace WebService1
                     list.Add(reader[0].ToString());
                 }
 
-                
+
 
             }
             catch (Exception)
@@ -480,8 +480,8 @@ namespace WebService1
                 Dispose();
             }
         }
-        //2
-        public bool userRegister(string username, string nickename, string password, string email, int sexy, Int64 hotelid)
+        //更改后的注册
+        public bool userRegister(string mobilephone, string nickename, string password, string email, int sexy, Int64 hotelid, string addressidcard, string idcard, string birthdate)
         {
             Guid guid = new Guid();
             guid = Guid.NewGuid();
@@ -489,10 +489,10 @@ namespace WebService1
             try
             {
                 Open();
-                string sql = "insert into users (uid,username,nickname,hotelid,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + guid + "','" + username + "','" + nickename + "','" + hotelid + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','" + sexy + "','" + username + "') ";
+                string sql = "insert into users values ('" + guid + "','" + mobilephone + "','" + nickename + "','" + hotelid + "','" + password + "','200','" + email + "','" + sexy + "','" + addressidcard + "','" + mobilephone + "','" + DateTime.Now + "','" + idcard + "','0','1','" + birthdate + "') ";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
-                sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + guid + "','200','" + hotelid + "','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
+                sql = "insert into usermoney values('" + guid + "','200','" + hotelid + "','0.00','0.00','" + DateTime.Now + "')";
                 cmd.CommandText = sql;
                 cmd.ExecuteNonQuery();
                 Dispose();
@@ -1072,29 +1072,23 @@ namespace WebService1
             }
         }
 
-        //10
+        //更改后的获得用户各个商家的总储值分条
         public List<string> getUserChuzhi(string uid)
         {
             List<string> list = new List<string>();
+            List<string> listresult = new List<string>();
             Open();
-
-            //string sqlSel = string.Format("select * from usermoneyhotel,UserInfo where usermoneyhotel.uid=UserInfo.Id and UserInfo.username='{0}'",username);
-            string sql = "select * from usermoneyhotel where uid='" + uid + "'";
+            string sql = "select * from ChuzhiHistory where uid='" + uid + "'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             SqlDataReader read = cmd.ExecuteReader();
             try
             {
-
                 while (read.Read())
                 {
                     list.Add(read["uid"].ToString());
                     list.Add(read["hotelid"].ToString());
-                    list.Add(read["scorechuzhi"].ToString());
-                    //  list.Add(read["userid"].ToString());
-
+                    list.Add(read["会员储值账户"].ToString());
                 }
-
-
             }
             catch (Exception)
             { }
@@ -1103,34 +1097,60 @@ namespace WebService1
                 read.Close();
                 Dispose();
             }
-            return list;
+            for (int i = 0; i < list.Count / 3; i++)
+            {
+                if (i == 0)
+                {
+                    listresult.Add(list[i * 3]);
+                    listresult.Add(list[i * 3 + 1]);
+                    listresult.Add(list[i * 3 + 2]);
+                }
+                else
+                {
+                    bool isexit = false;
+                    for (int m = 0; m < listresult.Count / 3; m++)
+                    {
+                        if (listresult[m * 3 + 1] == list[i * 3 + 1])
+                        {
+                            double a = Convert.ToDouble(listresult[m * 3 + 2]);
+                            double b = Convert.ToDouble(list[i * 3 + 2]);
+                            double c = a + b;
+                            listresult[m * 3 + 2] = c.ToString();
+                            isexit = true;
+                        }
+                    }
+                    if (!isexit)
+                    {
+                        listresult.Add(list[i * 3]);
+                        listresult.Add(list[i * 3 + 1]);
+                        listresult.Add(list[i * 3 + 2]);
+                    }
+                }
+            }
+            return listresult;
         }
 
-        //11
-        public List<string> getChuzhiById(string uid, int hotelid)
+
+        //更改后的得到某个店的储值消费记录
+        public List<string> getChuzhihistory(string uid, string hotelid)
         {
             List<string> list = new List<string>();
-            Open();
-            string sql = "select * from usermoneyhotel where uid='" + uid + "' and hotelid='" + hotelid + "' ";
-            SqlCommand cmd = new SqlCommand(sql, sqlCon);
-            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                if (read.Read())
+                Open();
+                string sql = "select * from ChuzhiHistory where uid='" + uid + "' and hotelid='" + hotelid + "' order by createtime desc";
+                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+                SqlDataReader read = cmd.ExecuteReader();
+                while (read.Read())
                 {
-                    list.Add(read["scorechuzhi"].ToString());
-
+                    list.Add(read["会员储值账户"].ToString());
+                    list.Add(read["createtime"].ToString());
                 }
-
-
-            }
-            catch (Exception)
-            { }
-            finally
-            {
                 read.Close();
                 Dispose();
             }
+            catch (Exception)
+            { }
             return list;
         }
 
@@ -1154,13 +1174,13 @@ namespace WebService1
                 Dispose();
             }
         }
-        //13
+        //更改后的
         public List<string> getUserKezhu(string uid)
         {
             List<string> list = new List<string>();
             Open();
             //string sqlSel = string.Format("select * from usermoneyhotel,UserInfo where usermoneyhotel.uid=UserInfo.Id and UserInfo.username='{0}'",username);
-            string sql = "select scorexiaofei from usermoney where uid='" + uid + "'";
+            string sql = "select kezhumoney from usermoney where uid='" + uid + "'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             SqlDataReader read = cmd.ExecuteReader();
             try
@@ -1212,9 +1232,9 @@ namespace WebService1
         {
             List<string> list = new List<string>();
             Open();
-                            string sql = "select * from hotel where city like'" + '%' + city + '%' + "' and hotelname like '" + '%' + shopname + '%' + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
+            string sql = "select * from hotel where city like'" + '%' + city + '%' + "' and hotelname like '" + '%' + shopname + '%' + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
                 while (read.Read())
@@ -1236,13 +1256,13 @@ namespace WebService1
             }
             return list;
         }
-        //14
-        public bool addChuzhihistory(string username, string hotelid, string number)
+        //更改后的
+        public bool addChuzhihistory(string uid, string hotelid, string money, string serviceuserid)
         {
             try
             {
                 Open();
-                string sql = "insert into UserChuzhiHistory values('" + username + "','" + hotelid + "','" + number + "','" + DateTime.Now + "')";
+                string sql = "insert into ChuzhiHistory values('" + uid + "','" + hotelid + "','" + money + "','" + money + "','" + 0 + "','" + 0 + "','" + "-" + money + "','" + 0 + "','" + 0 + "','" + DateTime.Now + "','" + serviceuserid + "')";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
                 Dispose();
@@ -1252,35 +1272,10 @@ namespace WebService1
             {
                 return false;
             }
-
-
-
-
-
         }
 
-        //15
-        public List<string> getChuzhihistory(string uid, string hotelid)
-        {
-            List<string> list = new List<string>();
-            try
-            {
-                Open();
-                string sql = "select * from hotelhistory where customeruserid='" + uid + "' and hotelid='" + hotelid + "' order by createtime desc";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader read = cmd.ExecuteReader();
-                while (read.Read())
-                {
-                    list.Add(read["storedmoneycustomer"].ToString());
-                    list.Add(read["createtime"].ToString());
-                }
-                read.Close();
-                Dispose();
-            }
-            catch (Exception)
-            { }
-            return list;
-        }
+
+
 
         //16
         public List<string> getKezhuhistory(string uid)
@@ -1366,34 +1361,37 @@ namespace WebService1
                 return false;
             }
         }
-
-        public string managerLogin(string username, string password)
+        //更改后的
+        public List<string> managerLogin(string username, string password)
         {
+            List<string> list = new List<string>();
             Open();
-            string sql = "select hotelid from users where username='" + username + "' and password='" + MD5(password) + "' and groupid=100 ";
+            string sql = "select * from users where username='" + username + "' and password='" + MD5(password) + "' and groupid=100 ";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             SqlDataReader read = cmd.ExecuteReader();
             try
             {
                 if (read.Read())
                 {
-                    return read["hotelid"].ToString();
+                    list.Add(read["uid"].ToString());
+                    list.Add(read["hotelid"].ToString());
                 }
                 else
                 {
-                    return "false";
+                    list.Add("false");
                 }
 
             }
             catch (Exception)
             {
-                return "false";
+                list.Add("false");
             }
             finally
             {
                 read.Close();
                 Dispose();
             }
+            return list;
         }
 
         public string hasMobilephone(string mobilephone)

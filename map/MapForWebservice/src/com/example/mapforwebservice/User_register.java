@@ -200,7 +200,7 @@ public class User_register extends Activity {
 					}else {
 						String resultString = mapdata.userRegister(
 								registerNameString, userNicknameString,
-								registerPwdString, userEmailString, SexString,inviteNumberString);
+								registerPwdString, userEmailString, SexString,inviteNumberString,"0","0","0");
 
 						Log.e("SexString", SexString);
 						if (resultString.equals("true")) {
