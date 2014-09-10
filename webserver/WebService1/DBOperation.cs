@@ -382,14 +382,14 @@ namespace WebService1
         public List<string> findUserInfor(string username)
         {
             List<string> list = new List<string>();
-           
+            Open();
+            string sql = "select * from [UserInfo] where [username]='" + username + "'";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader reader = cmd.ExecuteReader();
 
             try
             {
-                Open();
-                string sql = "select * from [UserInfo] where [username]='" + username + "'";
-                SqlCommand cmd = new SqlCommand(sql, sqlCon);
-                SqlDataReader reader = cmd.ExecuteReader();
+
 
                 if (reader.Read())
                 {
@@ -405,13 +405,16 @@ namespace WebService1
                     list.Add(reader["ykezhu"].ToString());
                 }
 
-                reader.Close();
-                Dispose();
+
 
             }
             catch (Exception)
             {
 
+            }
+            finally {
+                reader.Close();
+                Dispose();
             }
             return list;
         }
@@ -598,7 +601,7 @@ namespace WebService1
             }
         }
 
-        public bool userRegister(string username, string nickename, string password, string email, int sexy, Int64 hotelid, string addressidcard, string idcard,int hotelkind, string birthdate)
+        public bool userRegister(string username, string nickename, string password, string email, int sexy, Int64 hotelid)
         {
             Guid guid = new Guid();
             guid = Guid.NewGuid();
@@ -606,7 +609,7 @@ namespace WebService1
             try
             {
                 Open();
-                string sql = "insert into users values ('" + guid + "','" + username + "','" + nickename + "','" + hotelid + "','" + password + "','200','" + email + "','" + sexy + "','" + addressidcard + "','" + username + "','" + DateTime.Now + "','"+ idcard +"','"+ hotelid +"','" + birthdate + "') ";
+                string sql = "insert into users (uid,username,nickname,hotelid,password,groupid,onlinestate,regip,lastip,lastvisit,lastactivity,oltime,email,newpm,newpmcount,state,sexy,mobilephone) values ('" + guid + "','" + username + "','" + nickename + "','" + hotelid + "','" + password + "','200','0','127.0.0.1','127.0.0.1','" + DateTime.Now + "','" + DateTime.Now + "','0','" + email + "','0','0','1','" + sexy + "','" + username + "') ";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
                 sql = "insert into usermoney (uid,groupid,hotelid,totaluserid,scorechuzhi,scorexiaofei,moneysystem,joindate) values('" + guid + "','200','" + hotelid + "','00000000-0000-0000-0000-000000000000','0.00','0.00','0.00','" + DateTime.Now + "')";
