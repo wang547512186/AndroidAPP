@@ -1277,22 +1277,22 @@ namespace WebService1
 
 
 
-        //16
+        //更改后的获取客主币消费记录
         public List<string> getKezhuhistory(string uid)
         {
             List<string> list = new List<string>();
             try
             {
                 Open();
-                string sql = "select * from hotelhistory where customeruserid='" + uid + "'order by createtime desc";
+                string sql = "select * from HotelHistory where uid='" + uid + "'order by createtime desc";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 SqlDataReader read = cmd.ExecuteReader();
                 while (read.Read())
                 {
                     list.Add(read["hotelid"].ToString());
                     list.Add(read["hotelname"].ToString());
-                    list.Add(read["money"].ToString());
-                    list.Add(read["scorecustomer"].ToString());
+                    list.Add(read["实收金额"].ToString());
+                    list.Add(read["会员积分账户"].ToString());
                     list.Add(read["createtime"].ToString());
                 }
                 read.Close();
