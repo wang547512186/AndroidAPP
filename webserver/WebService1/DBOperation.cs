@@ -481,7 +481,7 @@ namespace WebService1
             }
         }
         //更改后的注册
-        public bool userRegister(string mobilephone, string nickename, string password, string email, int sexy, Int64 hotelid, string addressidcard, string idcard, string birthdate)
+        public bool userRegister(string mobilephone, string nickename, string password, string email, int sexy, string hotelid, string addressidcard, string idcard, string birthdate)
         {
             Guid guid = new Guid();
             guid = Guid.NewGuid();
@@ -736,11 +736,11 @@ namespace WebService1
         }
 
 
-        public List<string> getRoomInfo(int hotelid)
+        public List<string> getRoomInfo(string hotelid)
         {
             List<string> list = new List<string>();
             Open();
-            string sql = "select * from room where hotelinfoid ='" + hotelid + "'";
+            string sql = "select * from room where hotelid ='" + hotelid + "'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             SqlDataReader read = cmd.ExecuteReader();
             try
@@ -748,7 +748,7 @@ namespace WebService1
 
                 while (read.Read())
                 {
-                    list.Add(read["hotelinfoid"].ToString());
+                    list.Add(read["hotelid"].ToString());
                     list.Add(read["房型"].ToString());
                     list.Add(read["会员价"].ToString());
                     list.Add(read["床型"].ToString());
@@ -826,7 +826,7 @@ namespace WebService1
         //}
 
 
-        public List<string> getHotelInfoById(int hotelid)
+        public List<string> getHotelInfoById(string hotelid)
         {
             List<string> list = new List<string>();
             Open();
@@ -1076,9 +1076,8 @@ namespace WebService1
         public List<string> getUserChuzhi(string uid)
         {
             List<string> list = new List<string>();
-            List<string> listresult = new List<string>();
             Open();
-            string sql = "select * from ChuzhiHistory where uid='" + uid + "'";
+            string sql = "select * from userhotelmoney where uid='" + uid + "'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             SqlDataReader read = cmd.ExecuteReader();
             try
@@ -1097,37 +1096,7 @@ namespace WebService1
                 read.Close();
                 Dispose();
             }
-            for (int i = 0; i < list.Count / 3; i++)
-            {
-                if (i == 0)
-                {
-                    listresult.Add(list[i * 3]);
-                    listresult.Add(list[i * 3 + 1]);
-                    listresult.Add(list[i * 3 + 2]);
-                }
-                else
-                {
-                    bool isexit = false;
-                    for (int m = 0; m < listresult.Count / 3; m++)
-                    {
-                        if (listresult[m * 3 + 1] == list[i * 3 + 1])
-                        {
-                            double a = Convert.ToDouble(listresult[m * 3 + 2]);
-                            double b = Convert.ToDouble(list[i * 3 + 2]);
-                            double c = a + b;
-                            listresult[m * 3 + 2] = c.ToString();
-                            isexit = true;
-                        }
-                    }
-                    if (!isexit)
-                    {
-                        listresult.Add(list[i * 3]);
-                        listresult.Add(list[i * 3 + 1]);
-                        listresult.Add(list[i * 3 + 2]);
-                    }
-                }
-            }
-            return listresult;
+            return list;
         }
 
 
@@ -1153,6 +1122,70 @@ namespace WebService1
             { }
             return list;
         }
+
+        //同系统外店储值排序
+        public List<string> getChuzhiSort(string uid, string hoteltotalid)
+        {
+            List<string> list = new List<string>();
+            Open();
+            string sql = "select hotelid,(会员储值账户-会员已消费储值账户)as A ,会员已消费储值账户,chuzhihistoryid from ChuzhiHistory where uid='" + uid + "' and hoteltotalid='" + hoteltotalid + "' and 会员储值账户>会员已消费储值账户 order by createtime";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
+            try
+            {
+
+                while (read.Read())
+                {
+                    list.Add(read["hotelid"].ToString());
+                    list.Add(read["A"].ToString());
+                    list.Add(read["会员已消费储值账户"].ToString());
+                    list.Add(read["chuzhihistoryid"].ToString());
+                }
+
+            }
+            catch (Exception)
+            { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
+            return list;
+        }
+
+        //同系统本店储值排序
+        public List<string> getSameChuzhiSort(string uid, string hotelid)
+        {
+            List<string> list = new List<string>();
+            Open();
+            string sql = "select hotelid,(会员储值账户-会员已消费储值账户)as A ,会员已消费储值账户,chuzhihistoryid from ChuzhiHistory where uid='" + uid + "' and hotelid='" + hotelid + "' and 会员储值账户>会员已消费储值账户 order by createtime";
+            SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
+            try
+            {
+
+                while (read.Read())
+                {
+                    
+                    list.Add(read["hotelid"].ToString());
+                    list.Add(read["A"].ToString());
+                    list.Add(read["会员已消费储值账户"].ToString());
+                    list.Add(read["chuzhihistoryid"].ToString());
+                }
+
+            }
+            catch (Exception)
+            { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
+            return list;
+        }
+
+
+
 
         //12
         public bool addUserKezhu(string uid)
@@ -1256,13 +1289,278 @@ namespace WebService1
             }
             return list;
         }
-        //更改后的
-        public bool addChuzhihistory(string uid, string hotelid, string money, string serviceuserid)
+
+
+
+        //new用户进行储值总值的更改
+        public bool updateAddChuzhi(string uid, string hotelid, string money, string hoteltotalid)
+        {
+            bool result = false;
+            Open();
+            string sql = "select * from userhotelmoney where uid='" + uid + "' and hotelid='" + hotelid + "' and hoteltotalid='" + hoteltotalid + "'";
+            SqlCommand com = new SqlCommand(sql, sqlCon);
+            //SqlDataReader read = com.ExecuteReader();
+            try
+            {
+                com.ExecuteNonQuery();
+                sql = "select @@rowcount";
+                com.CommandText = sql;
+                if ((int)com.ExecuteScalar() == 0)
+                {
+                    sql = "insert into userhotelmoney values ('" + uid + "','" + hotelid + "','" + hoteltotalid + "','" + money + "')";
+                    com.CommandText = sql;
+                    com.ExecuteNonQuery();
+                    result = true;
+
+                }
+                else
+                {
+                    sql = "update userhotelmoney set chuzhimoney='" + money + "' where uid='" + uid + "' and hotelid='" + hotelid + "' and hoteltotalid='" + hoteltotalid + "'";
+                    com.CommandText = sql;
+                    com.ExecuteNonQuery();
+                    result = true;
+                }
+
+            }
+            catch
+            {
+                result = false;
+            }
+            finally
+            {
+                //read.Close();
+                Dispose();
+            }
+            return result;
+        }
+
+        //new查找当前商家是否有储值并显示储值
+        public double getUserhotelmoney(string uid, string hotelid)
+        {
+            double chuzhi = 0;
+            Open();
+            string sql = "select chuzhimoney from userhotelmoney where uid='" + uid + "' and hotelid='" + hotelid + "'";
+            SqlCommand com = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = com.ExecuteReader();
+            try
+            {
+                if (read.Read())
+                {
+                    chuzhi = Convert.ToDouble(read["chuzhimoney"].ToString());
+                }
+            }
+            catch
+            { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
+            return chuzhi;
+        }
+
+        //new商家同系统总值
+        public double getUserSamesytemchuzhi(string uid, string hoteltotalid)
+        {
+            double samesystem = 0;
+            Open();
+            string sql = "select sum(chuzhimoney) as samesystem from userhotelmoney where uid='" + uid + "' and hoteltotalid='" + hoteltotalid + "'";
+            SqlCommand com = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = com.ExecuteReader();
+            try
+            {
+                if (read.Read())
+                {
+                    samesystem = Convert.ToDouble(read["samesystem"].ToString());
+                }
+            }
+            catch
+            { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
+            return samesystem;
+        }
+
+        //充值
+        public bool chuzhiRecharge(string uid, string hotelid, string hoteltotalid, string money, string serviceuserid)
+        {
+            bool result = false;
+            bool result2 = false;
+            double updatechuzhi;
+            try
+            {
+                result = addChuzhihistory(uid, hotelid, hoteltotalid, hotelid, money, money, "0", "0", "-" + money, "0", "0", serviceuserid, "1");
+                double nowchuzhi = getUserhotelmoney(uid, hotelid);
+                updatechuzhi = nowchuzhi + Convert.ToDouble(money);
+                result2 = updateAddChuzhi(uid, hotelid, updatechuzhi.ToString(), hoteltotalid);
+
+            }
+            catch
+            {
+                result = false;
+                result2 = false;
+            }
+            finally
+            {
+            }
+            return result && result2;
+        }
+
+        //储值消费
+        public bool chuzhiConsume(string uid, string hotelid, string hoteltotalid, string money, string serviceuserid)
+        {
+            bool result1 = false;
+            bool result2 = false;
+            bool result3 = false;
+            bool result4 = false;
+            double updatechuzhi;
+            double sumsystem=getUserhotelmoney(uid, hotelid);
+            List<string> sameshop = getSameChuzhiSort(uid, hotelid);
+            for (int i = 0; i < sameshop.Count / 4; i++)
+            {
+                if (Convert.ToDouble(money) <= Convert.ToDouble(sameshop[i * 4 + 1]))
+                {
+                    result1 = addChuzhihistory(uid, hotelid, hoteltotalid, hotelid, "0", "-" + money, "0", "0", money, money, "-" + money, serviceuserid, "2");
+                    double nowchuzhi = getUserhotelmoney(uid, hotelid);
+                    updatechuzhi = nowchuzhi - Convert.ToDouble(money);
+                    result2 = updateAddChuzhi(uid, hotelid, updatechuzhi.ToString(), hoteltotalid);
+
+                    double hasconsume = Convert.ToDouble(money) + Convert.ToDouble(sameshop[i * 4 + 2]);
+                    result3 = updateChuzhihistory(uid, hotelid, hasconsume.ToString(),sameshop[i * 4+3]);
+                    money="0";
+                    break;
+                }
+                else
+                {
+                    //添加储值记录储值
+                    result1 = addChuzhihistory(uid, hotelid, hoteltotalid, sameshop[i * 4], "0", "-" + sameshop[i * 4 + 1], "0", "0", sameshop[i * 4 + 1], sameshop[i * 4 + 1], "-" + sameshop[i * 4 + 1], serviceuserid, "3");
+
+                    //更改该商家的用户总储值
+                    double nowchuzhi = getUserhotelmoney(uid, sameshop[i * 4]);
+
+                    updatechuzhi = nowchuzhi - Convert.ToDouble(sameshop[i * 4 + 1]);
+
+                    result2 = updateAddChuzhi(uid, sameshop[i * 4], updatechuzhi.ToString(), hoteltotalid);
+
+
+                    //更改充值记录中的已消费值
+                    double hasconsume = Convert.ToDouble(sameshop[i * 4 + 1]) + Convert.ToDouble(sameshop[i * 4 + 2]);
+
+                    result3 = updateChuzhihistory(uid, sameshop[i * 4], hasconsume.ToString(), sameshop[i * 4 + 3]);
+
+                    money = (Convert.ToDouble(money) - Convert.ToDouble(sameshop[i * 4 + 1])).ToString();
+                }
+            }
+            if (Convert.ToDouble(money) > 0)
+            {
+                result4=chuzhiSamesystem(uid, hotelid, hoteltotalid, money, serviceuserid);
+            }
+            return (result1 && result2 && result3) || result4;
+        }
+
+
+        // 其中外店的储值消费
+        public bool chuzhiSamesystem(string uid, string hotelid, string hoteltotalid, string money, string serviceuserid)
+        {
+            bool result1 = false;
+            bool result2 = false;
+            bool result3 = false;
+            double updatechuzhi;
+            List<string> chuzhisamesystem = getChuzhiSort(uid, hoteltotalid);
+            for (int i = 0; i < chuzhisamesystem.Count / 4; i++)
+            {
+                if (Convert.ToDouble(money) < Convert.ToDouble(chuzhisamesystem[i * 4 + 1]))
+                {
+                    result1 = addChuzhihistory(uid, hotelid, hoteltotalid, chuzhisamesystem[i * 4], "0", "-" + money, "0", "0", money, money, "-" + money, serviceuserid, "3");
+                    double nowchuzhi = getUserhotelmoney(uid, chuzhisamesystem[i * 4]);
+                    updatechuzhi = nowchuzhi - Convert.ToDouble(money);
+                    result2 = updateAddChuzhi(uid, chuzhisamesystem[i * 4], updatechuzhi.ToString(), hoteltotalid);
+                    double hasconsume = Convert.ToDouble(money) + Convert.ToDouble(chuzhisamesystem[i * 4 + 2]);
+                    result3 = updateChuzhihistory(uid, chuzhisamesystem[i * 4], hasconsume.ToString(), chuzhisamesystem[i * 4 + 3]);
+                    break;
+                }
+                else
+                {
+                    //添加储值记录储值
+                    result1 = addChuzhihistory(uid, hotelid, hoteltotalid, chuzhisamesystem[i * 4], "0", "-" + chuzhisamesystem[i * 4 + 1], "0", "0", chuzhisamesystem[i * 4 + 1], chuzhisamesystem[i * 4 + 1], "-" + chuzhisamesystem[i * 4 + 1], serviceuserid, "3");
+
+                    //更改该商家的用户总储值
+                    double nowchuzhi = getUserhotelmoney(uid, chuzhisamesystem[i * 4]);
+
+                    updatechuzhi = nowchuzhi - Convert.ToDouble(chuzhisamesystem[i * 4 + 1]);
+
+                    result2 = updateAddChuzhi(uid, chuzhisamesystem[i * 4], updatechuzhi.ToString(), hoteltotalid);
+
+
+                    //更改充值记录中的已消费值
+                    double hasconsume = Convert.ToDouble(chuzhisamesystem[i * 4 + 1]) + Convert.ToDouble(chuzhisamesystem[i * 4 + 2]);
+
+                    result3 = updateChuzhihistory(uid, chuzhisamesystem[i * 4], hasconsume.ToString(), chuzhisamesystem[i * 4 + 3]);
+
+                    money = (Convert.ToDouble(money) - Convert.ToDouble(chuzhisamesystem[i * 4 + 1])).ToString();
+                }
+            }
+            return result1 && result2 && result3;
+        }
+
+        //读取储值记录中已经消费的值
+        //  public double getHasconsume(string uid, string hotelid,)
+
+        //public bool chuzhiConsume(string uid, string hotelid, string chuzhihotelid, string hoteltotalid, string money, string serviceuserid)
+        //{
+        //    bool result = false;
+        //    bool result2 = false;
+        //    if(hotelid==chuzhihotelid)
+        //    try
+        //    {
+        //        if (hotelid == chuzhihotelid)
+        //        {
+        //            double hotelchuzhi = getUserhotelmoney(uid, chuzhihotelid);
+        //            if(hotelchuzhi > Convert.ToDouble( money))
+        //            result = addChuzhihistory(uid, hotelid, hoteltotalid, hotelid, money, money, "0", "0", "-" + money, "0", "0", serviceuserid, "1");
+        //            result2 = updateAddChuzhi(uid, hotelid, money, hoteltotalid);
+        //        }
+
+        //    }
+        //    catch
+        //    {
+        //        result = false;
+        //        result2 = false;
+        //    }
+        //    finally
+        //    {
+        //    }
+        //    return result && result2;
+        //}
+
+        //更改后的添加储值记录
+        public bool addChuzhihistory(string uid, string hotelid, string hoteltotalid, string chuzhihotelid, string 实收金额, string 会员储值账户, string 会员已消费储值账户, string 接待商家储值账户, string 储值商家储值账户, string 接待商家清算账户, string 储值商家清算账户, string serviceuserid, string consumetype)
         {
             try
             {
                 Open();
-                string sql = "insert into ChuzhiHistory values('" + uid + "','" + hotelid + "','" + money + "','" + money + "','" + 0 + "','" + 0 + "','" + "-" + money + "','" + 0 + "','" + 0 + "','" + DateTime.Now + "','" + serviceuserid + "')";
+                string sql = "insert into ChuzhiHistory values('" + uid + "','" + hotelid + "','" + hoteltotalid + "','" + chuzhihotelid + "','" + 实收金额 + "','" + 会员储值账户 + "','" + 会员已消费储值账户 + "','" + 接待商家储值账户 + "','" + 储值商家储值账户 + "','" + 接待商家清算账户 + "','" + 储值商家清算账户 + "','" + DateTime.Now + "','" + serviceuserid + "','" + consumetype + "')";
+                SqlCommand cmd = new SqlCommand(sql, sqlCon);
+                cmd.ExecuteNonQuery();
+                Dispose();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //修改储值记录
+        public bool updateChuzhihistory(string uid, string hotelid, string money, string chuzhihistoryid)
+        {
+            try
+            {
+                Open();
+                string sql = "update ChuzhiHistory set 会员已消费储值账户='" + money + "' where uid ='" + uid + "' and hotelid='" + hotelid + "' and chuzhihistoryid='" + chuzhihistoryid + "' ";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 cmd.ExecuteNonQuery();
                 Dispose();
@@ -1275,24 +1573,22 @@ namespace WebService1
         }
 
 
-
-
-        //更改后的获取客主币消费记录
+        //16
         public List<string> getKezhuhistory(string uid)
         {
             List<string> list = new List<string>();
             try
             {
                 Open();
-                string sql = "select * from HotelHistory where uid='" + uid + "'order by createtime desc";
+                string sql = "select * from hotelhistory where customeruserid='" + uid + "'order by createtime desc";
                 SqlCommand cmd = new SqlCommand(sql, sqlCon);
                 SqlDataReader read = cmd.ExecuteReader();
                 while (read.Read())
                 {
                     list.Add(read["hotelid"].ToString());
                     list.Add(read["hotelname"].ToString());
-                    list.Add(read["实收金额"].ToString());
-                    list.Add(read["会员积分账户"].ToString());
+                    list.Add(read["money"].ToString());
+                    list.Add(read["scorecustomer"].ToString());
                     list.Add(read["createtime"].ToString());
                 }
                 read.Close();
@@ -1444,7 +1740,72 @@ namespace WebService1
             }
         }
 
+        //new清算操作处理
+        public bool qingsuan(string uid, string hotelid, string clearingmoney)
+        {
+            Open();
+            string sql = "insert into samesystemhistory values('"+ uid +"','"+ hotelid +"','"+ clearingmoney +"','"+ DateTime.Now +"')";
+            SqlCommand com = new SqlCommand(sql,sqlCon);
+            try
+            {
+                double uidqingsuan = qingsuanvalue(uid);
+                double hotelidqingsuan = qingsuanvalue(hotelid);
+                updateqingsuan(uid, (uidqingsuan - Convert.ToDouble(clearingmoney)).ToString());
+                updateqingsuan(hotelid, (uidqingsuan + Convert.ToDouble(clearingmoney)).ToString());
+                com.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
 
+        //new读取清算账户的储值
+        public double qingsuanvalue(string uid)
+        {
+            double value = 0;
+            string sql = "select * from samesystemmoney where uid='"+ uid +"'";
+            SqlCommand com = new SqlCommand(sql,sqlCon);
+            SqlDataReader read = com.ExecuteReader();
+            try
+            {
+                if (read.Read())
+                    value = Convert.ToDouble(read["money"].ToString());
+            }
+            catch
+            { }
+            finally
+            {
+                Dispose();
+            }
+            return value;
+        }
 
+        //new更新清算账户的储值
+        public bool updateqingsuan(string uid,string money)
+        {
+            Open();
+            string sql = "update samesystemmoney set money='"+ money +"' where uid='" + uid + "'";
+            SqlCommand com = new SqlCommand(sql, sqlCon);
+            try
+            {
+                com.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                Dispose();
+            }
+            
+        }
     }
 }

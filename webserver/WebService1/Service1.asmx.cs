@@ -91,7 +91,7 @@ namespace WebService1
         }
 
         [WebMethod(Description = "注册用户")]
-        public bool userRegister(string mobilephone, string nickename, string password, string email, int sexy, Int64 hotelid, string addressidcard, string idcard, string birthdate)
+        public bool userRegister(string mobilephone, string nickename, string password, string email, int sexy, string hotelid, string addressidcard, string idcard, string birthdate)
         {
             return dbOperation.userRegister(mobilephone,nickename,password,email,sexy,hotelid,addressidcard, idcard,birthdate);
         }
@@ -158,7 +158,7 @@ namespace WebService1
         }
 
         [WebMethod(Description = "获取酒店房型")]
-        public string[] getRoomInfo(int hotelid)
+        public string[] getRoomInfo(string hotelid)
         {
             return dbOperation.getRoomInfo(hotelid).ToArray();
         }
@@ -178,7 +178,7 @@ namespace WebService1
 
 
         [WebMethod(Description = "通过ID获取酒店信息")]
-        public string[] getHotelInfoById(int hotelid)
+        public string[] getHotelInfoById(string hotelid)
         {
             return dbOperation.getHotelInfoById(hotelid).ToArray();
         }
@@ -237,17 +237,22 @@ namespace WebService1
             return dbOperation.addUserKezhu(uid);
         }
 
+        [WebMethod(Description = "充值")]
+        public bool chuzhiRecharge(string uid, string hotelid,string hoteltotalid, string money, string serviceuserid)
+        {
+            return dbOperation.chuzhiRecharge( uid,hotelid,hoteltotalid,money,serviceuserid);
+        }
+
         [WebMethod(Description = "搜索商店")]
         public string[] findShops(string city, string shopname)
         {
             return dbOperation.findShops(city, shopname).ToArray();
         }
 
-
         [WebMethod(Description = "添加储值记录")]
-        public bool addChuzhihistory(string uid, string hotelid, string money, string serviceuserid)
+        public bool addChuzhihistory(string uid, string hotelid, string hoteltotalid,string chuzhihotelid, string 实收金额, string 会员储值账户, string 会员已消费储值账户, string 接待商家储值账户, string 储值商家储值账户, string 接待商家清算账户, string 储值商家清算账户, string serviceuserid, string consumetype)
         {
-            return dbOperation.addChuzhihistory(uid, hotelid, money, serviceuserid);
+            return dbOperation.addChuzhihistory( uid,  hotelid,  hoteltotalid,chuzhihotelid,  实收金额,  会员储值账户,  会员已消费储值账户,  接待商家储值账户,  储值商家储值账户,  接待商家清算账户,  储值商家清算账户,  serviceuserid , consumetype);
         }
 
         [WebMethod(Description = "查找储值记录")]
@@ -273,6 +278,13 @@ namespace WebService1
         {
             return dbOperation.getKezhuhistory(uid).ToArray();
         }
+
+        [WebMethod(Description = "同系统外店储值排序")]    //new  
+        public string[] getChuzhiSort(string uid, string hoteltotalid)
+        {
+            return dbOperation.getChuzhiSort(uid, hoteltotalid).ToArray();
+        }
+
         [WebMethod(Description = "测试添加")]
         public bool test(string id, string num)
         {
@@ -289,6 +301,12 @@ namespace WebService1
         public bool userMobileSet(string idcard, string mobilephone, string cardnumber)
         {
             return dbOperation.userMobileSet(idcard, mobilephone, cardnumber);
+        }
+
+        [WebMethod(Description = "储值消费")]
+        public bool chuzhiConsume(string uid, string hotelid, string hoteltotalid, string money, string serviceuserid)
+        {
+            return dbOperation.chuzhiConsume(uid, hotelid, hoteltotalid, money, serviceuserid);
         }
 
     }
