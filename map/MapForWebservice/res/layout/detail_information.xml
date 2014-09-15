@@ -156,15 +156,17 @@
                 android:layout_height="1dp"
                 android:background="#cccccc" />
 
-            <TextView
-                android:id="@+id/HotelCenter"
+           
+            <Button
+                android:id="@+id/reserveBtn"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/hoteldetailcenter"
+                android:layout_height="48dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_button"
                 android:gravity="center"
-                android:text="你可以通过上述地址找到该店"
-                android:textColor="#FFC125" >
-            </TextView>
+                android:text="预定"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
 
             <TableLayout
                 android:id="@+id/timeLayout"
@@ -257,7 +259,7 @@
                         </LinearLayout>
                     </LinearLayout>
                 </TableRow>
-            </TableLayout>
+            </TableLayout> 
 
             <TextView
                 android:id="@+id/noInfoText"

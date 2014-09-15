@@ -24,7 +24,6 @@ public class User_login extends Activity {
 	private EditText loginpwd;
 	private Button logintrue;
 	private Button registerBtn;
-	private Button oldregisterBtn;
 	// private Button loginfalse;
 	private MapData mapdata;
 	private SharedPreferences sp;
@@ -56,19 +55,6 @@ public class User_login extends Activity {
 			}
 		});
 
-		oldregisterBtn = (Button) findViewById(R.id.oldregisterBtn);
-		oldregisterBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(User_login.this,
-						User_oldregister.class);
-				startActivity(intent);
-				finish();
-			}
-
-		});
 
 		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
 		returnbtn.setOnClickListener(new OnClickListener() {

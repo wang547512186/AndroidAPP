@@ -16,29 +16,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class detail_information extends Activity {
 
@@ -75,6 +72,7 @@ public class detail_information extends Activity {
 	private LinearLayout hotelSalesLayout;
 	private LinearLayout hotelPriceLayout;
 	private LinearLayout hotelLeisureLayout;
+	private Button reserveBtn;
 	private ImageView returnbutton;
 	private ListView listview;
 	private String hotelId = "";
@@ -133,7 +131,7 @@ public class detail_information extends Activity {
 		hotelPrice = (TextView) findViewById(R.id.hotelPrice);
 		TextView noInfoText = (TextView) findViewById(R.id.noInfoText);
 		LinearLayout timeLayout = (LinearLayout) findViewById(R.id.timeLayout);
-
+		timeLayout.setVisibility(View.GONE);
 		hotelInfoLayout = (LinearLayout) findViewById(R.id.hotelInfoLayout);
 		hotelFoodLayout = (LinearLayout) findViewById(R.id.hotelFoodLayout);
 		hotelMeetingLayout = (LinearLayout) findViewById(R.id.hotelMeetingLayout);
@@ -147,6 +145,30 @@ public class detail_information extends Activity {
 		hotelTrafficLayout = (LinearLayout) findViewById(R.id.hotelTrafficLayout);
 		hotelSalesLayout = (LinearLayout) findViewById(R.id.hotelSalesLayout);
 		hotelPriceLayout = (LinearLayout) findViewById(R.id.hotelPriceLayout);
+		reserveBtn = (Button) findViewById(R.id.reserveBtn);
+		reserveBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Dialog fail2 = new AlertDialog.Builder(detail_information.this)
+						.setTitle("提示")
+						.setMessage("您的预定信息将会发送到酒店,请确认您的预定信息,确认后酒店将会第一时间联系您")
+						.setPositiveButton("确认预定",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										Toast.makeText(detail_information.this,
+												"预定信息已发送到酒店", Toast.LENGTH_LONG)
+												.show();
+									}
+								}).setNegativeButton("取消", null).create();
+				fail2.show();
+			}
+		});
 
 		returnbutton = (ImageView) findViewById(R.id.Hotelreturn);
 		listview = (ListView) findViewById(R.id.hoteldetail);
@@ -237,55 +259,55 @@ public class detail_information extends Activity {
 					|| hotelInfo.getText().toString().trim().equals("")) {
 				hotelInfoLayout.setVisibility(View.GONE);
 			}
-			if (hotelFood.getText().toString().equals("anyType{}")
-					|| hotelFood.getText().toString().trim().equals("")) {
-				hotelFoodLayout.setVisibility(View.GONE);
-			}
-			if (hotelMeeting.getText().toString().equals("anyType{}")
-					|| hotelMeeting.getText().toString().trim().trim()
-							.equals("")) {
-				hotelMeetingLayout.setVisibility(View.GONE);
-			}
-			if (hotelLeisure.getText().toString().equals("anyType{}")
-					|| hotelLeisure.getText().toString().trim().equals("")) {
-				hotelLeisureLayout.setVisibility(View.GONE);
-			}
-			if (hotelService.getText().toString().equals("anyType{}")
-					|| hotelService.getText().toString().trim().equals("")) {
-				hotelServiceLayout.setVisibility(View.GONE);
-			}
-			if (hotelSight.getText().toString().equals("anyType{}")
-					|| hotelSight.getText().toString().trim().equals("")) {
-				hotelSightLayout.setVisibility(View.GONE);
-			}
-			if (hotelNet.getText().toString().equals("anyType{}")
-					|| hotelNet.getText().toString().trim().equals("")) {
-				hotelNetLayout.setVisibility(View.GONE);
-			}
-			if (hotelCreditCard.getText().toString().equals("anyType{}")
-					|| hotelCreditCard.getText().toString().trim().equals("")) {
-				hotelCreditCardLayout.setVisibility(View.GONE);
-			}
-			if (hotelTraffic.getText().toString().equals("anyType{}")
-					|| hotelTraffic.getText().toString().trim().equals("")) {
-				hotelTrafficLayout.setVisibility(View.GONE);
-			}
-			if (hotelDiscount.getText().toString().equals("anyType{}")
-					|| hotelDiscount.getText().toString().trim().equals("")) {
-				hotelDiscountLayout.setVisibility(View.GONE);
-			}
-			if (hotelPer.getText().toString().equals("anyType{}")
-					|| hotelPer.getText().toString().trim().equals("")) {
-				hotelPerLayout.setVisibility(View.GONE);
-			}
-			if (hotelSales.getText().toString().equals("anyType{}")
-					|| hotelSales.getText().toString().trim().equals("")) {
-				hotelSalesLayout.setVisibility(View.GONE);
-			}
-			if (hotelPrice.getText().toString().equals("anyType{}")
-					|| hotelPrice.getText().toString().trim().equals("")) {
-				hotelPriceLayout.setVisibility(View.GONE);
-			}
+			// if (hotelFood.getText().toString().equals("anyType{}")
+			// || hotelFood.getText().toString().trim().equals("")) {
+			hotelFoodLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelMeeting.getText().toString().equals("anyType{}")
+			// || hotelMeeting.getText().toString().trim().trim()
+			// .equals("")) {
+			hotelMeetingLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelLeisure.getText().toString().equals("anyType{}")
+			// || hotelLeisure.getText().toString().trim().equals("")) {
+			hotelLeisureLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelService.getText().toString().equals("anyType{}")
+			// || hotelService.getText().toString().trim().equals("")) {
+			hotelServiceLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelSight.getText().toString().equals("anyType{}")
+			// || hotelSight.getText().toString().trim().equals("")) {
+			hotelSightLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelNet.getText().toString().equals("anyType{}")
+			// || hotelNet.getText().toString().trim().equals("")) {
+			hotelNetLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelCreditCard.getText().toString().equals("anyType{}")
+			// || hotelCreditCard.getText().toString().trim().equals("")) {
+			hotelCreditCardLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelTraffic.getText().toString().equals("anyType{}")
+			// || hotelTraffic.getText().toString().trim().equals("")) {
+			hotelTrafficLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelDiscount.getText().toString().equals("anyType{}")
+			// || hotelDiscount.getText().toString().trim().equals("")) {
+			hotelDiscountLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelPer.getText().toString().equals("anyType{}")
+			// || hotelPer.getText().toString().trim().equals("")) {
+			hotelPerLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelSales.getText().toString().equals("anyType{}")
+			// || hotelSales.getText().toString().trim().equals("")) {
+			hotelSalesLayout.setVisibility(View.GONE);
+			// }
+			// if (hotelPrice.getText().toString().equals("anyType{}")
+			// || hotelPrice.getText().toString().trim().equals("")) {
+			hotelPriceLayout.setVisibility(View.GONE);
+			// }
 
 			LinearLayout hotelPhoneLayout = (LinearLayout) findViewById(R.id.hotelPhoneLayout);
 
@@ -469,68 +491,70 @@ public class detail_information extends Activity {
 	class hotel_itemOnClickListener implements OnItemClickListener {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
-			if (userPhone.equals("")) {
-				Dialog fail = new AlertDialog.Builder(detail_information.this)
-						.setTitle("未登录")
-						.setMessage("尊敬的用户,请先登录")
-						.setPositiveButton("确定",
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										Intent intent = new Intent(
-												detail_information.this,
-												User_login.class);
-										startActivity(intent);
-										finish();
-									}
-								})
-						.setNegativeButton("取消",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int whichButton) {
-										// 取消按钮事件
-									}
-								}).create();
-				fail.show();
-			} else if (startYear == 0 || endYear == 0) {
-				Toast.makeText(detail_information.this, "请选择日期",
-						Toast.LENGTH_LONG).show();
-			} else {
-				// TODO Auto-generated method stub
-				String startdateString=startYear + "-" + startMonth + "-" + startDay + "-";
-				String enddateString=endYear + "-" + endMonth + "-" + endDay + "-";
-				try {
-					dayNum=daysBetween(startdateString,enddateString);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				TextView roomText = (TextView) listview.getChildAt(arg2)
-						.findViewById(R.id.roomText);
-				TextView price2 = (TextView) listview.getChildAt(arg2)
-						.findViewById(R.id.price2);
-				String roomtype = roomText.getText().toString();
-				String priceStr = price2.getText().toString();
-				Intent intent = new Intent(detail_information.this,
-						RoomDetail.class);
-				Bundle bundle = new Bundle();
-				bundle.putInt("dayNum", dayNum);
-				bundle.putInt("startYear", startYear);
-				bundle.putInt("startMonth", startMonth);
-				bundle.putInt("startDay", startDay);
-				bundle.putInt("endYear", endYear);
-				bundle.putInt("endMonth", endMonth);
-				bundle.putInt("endDay", endDay);
-
-				bundle.putString("hotelName", hotelName);
-				bundle.putString("hotelAddress", hotelAddress);
-				bundle.putString("roomtype", roomtype);
-				bundle.putString("price", priceStr);
-				intent.putExtras(bundle);
-				startActivity(intent);
-			}
+			// if (userPhone.equals("")) {
+			// Dialog fail = new AlertDialog.Builder(detail_information.this)
+			// .setTitle("未登录")
+			// .setMessage("尊敬的用户,请先登录")
+			// .setPositiveButton("确定",
+			// new DialogInterface.OnClickListener() {
+			// @Override
+			// public void onClick(DialogInterface dialog,
+			// int which) {
+			// Intent intent = new Intent(
+			// detail_information.this,
+			// User_login.class);
+			// startActivity(intent);
+			// finish();
+			// }
+			// })
+			// .setNegativeButton("取消",
+			// new DialogInterface.OnClickListener() {
+			// public void onClick(DialogInterface dialog,
+			// int whichButton) {
+			// // 取消按钮事件
+			// }
+			// }).create();
+			// fail.show();
+			// } else if (startYear == 0 || endYear == 0) {
+			// Toast.makeText(detail_information.this, "请选择日期",
+			// Toast.LENGTH_LONG).show();
+			// } else {
+			// // TODO Auto-generated method stub
+			// String startdateString=startYear + "-" + startMonth + "-" +
+			// startDay + "-";
+			// String enddateString=endYear + "-" + endMonth + "-" + endDay +
+			// "-";
+			// try {
+			// dayNum=daysBetween(startdateString,enddateString);
+			// } catch (ParseException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+			//
+			// TextView roomText = (TextView) listview.getChildAt(arg2)
+			// .findViewById(R.id.roomText);
+			// TextView price2 = (TextView) listview.getChildAt(arg2)
+			// .findViewById(R.id.price2);
+			// String roomtype = roomText.getText().toString();
+			// String priceStr = price2.getText().toString();
+			// Intent intent = new Intent(detail_information.this,
+			// RoomDetail.class);
+			// Bundle bundle = new Bundle();
+			// bundle.putInt("dayNum", dayNum);
+			// bundle.putInt("startYear", startYear);
+			// bundle.putInt("startMonth", startMonth);
+			// bundle.putInt("startDay", startDay);
+			// bundle.putInt("endYear", endYear);
+			// bundle.putInt("endMonth", endMonth);
+			// bundle.putInt("endDay", endDay);
+			//
+			// bundle.putString("hotelName", hotelName);
+			// bundle.putString("hotelAddress", hotelAddress);
+			// bundle.putString("roomtype", roomtype);
+			// bundle.putString("price", priceStr);
+			// intent.putExtras(bundle);
+			// startActivity(intent);
+			// }
 
 		}
 	}
@@ -588,8 +612,7 @@ public class detail_information extends Activity {
 	}
 
 	// 天数计算
-	public int daysBetween(String smdate, String bdate)
-			throws ParseException {
+	public int daysBetween(String smdate, String bdate) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(sdf.parse(smdate));

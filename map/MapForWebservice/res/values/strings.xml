@@ -64,5 +64,6 @@
     <string name="title_activity_fast_pay">FastPay</string>
     <string name="title_activity_user_change_mobile">UserChangeMobile</string>
     <string name="title_activity_user_old_register">User_oldregister</string>
+    <string name="title_activity_same_sys_select">SameSysSelect</string>
 
 </resources>

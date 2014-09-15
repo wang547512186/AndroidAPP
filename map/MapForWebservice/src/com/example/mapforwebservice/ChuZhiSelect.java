@@ -75,10 +75,12 @@ public class ChuZhiSelect extends Activity {
 				String hotelname = map.get("hotelname");
 				String hotelchuzhi = map.get("hotelchuzhi");
 				String hoteladdress = map.get("hoteladdress");
+				String hoteltotalid =map.get("hoteltotalid");
 				bundle.putString("hotelId", hotelId);
 				bundle.putString("hotelname", hotelname);
 				bundle.putString("hotelchuzhi", hotelchuzhi);
 				bundle.putString("hoteladdress", hoteladdress);
+				bundle.putString("hoteltotalid", hoteltotalid);
 				intent.putExtras(bundle);
 				startActivity(intent);
 				finish();
@@ -101,7 +103,7 @@ public class ChuZhiSelect extends Activity {
 
 	private List<Map<String, Object>> getData() {
 		// TODO Auto-generated method stub
-		int m = chuzhidetail.size() / 3;
+		int m = chuzhidetail.size() / 4;
 		list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
 
@@ -109,7 +111,7 @@ public class ChuZhiSelect extends Activity {
 			for (int i = 0; i < m; i++) {
 				map = new HashMap<String, Object>();
 
-				hotelId = chuzhidetail.get(i * 3 + 1).toString();
+				hotelId = chuzhidetail.get(i * 4 + 1).toString();
 				hoteldetail = mapdata.getHotelInfoById(hotelId);
 				if (!hoteldetail.isEmpty()) {
 					map.put("hotelname", hoteldetail.get(1).toString());
@@ -117,8 +119,9 @@ public class ChuZhiSelect extends Activity {
 				} else {
 					continue;
 				}
-				map.put("hotelId", chuzhidetail.get(i * 3 + 1).toString());
-				map.put("hotelchuzhi", chuzhidetail.get(i * 3 + 2).toString());
+				map.put("hotelId", chuzhidetail.get(i * 4 + 1).toString());
+				map.put("hotelchuzhi", chuzhidetail.get(i * 4 + 2).toString());
+				map.put("hoteltotalid", chuzhidetail.get(i * 4 + 3).toString());
 				list.add(map);
 
 			}

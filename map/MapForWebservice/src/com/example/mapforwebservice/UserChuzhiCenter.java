@@ -94,7 +94,7 @@ public class UserChuzhiCenter extends Activity {
 
 	private List<Map<String, Object>> getData() {
 		// TODO Auto-generated method stub
-		int m = chuzhidetail.size() / 3;
+		int m = chuzhidetail.size() / 4;
 		list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
 
@@ -102,7 +102,7 @@ public class UserChuzhiCenter extends Activity {
 			for (int i = 0; i < m; i++) {
 				map = new HashMap<String, Object>();
 
-				hotelId = chuzhidetail.get(i * 3 + 1).toString();
+				hotelId = chuzhidetail.get(i * 4 + 1).toString();
 				hoteldetail = mapdata.getHotelInfoById(hotelId);
 				if (!hoteldetail.isEmpty()) {
 
@@ -111,8 +111,8 @@ public class UserChuzhiCenter extends Activity {
 				} else {
 					continue;
 				}
-				map.put("hotelId", chuzhidetail.get(i * 3 + 1).toString());
-				map.put("hotelchuzhi", chuzhidetail.get(i * 3 + 2).toString());
+				map.put("hotelId", chuzhidetail.get(i * 4 + 1).toString());
+				map.put("hotelchuzhi", chuzhidetail.get(i * 4 + 2).toString());
 				list.add(map);
 
 			}

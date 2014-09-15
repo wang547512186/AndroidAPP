@@ -411,6 +411,10 @@
             android:name=".User_oldregister"
             android:label="@string/title_activity_user_old_register" >
         </activity>
+        <activity
+            android:name=".SameSysSelect"
+            android:label="@string/title_activity_same_sys_select" >
+        </activity>
     </application>
 
 </manifest>

@@ -31,7 +31,7 @@ public class FastPay extends Activity {
 	private Button matchingCodeBtn;
 	private TextView matchingCodeText;
 	private TextView confirmText;
-	private static String matchCodeString = "";
+	private String matchCodeString = "";
 	private ProgressDialog dialog;
 
 	@Override

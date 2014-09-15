@@ -157,6 +157,13 @@ namespace WebService1
             return dbOperation.addUserChuzhi( uid,  hotelid, hoteltotalid, scorechuzhi);
         }
 
+        [WebMethod(Description = "获取匹配码用户信息")]
+        public string[] getPayCodeUid(string code)
+        {
+            return dbOperation.getPayCodeUid(code).ToArray();
+        }
+
+
         [WebMethod(Description = "获取酒店房型")]
         public string[] getRoomInfo(string hotelid)
         {
@@ -214,10 +221,10 @@ namespace WebService1
             return dbOperation.getUserChuzhi(uid).ToArray();
         }
 
-        [WebMethod(Description = "修改用户储值")]
-        public bool updateUserChuzhi(string uid, string hotelid, string money)
+        [WebMethod(Description = "获取同系统的店")]
+        public string[] getSamesytemname(string hoteltotalid)
         {
-            return dbOperation.updateUserChuzhi(uid, hotelid, money);
+            return dbOperation.getSamesytemname(hoteltotalid).ToArray();
         }
         [WebMethod(Description = "修改用户客主币")]
         public bool updateUserKezhu(string uid, string money)
@@ -307,6 +314,13 @@ namespace WebService1
         public bool chuzhiConsume(string uid, string hotelid, string hoteltotalid, string money, string serviceuserid)
         {
             return dbOperation.chuzhiConsume(uid, hotelid, hoteltotalid, money, serviceuserid);
+        }
+
+
+        [WebMethod(Description = "商家同系统总值")]
+        public string getUserSamesytemchuzhi(string uid, string hoteltotalid)
+        {
+            return dbOperation.getUserSamesytemchuzhi(uid, hoteltotalid);
         }
 
     }

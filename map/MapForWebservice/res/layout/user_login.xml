@@ -129,23 +129,6 @@
             android:textSize="20sp" />
         
         
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp" 
-            android:text="实体卡用户?"
-            android:textColor="@color/secondtext"/>
-        
-        <Button
-            android:id="@+id/oldregisterBtn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_button"
-            android:gravity="center"
-            android:text="实体卡用户注册"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -177,7 +177,6 @@ public class User_register extends Activity {
 							|| registerPwdString.trim().equals("")
 							|| registerPwdString2.trim().equals("")
 							|| phoneNumberString.trim().equals("")
-							|| userEmailString.trim().equals("")
 							|| inviteNumberString.trim().equals("")) {
 						Dialog fail2 = new AlertDialog.Builder(
 								User_register.this).setTitle("ÌבÊ¾")

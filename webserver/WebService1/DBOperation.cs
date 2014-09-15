@@ -1028,26 +1028,33 @@ namespace WebService1
             return list;
         }
         //8
-        public bool updateUserChuzhi(string uid, string hotelid, string money)
+        //找出各个同系统的商家名字
+        public List<string> getSamesytemname(string hoteltotalid)
         {
+            List<string> list = new List<string>();
             Open();
-            string sql = "update usermoneyhotel set scorechuzhi ='" + money + "' where hotelid='" + hotelid + "' and uid='" + uid + "'";
+            string sql = "select * from hotel where hoteltotalid='" + hoteltotalid + "'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = cmd.ExecuteReader();
             try
             {
-                if ((int)cmd.ExecuteNonQuery() != 0)
-                    return true;
-                else
-                    return false;
+                while (read.Read())
+                {
+                    list.Add(read["hotelid"].ToString());
+                    list.Add(read["hotelname"].ToString());
+                    list.Add(read["address"].ToString());
+                    //list.Add(read["hoteltotalid"].ToString());
+                    //list.Add(read["hotelkind"].ToString());
+                }
             }
-            catch
-            {
-                return false;
-            }
+            catch (Exception)
+            { }
             finally
             {
+                read.Close();
                 Dispose();
             }
+            return list;
         }
 
         //9
@@ -1072,6 +1079,8 @@ namespace WebService1
             }
         }
 
+       
+
         //更改后的获得用户各个商家的总储值分条
         public List<string> getUserChuzhi(string uid)
         {
@@ -1086,7 +1095,8 @@ namespace WebService1
                 {
                     list.Add(read["uid"].ToString());
                     list.Add(read["hotelid"].ToString());
-                    list.Add(read["会员储值账户"].ToString());
+                    list.Add(read["chuzhimoney"].ToString());
+                    list.Add(read["hoteltotalid"].ToString());
                 }
             }
             catch (Exception)
@@ -1098,6 +1108,8 @@ namespace WebService1
             }
             return list;
         }
+
+
 
 
         //更改后的得到某个店的储值消费记录
@@ -1360,7 +1372,7 @@ namespace WebService1
         }
 
         //new商家同系统总值
-        public double getUserSamesytemchuzhi(string uid, string hoteltotalid)
+        public string getUserSamesytemchuzhi(string uid, string hoteltotalid)
         {
             double samesystem = 0;
             Open();
@@ -1381,8 +1393,10 @@ namespace WebService1
                 read.Close();
                 Dispose();
             }
-            return samesystem;
+            return samesystem.ToString();
         }
+
+
 
         //充值
         public bool chuzhiRecharge(string uid, string hotelid, string hoteltotalid, string money, string serviceuserid)
@@ -1407,6 +1421,34 @@ namespace WebService1
             {
             }
             return result && result2;
+        }
+
+        //获取匹配码用户信息
+        public List<string> getPayCodeUid(string code)
+        {
+            List<string> uidList = new List<string>();
+            Open();
+            string sql = "select * from Fastpay where  code='" + code + "'";
+            SqlCommand com = new SqlCommand(sql, sqlCon);
+            SqlDataReader read = com.ExecuteReader();
+            try
+            {
+                if (read.Read())
+                {
+                    uidList.Add(read["mobilephone"].ToString());
+                }
+            }
+            catch
+            { }
+            finally
+            {
+                read.Close();
+                Dispose();
+            }
+            return uidList;
+ 
+
+
         }
 
         //储值消费
@@ -1740,72 +1782,7 @@ namespace WebService1
             }
         }
 
-        //new清算操作处理
-        public bool qingsuan(string uid, string hotelid, string clearingmoney)
-        {
-            Open();
-            string sql = "insert into samesystemhistory values('"+ uid +"','"+ hotelid +"','"+ clearingmoney +"','"+ DateTime.Now +"')";
-            SqlCommand com = new SqlCommand(sql,sqlCon);
-            try
-            {
-                double uidqingsuan = qingsuanvalue(uid);
-                double hotelidqingsuan = qingsuanvalue(hotelid);
-                updateqingsuan(uid, (uidqingsuan - Convert.ToDouble(clearingmoney)).ToString());
-                updateqingsuan(hotelid, (uidqingsuan + Convert.ToDouble(clearingmoney)).ToString());
-                com.ExecuteNonQuery();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-            finally
-            {
-                Dispose();
-            }
-        }
 
-        //new读取清算账户的储值
-        public double qingsuanvalue(string uid)
-        {
-            double value = 0;
-            string sql = "select * from samesystemmoney where uid='"+ uid +"'";
-            SqlCommand com = new SqlCommand(sql,sqlCon);
-            SqlDataReader read = com.ExecuteReader();
-            try
-            {
-                if (read.Read())
-                    value = Convert.ToDouble(read["money"].ToString());
-            }
-            catch
-            { }
-            finally
-            {
-                Dispose();
-            }
-            return value;
-        }
 
-        //new更新清算账户的储值
-        public bool updateqingsuan(string uid,string money)
-        {
-            Open();
-            string sql = "update samesystemmoney set money='"+ money +"' where uid='" + uid + "'";
-            SqlCommand com = new SqlCommand(sql, sqlCon);
-            try
-            {
-                com.ExecuteNonQuery();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-            finally
-            {
-                Dispose();
-            }
-            
-        }
     }
 }

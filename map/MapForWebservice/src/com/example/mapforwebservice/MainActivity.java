@@ -303,7 +303,9 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		mLocationClient.registerLocationListener(myListener);
 		setLocationOption();// 设定定位参数
 		// mLocationClient.start();//开始定位
-
+		
+		
+		
 		myloc = (ImageView) findViewById(R.id.myloc);
 		myloc.setOnClickListener(new OnClickListener() {
 
@@ -333,6 +335,10 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		MyThread thread = new MyThread();
 		Thread mThread = new Thread(thread);
 		mThread.start();
+		
+		
+		
+		
 	}
 
 	protected void checkThread() {
@@ -405,8 +411,8 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 				break;
 			case 3:
 				timer.cancel();
-				Toast.makeText(MainActivity.this, "服务器异常,读取数据失败", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(MainActivity.this, "服务器异常,读取数据失败",
+						Toast.LENGTH_LONG).show();
 				dialog.dismiss();
 				break;
 
@@ -490,21 +496,29 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		Drawable mark = getResources().getDrawable(R.drawable.icon_gcoding);
 		// 创建IteminizedOverlay
 		OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
+		locations = mapdata.selectall(curCityString.substring(0,
+				curCityString.length() - 1));
 		int sums = locations.size() / 5;
-		for (int i = 0; i < sums; i++) {
-			String[] strings = locations.get(i * 5 + 3).toString().trim()
-					.split(",");
-			if (strings[0].equals("0")) {
-				continue;
-			} else {
-				double mLat = Double.valueOf(strings[0]);
-				double mLon = Double.valueOf(strings[1]);
-				GeoPoint p = new GeoPoint((int) (mLat * 1E6),
-						(int) (mLon * 1E6));
-				OverlayItem item = new OverlayItem(p, "item" + i, "item" + i);
-				itemOverlay.addItem(item);
+		try {
+			for (int i = 0; i < sums; i++) {
+				String[] strings = locations.get(i * 5 + 3).toString().trim()
+						.split(",");
+				if (strings[0].equals("0")) {
+					continue;
+				} else {
+					double mLat = Double.valueOf(strings[0]);
+					double mLon = Double.valueOf(strings[1]);
+					GeoPoint p = new GeoPoint((int) (mLat * 1E6),
+							(int) (mLon * 1E6));
+					OverlayItem item = new OverlayItem(p, "item" + i, "item"
+							+ i);
+					itemOverlay.addItem(item);
+				}
 			}
+		} catch (Exception e) {
+
 		}
+
 		mMapView.getOverlays().clear();
 		mMapView.getOverlays().add(itemOverlay);
 		mMapView.refresh();
@@ -1440,16 +1454,19 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 			if (location == null)
 				return;
 			Drawable mark = getResources().getDrawable(
-					R.drawable.icon_mylocation);
+					R.drawable.ic_myloc1);
 			// 创建IteminizedOverlay
 			OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
 			double mLat = location.getLatitude();
 			double mLon = location.getLongitude();
-			curCityString=location.getCity();
+			curCityString = location.getCity();
+			selectcity.setText(curCityString);
 			GeoPoint p = new GeoPoint((int) (mLat * 1E6), (int) (mLon * 1E6));
 			OverlayItem item = new OverlayItem(p, "item", "item");
 			itemOverlay.addItem(item);
 
+			((PointValue) getApplication()).setPointXValue((int) (mLat * 1E6));
+			((PointValue) getApplication()).setPointYValue((int) (mLon * 1E6));
 			MapController mMapController = mMapView.getController();
 			mMapController.setCenter(p);// 设置地图中心点
 			mMapController.setZoom(14);// 设置地图zoom级别\
@@ -1457,7 +1474,6 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 			showalladdress();
 			mMapView.getOverlays().add(itemOverlay);
 			mMapView.refresh();
-
 		}
 
 		// 接收POI信息函数

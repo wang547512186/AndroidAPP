@@ -1,5 +1,6 @@
 package com.example.mapforwebservice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,9 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,52 +31,79 @@ public class ChuZhiPay extends Activity {
 	private Button payconfirmBtn;
 	private String hotelId;
 	private String hotelNameStr;
-	private String hotelChuzhiStr;
+	//private String hotelChuzhiStr;
+	private String samesystemmoney;
 	private String hotelAddressStr;
+	private String hoteltotalid;
 	private Double chuzhi = 0.0;
 	private EditText requestChuzhi;
 	private Double requestChuzhiNumber;
 	private SharedPreferences sp;
 	private String userPhone = "";
-	private String nickName = "";
-	private String userPwd = "";
+	private String hoteltotalId = "";
 	private String uid = "";
 	private MapData mapdata;
-	private List<String> detail;
+	private List<String> hotelInfoList;
 	private static final int RESULT_FAIL = 1;
 	private static final int RESULT_SUCCESS = 2;
-
+	private ArrayAdapter<String> adapter;
+    private List<String> namehotel;
+    private List<String> hotelnametotal;
+    private TextView hoteladdress;
+    private int site=0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chu_zhi_pay);
-
+		Intent intent = getIntent();
+		hotelId = intent.getStringExtra("hotelId");
 		sp = getSharedPreferences("login_state", Context.MODE_PRIVATE);
 		userPhone = sp.getString("userPhone", "");
 		uid = sp.getString("uid", "");
 		mapdata = new MapData();
-		detail = mapdata.userInfor(userPhone);
-		if (!detail.isEmpty()) {
-			nickName = detail.get(1).toString().trim();
+		hotelInfoList = mapdata.hotelshopInfo(hotelId);
+		if (!hotelInfoList.isEmpty()) {
+			hoteltotalId= hotelInfoList.get(1).toString().trim();
 		}
 
-		Intent intent = getIntent();
-		hotelId = intent.getStringExtra("hotelId");
+		
 		
 		// Toast.makeText(ChuZhiPay.this,hotelId, Toast.LENGTH_LONG).show();
 		hotelNameStr = intent.getStringExtra("hotelname");
-		hotelChuzhiStr = intent.getStringExtra("hotelchuzhi");
+		//hotelChuzhiStr = intent.getStringExtra("hotelchuzhi");
 		hotelAddressStr = intent.getStringExtra("hoteladdress");
-		TextView hotelname = (TextView) findViewById(R.id.hotelname);
+		hoteltotalid = intent.getStringExtra("hoteltotalid");
+		Spinner hotelname = (Spinner) findViewById(R.id.hotelname);
 		TextView hotelchuzhi = (TextView) findViewById(R.id.hotelchuzhi);
-		TextView hoteladdress = (TextView) findViewById(R.id.hoteladdress);
-		hotelname.setText(hotelNameStr);
-		hotelchuzhi.setText(hotelChuzhiStr);
+		hoteladdress = (TextView) findViewById(R.id.hoteladdress);
+		hotelnametotal=new ArrayList<String>();
+		namehotel=new ArrayList<String>();
+		hotelnametotal=mapdata.getSamesytemname(hoteltotalid);
+		
+		for(int i=0;i<hotelnametotal.size()/3;i++)
+		{
+			namehotel.add(hotelnametotal.get(i*3+1));
+			if(hotelNameStr.equals( hotelnametotal.get(i*3+1)))
+				site=i;
+		}
+		adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,namehotel);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        
+        //将adapter 添加到spinner中
+		hotelname.setAdapter(adapter);
+		
+		hotelname.setOnItemSelectedListener(new SpinnerSelectedListener());
+        
+        //设置默认值
+		hotelname.setVisibility(View.VISIBLE);
+		//hotelname.setText(hotelNameStr);
+		hotelname.setSelection(site, true);
 		hoteladdress.setText(hotelAddressStr);
 
 		requestChuzhi = (EditText) findViewById(R.id.requestChuzhi);
-		chuzhi = Double.valueOf(hotelChuzhiStr);
-
+		samesystemmoney=mapdata.getUserSamesytemchuzhi(uid,hoteltotalid);
+		chuzhi = Double.valueOf(samesystemmoney);
+		hotelchuzhi.setText(samesystemmoney);
 		ImageView returnbtn = (ImageView) findViewById(R.id.returnbtn);
 		returnbtn.setOnClickListener(new OnClickListener() {
 
@@ -114,27 +146,32 @@ public class ChuZhiPay extends Activity {
 			}
 
 		});
+		
+		
+		
 	}
+	
+	class SpinnerSelectedListener implements OnItemSelectedListener{
+		 
+        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+                long arg3) {
+        	
+        	hoteladdress.setText(hotelnametotal.get(arg2*3+2));
+        	hotelId=hotelnametotal.get(arg2*3);
+        }
+ 
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
+    }
 
 	protected void onActivityResult(int requestCode, int resuluCode, Intent data) {
 		if (requestCode == 3 && resuluCode == RESULT_FAIL) {
 		}
 		if (requestCode == 3 && resuluCode == RESULT_SUCCESS) {
 			mapdata = new MapData();
-			requestChuzhiNumber = Double.valueOf('-'+requestChuzhi.getText()
-					.toString());
-			String isUpdateChuzhi = mapdata.updateUserChuzhi(uid, hotelId,
-					String.valueOf(chuzhi + requestChuzhiNumber));
-//			Toast.makeText(ChuZhiPay.this,uid+"|"+hotelId+"|"+ String.valueOf(chuzhi + requestChuzhiNumber), Toast.LENGTH_LONG).show();
-			if (isUpdateChuzhi.equals("true")) {
+			String payResult = mapdata.chuzhiConsume(uid, hotelId, hoteltotalId, String.valueOf(requestChuzhiNumber), uid);
 
-				mapdata = new MapData();
-				try {
-					mapdata.addHistory(uid, nickName, hotelId, hotelNameStr, "0","0", String.valueOf(requestChuzhiNumber));
-				} catch (Exception e) {
-//					Toast.makeText(ChuZhiPay.this,userName+hotelId+String.valueOf(requestChuzhiNumber), Toast.LENGTH_LONG).show();
-				}
-
+			if (payResult.equals("true")) {
 				Dialog dialog2 = new AlertDialog.Builder(ChuZhiPay.this)
 						.setTitle("支付结果")
 						.setMessage("储值支付成功!")
