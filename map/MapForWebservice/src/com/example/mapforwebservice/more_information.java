@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -25,32 +26,21 @@ public class more_information extends FragmentActivity {
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 		// mTabHost.getCurrentTabView().setBackgroundColor(Color.RED);
 
-		indicator = getIndicatorView("全部", R.layout.near);
+		indicator = getIndicatorView("全部", R.layout.tab_all);
 		mTabHost.addTab(mTabHost.newTabSpec("0").setIndicator(indicator),
 				HotelList.class, null);
-		indicator = getIndicatorView("酒店", R.layout.classify);
+		indicator = getIndicatorView("酒店", R.layout.tab_hotel);
 		mTabHost.addTab(mTabHost.newTabSpec("1").setIndicator(indicator),
 				HotelList1.class, null);
-		indicator = getIndicatorView("其他", R.layout.pay);
+		indicator = getIndicatorView("餐饮", R.layout.tab_food);
 		mTabHost.addTab(mTabHost.newTabSpec("2").setIndicator(indicator),
 				HotelList2.class, null);
-		indicator = getIndicatorView("个人中心", R.layout.user);
+		indicator = getIndicatorView("汽车服务", R.layout.tab_car);
 		mTabHost.addTab(mTabHost.newTabSpec("3").setIndicator(indicator),
-				NewsFragment.class, null);
-		mTabHost.getTabWidget().getChildAt(3)
-				.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View arg0) {
-						// TODO Auto-generated method stub
-						Intent intent = new Intent();
-						intent.setClass(more_information.this,
-								User_information.class);
-						startActivity(intent);
-						more_information.this.finish();
-					}
-
-				});
+				HotelList2.class, null);
+		indicator = getIndicatorView("其他", R.layout.tab_other);
+		mTabHost.addTab(mTabHost.newTabSpec("4").setIndicator(indicator),
+				HotelList2.class, null);
 	}
 
 	class ImgBtOnClickListener implements OnClickListener {

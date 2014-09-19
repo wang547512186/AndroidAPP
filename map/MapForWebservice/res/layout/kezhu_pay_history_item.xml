@@ -7,8 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="#ffffff"
+        android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp" >
 
@@ -32,19 +32,21 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical" >
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="20dp"
-                    android:layout_marginRight="3dp"
-                    android:src="@drawable/ic_loc" />
-
                 <TextView
-                    android:id="@+id/kezhuHotelAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxWidth="200dp"
-                    android:text="TextView"
-                    android:textSize="13sp" />
+                    android:text="单号"
+                    android:textColor="@color/secondtext"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/orderid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="xxxxxxxxx"
+                    android:textColor="@color/secondtext"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -71,30 +73,31 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="#cccccc" />
-        <LinearLayout 
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
-            <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|right"
-            android:layout_weight="1"
-            android:text="客主币支付 : "
-            android:textSize="16sp" />
-            <TextView
-            android:id="@+id/kezhuHotelNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="xxx"
-            android:textStyle="bold"
-            android:textColor="@color/moneycolor"
-            android:textSize="20sp" />
-        </LinearLayout>
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp" >
 
-        
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="客主币支付 : "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/kezhuHotelNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="xxx"
+                android:textColor="@color/moneycolor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
     <View

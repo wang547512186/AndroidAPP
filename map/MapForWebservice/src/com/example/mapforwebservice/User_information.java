@@ -153,38 +153,7 @@ public class User_information extends Activity {
 		Thread mThread = new Thread(thread);
 		mThread.start();
 
-		// ÅÐ¶ÏÊÇ·ñµÇÂ¼
-		// if (UserName.equals("")) {
-		// userLayout.setVisibility(View.INVISIBLE);
-		// } else {
-		// userLayout.setVisibility(View.VISIBLE);
-		// detail = mapdata.userInfor(UserName);
-		// kezhudetail = mapdata.getUserKezhu(uid);
-		// try {
-		//
-		// // double totalkezhu = Double.valueOf(detail.get(7).toString())
-		// // + Double.valueOf(detail.get(8).toString());
-		// if (kezhudetail.size() != 0) {
-		// totalkezhu = Double.valueOf(kezhudetail.get(0).toString());
-		// kezhuNum.setText(totalkezhu + "");
-		// } else {
-		// totalkezhu = 0.00;
-		// kezhuNum.setText(totalkezhu + "");
-		// }
-		//
-		// curUserName.setText(detail.get(1).toString());
-		// } catch (Exception e) {
-		// Editor editor = sp.edit();
-		// editor.putString("userName", "");
-		// editor.commit();
-		// UserName = sp.getString("userName", "");
-		// uid = sp.getString("uid", "");
-		// userLayout.setVisibility(View.INVISIBLE);
-		// exitBtn.setVisibility(View.GONE);
-		// Log.e("catch~~~~~~~~UserName~~", UserName);
-		// }
-		//
-		// }
+		
 
 		noLoginLayout = (LinearLayout) findViewById(R.id.noLoginLayout);
 		changeBackground(noLoginLayout);

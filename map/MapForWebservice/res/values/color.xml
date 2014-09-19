@@ -12,5 +12,15 @@
     <color name="titlecolor">#202020</color>
     <color name="link">#002BFF</color>
     <color name="redboder">#9A0000</color>
-   
+    <color name="unclick">#BBBBBB</color>
+    <color name="blue">#0099FF</color>
+    
+    <color name="hotelup">#CC9999</color>
+    <color name="hoteldown">#966c6c</color>
+    <color name="foodup">#33CC99</color>
+    <color name="fooddown">#218a67</color>
+    <color name="carup">#666699</color>
+    <color name="cardown">#404060</color>
+    <color name="otherup">#FF9900</color>
+    <color name="otherdown">#b76e01</color>
 </resources>

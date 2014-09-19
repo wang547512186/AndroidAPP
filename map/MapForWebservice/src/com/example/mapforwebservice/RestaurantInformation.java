@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -36,6 +37,11 @@ public class RestaurantInformation extends Activity {
 	private String shopId = "11";
 	String phoneStr;
 	private String restName;
+	private String picUrl = "http://www.kezhu.com/hotelpic/b/";
+	private String pic1 = "";
+	private String pic2 = "";
+	private String pic3 = "";
+	private Bitmap bitmap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,7 @@ public class RestaurantInformation extends Activity {
 
 		});
 
-		initViewPager();
+		
 
 		Bundle bundle = this.getIntent().getExtras();
 		restName = bundle.getString("name");
@@ -76,13 +82,16 @@ public class RestaurantInformation extends Activity {
 			restPhone.setText(detail.get(5).toString().trim());
 			restAddress.setText(detail.get(6).toString().trim());
 			restInfo.setText(detail.get(7).toString().trim());
+			pic1 = detail.get(9).toString().trim();
+			pic2 = detail.get(10).toString().trim();
+			pic3 = detail.get(11).toString().trim();
 //			restTraffic.setText(detail.get(12).toString().trim());
 //			restSale.setText(detail.get(16).toString().trim());
 //			restPrice.setText(detail.get(17).toString().trim());
 		} catch (Exception e) {
 		}
 
-		if (detail.get(11).toString().equals("anyType{}")) {
+		if (detail.get(7).toString().equals("anyType{}")) {
 			restInfoLayout.setVisibility(View.GONE);
 		}
 //		if (detail.get(12).toString().equals("anyType{}")) {
@@ -109,6 +118,7 @@ public class RestaurantInformation extends Activity {
 				startActivity(phoneIntent);
 			}
 		});
+		initViewPager();
 
 	}
 
@@ -169,14 +179,30 @@ public class RestaurantInformation extends Activity {
 	private void initPageAdapter() {
 		pageViews = new ArrayList<View>();
 
-		ImageView img1 = new ImageView(this);
-		img1.setImageResource(R.drawable.aa1);
-
-		pageViews.add(img1);
-
-		ImageView img2 = new ImageView(this);
-		img2.setImageResource(R.drawable.aa2);
-		pageViews.add(img2);
+		if (!pic1.equals("") && !pic1.equals("anyType{}")) {
+			bitmap = HotelList.getPic(picUrl + pic1);
+			ImageView img1 = new ImageView(this);
+			img1.setImageBitmap(bitmap);
+			pageViews.add(img1);
+		}
+		if (!pic2.equals("") && !pic2.equals("anyType{}")) {
+			bitmap = HotelList.getPic(picUrl + pic2);
+			ImageView img2 = new ImageView(this);
+			img2.setImageBitmap(bitmap);
+			pageViews.add(img2);
+		}
+		if (!pic3.equals("") && !pic3.equals("anyType{}")) {
+			bitmap = HotelList.getPic(picUrl + pic3);
+			ImageView img3 = new ImageView(this);
+			img3.setImageBitmap(bitmap);
+			pageViews.add(img3);
+		}
+		
+		if(pageViews.size()==0){
+			ImageView img4 = new ImageView(this);
+			img4.setImageResource(R.drawable.no_pic);
+			pageViews.add(img4);
+		}
 
 		adapter = new ImagePagerAdapter(pageViews);
 	}

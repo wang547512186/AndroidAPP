@@ -53,7 +53,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_search"
-            android:hint="酒店名" />
+            android:hint="请输入商家名" />
     </LinearLayout>
 
     <ListView

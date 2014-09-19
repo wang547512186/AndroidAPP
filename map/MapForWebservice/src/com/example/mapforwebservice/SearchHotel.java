@@ -7,6 +7,8 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -29,6 +32,10 @@ public class SearchHotel extends Activity {
 	private SimpleAdapter adapter;
 	private MapData mapdata;
 	private String curCityString;
+	private String picUrl = "http://www.kezhu.com/hotelpic/b/";
+	private String picname;
+	private Bitmap bitmap;
+	private Drawable drawable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +95,19 @@ public class SearchHotel extends Activity {
 		adapter = new SimpleAdapter(this, getData(), R.layout.hotellist_item,
 				new String[] { "img", "title", "address" }, new int[] { R.id.img,
 						R.id.title, R.id.address });
+		adapter.setViewBinder(new ViewBinder() {
+			@Override
+			public boolean setViewValue(View view, Object data,
+					String textRepresentation) {
+				// TODO Auto-generated method stub
+				if (view instanceof ImageView && data instanceof Bitmap) {
+					ImageView i = (ImageView) view;
+					i.setImageBitmap((Bitmap) data);
+					return true;
+				}
+				return false;
+			}
+		});
 		listview.setAdapter(adapter);
 		listview.setDividerHeight(0);
 
@@ -119,6 +139,19 @@ public class SearchHotel extends Activity {
 		adapter = new SimpleAdapter(this, getData(), R.layout.hotellist_item,
 				new String[] { "img", "title", "address" }, new int[] { R.id.img,
 						R.id.title, R.id.address });
+		adapter.setViewBinder(new ViewBinder() {
+			@Override
+			public boolean setViewValue(View view, Object data,
+					String textRepresentation) {
+				// TODO Auto-generated method stub
+				if (view instanceof ImageView && data instanceof Bitmap) {
+					ImageView i = (ImageView) view;
+					i.setImageBitmap((Bitmap) data);
+					return true;
+				}
+				return false;
+			}
+		});
 
 	}
 
@@ -127,6 +160,19 @@ public class SearchHotel extends Activity {
 				R.layout.hotellist_item,
 				new String[] { "img", "title", "address" }, new int[] { R.id.img,
 						R.id.title, R.id.address });
+		adapter.setViewBinder(new ViewBinder() {
+			@Override
+			public boolean setViewValue(View view, Object data,
+					String textRepresentation) {
+				// TODO Auto-generated method stub
+				if (view instanceof ImageView && data instanceof Bitmap) {
+					ImageView i = (ImageView) view;
+					i.setImageBitmap((Bitmap) data);
+					return true;
+				}
+				return false;
+			}
+		});
 	}
 
 	private List<Map<String, Object>> searchData(String str,
@@ -146,16 +192,25 @@ public class SearchHotel extends Activity {
 
 	private List<Map<String, Object>> getData() {
 		// TODO Auto-generated method stub
-		int m = orderlist.size() / 5;
+		int m = orderlist.size() / 8;
 		list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
 
 		for (int i = 0; i < m; i++) {
 			map = new HashMap<String, Object>();
-			map.put("img", R.drawable.hotel1);
-			map.put("hotelId", orderlist.get(i * 5 + 0).toString());
-			map.put("title", orderlist.get(i * 5 + 1).toString());
-			map.put("address", orderlist.get(i * 5 + 3).toString());
+
+			picname = "";
+			picname = orderlist.get(i * 8 + 5).toString().trim();
+			if (!picname.equals("") && !picname.equals("anyType{}")) {
+				bitmap = HotelList.getPic(picUrl + picname);
+			} else {
+				bitmap = HotelList.getPic(picUrl + "kezhu.jpg");
+			}
+
+			map.put("img", bitmap);
+			map.put("hotelId", orderlist.get(i * 8 + 0).toString());
+			map.put("title", orderlist.get(i * 8 + 1).toString());
+			map.put("address", orderlist.get(i * 8 + 3).toString());
 			list.add(map);
 
 		}

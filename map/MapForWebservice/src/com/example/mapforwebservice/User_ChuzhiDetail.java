@@ -9,9 +9,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -74,28 +81,22 @@ public class User_ChuzhiDetail extends Activity {
 		});
 
 		listview = (ListView) findViewById(R.id.chuzhi_detailList);
-		SimpleAdapter adapter = new SimpleAdapter(this, getData(),
-				R.layout.user_chuzhi_detail_item, new String[] { "chuzhi_type",
-						"chuzhi_number", "chuzhi_date", "orderid" }, new int[] {
-						R.id.chuzhi_type, R.id.chuzhi_number, R.id.chuzhi_date,
-						R.id.orderid });
-		listview.setAdapter(adapter);
+		MyAdapter mAdapter = new MyAdapter(this);
+		// SimpleAdapter adapter = new SimpleAdapter(this, getDate(),
+		// R.layout.user_chuzhi_detail_item, new String[] { "chuzhi_type",
+		// "chuzhi_number", "chuzhi_date" }, new int[] {
+		// R.id.chuzhi_type, R.id.chuzhi_number, R.id.orderid });
+		listview.setAdapter(mAdapter);
 		listview.setDividerHeight(0);
 
 	}
 
-	private List<Map<String, Object>> getData() {
+	private List<Map<String, Object>> getDate() {
 		// TODO Auto-generated method stub
 		list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
 		int m = historylist.size() / 2;
 
-		// map = new HashMap<String, Object>();
-		// map.put("chuzhi_type", "充值");
-		// map.put("chuzhi_number", "500");
-		// map.put("orderid", "1561145");
-		// map.put("chuzhi_date", "2012-13-14");
-		// list.add(map);
 		try {
 			for (int i = 0; i < m; i++) {
 				map = new HashMap<String, Object>();
@@ -103,11 +104,13 @@ public class User_ChuzhiDetail extends Activity {
 				chuzhi = Double.valueOf(historylist.get(i * 2 + 0).toString());
 				if (chuzhi < 0) {
 					map.put("chuzhi_type", "消费");
-				} else if(chuzhi > 0){
+				} else if (chuzhi > 0) {
 					map.put("chuzhi_type", "充值");
-				}else{continue;}
+				} else {
+					continue;
+				}
 				map.put("chuzhi_number", historylist.get(i * 2 + 0).toString());
-			    //map.put("orderid", "");
+				// map.put("orderid", "");
 				map.put("chuzhi_date", historylist.get(i * 2 + 1).toString());
 				list.add(map);
 			}
@@ -120,5 +123,77 @@ public class User_ChuzhiDetail extends Activity {
 		}
 
 		return list;
+	}
+
+	private class MyAdapter extends BaseAdapter {
+
+		private LayoutInflater mInflater;// 得到一个LayoutInfalter对象用来导入布局
+
+		/** 构造函数 */
+		public MyAdapter(Context context) {
+			this.mInflater = LayoutInflater.from(context);
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return getDate().size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return getDate().get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			ViewHolder holder;
+			if (convertView == null) {
+				convertView = mInflater.inflate(
+						R.layout.user_chuzhi_detail_item, null);
+				holder = new ViewHolder();
+				/** 得到各个控件的对象 */
+				holder.chuzhi_type = (TextView) convertView
+						.findViewById(R.id.chuzhi_type);
+				holder.chuzhi_number = (TextView) convertView
+						.findViewById(R.id.chuzhi_number);
+				holder.chuzhi_date = (TextView) convertView
+						.findViewById(R.id.chuzhi_date);
+				convertView.setTag(holder);// 绑定ViewHolder对象
+
+			} else {
+				holder = (ViewHolder) convertView.getTag();// 取出ViewHolder对象
+			}
+			holder.chuzhi_type.setText(getDate().get(position)
+					.get("chuzhi_type").toString());
+			holder.chuzhi_number.setText(getDate().get(position)
+					.get("chuzhi_number").toString());
+			double number = Double.valueOf(holder.chuzhi_number.getText()
+					.toString());
+			if (number < 0) {
+				holder.chuzhi_number.setTextColor(getResources().getColor(R.color.blue));
+			} else {
+				holder.chuzhi_number.setTextColor(getResources().getColor(R.color.moneycolor));
+			}
+			holder.chuzhi_date.setText(getDate().get(position)
+					.get("chuzhi_date").toString());
+
+			return convertView;
+		}
+
+	}
+
+	public final class ViewHolder {
+		public TextView chuzhi_type;
+		public TextView chuzhi_number;
+		public TextView chuzhi_date;
 	}
 }

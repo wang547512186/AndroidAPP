@@ -48,12 +48,12 @@
             android:layout_height="wrap_content"
             android:gravity="center" >
 
-            <ImageView 
+            <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_margin="10dp"
-                android:src="@drawable/bad_face"
-                />
+                android:src="@drawable/bad_face" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
@@ -69,19 +69,12 @@
             android:background="#cccccc" />
     </LinearLayout>
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/kezhuPayHistorylist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical" >
-
-        <ListView
-            android:id="@+id/kezhuPayHistorylist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none" >
-        </ListView>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:scrollbars="none" >
+    </ListView>
 
 </LinearLayout>

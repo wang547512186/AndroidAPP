@@ -31,7 +31,6 @@ public class MapData {
 	private static final String getHotelInfoById = "getHotelInfoById";
 	private static final String getRoomInfo = "getRoomInfo";
 	private static final String getShopInfo = "getShopInfo";
-	private static final String getShopInfoById = "getShopInfoById";
 	private static final String getConsume = "getConsume";
 	private static final String addHotelhistory = "addHotelhistory";
 	private static final String addHistory = "addHistory";
@@ -57,8 +56,8 @@ public class MapData {
 	// private static final String
 	// WSDL="http://10.0.2.2:55718/Service1.asmx?WSDL";
 
-	 private static final String WSDL =
-	 "http://114.215.196.123:8080/Service1.asmx?WSDL"; // 阿里云
+//	 private static final String WSDL =
+//	 "http://114.215.196.123:8080/Service1.asmx?WSDL"; // 阿里云
 
 	// private static final String WSDL
 	// ="http://192.168.10.119:180/Service1.asmx?WSDL"; //公司
@@ -67,7 +66,7 @@ public class MapData {
 	// private static final String WSDL =
 	// "http://192.168.10.18:8081/Service1.asmx?WSDL";
 
-//	private static final String WSDL = "http://192.168.1.114:8081/Service1.asmx?WSDL"; // 个人电脑
+	private static final String WSDL = "http://192.168.1.114:8081/Service1.asmx?WSDL"; // 个人电脑
 
 	public String getUserSamesytemchuzhi(String uid, String hoteltotalid) {
 		String value = "";
@@ -803,36 +802,7 @@ public class MapData {
 		return value;
 	}
 
-	public List<String> getShopInfoById(String hotelid) {
-		// TODO Auto-generated method stub
-		List<String> value = new ArrayList<String>();
-		SoapObject soapObject = new SoapObject(serviceNameSpace,
-				getShopInfoById);
-		soapObject.addProperty("hotelid", hotelid);
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		envelope.dotNet = true;
-		envelope.setOutputSoapObject(soapObject);
-
-		AndroidHttpTransport httpTransport = new AndroidHttpTransport(WSDL);
-		try {
-			httpTransport.call(serviceNameSpace + getShopInfoById, envelope);
-			SoapObject result = (SoapObject) envelope.getResponse();
-			int count = result.getPropertyCount();
-			for (int index = 0; index < count; index++) {
-				value.add(result.getProperty(index).toString());
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return value;
-	}
-
+	
 	public List<String> getHotelInfo() {
 		// TODO Auto-generated method stub
 		List<String> value = new ArrayList<String>();

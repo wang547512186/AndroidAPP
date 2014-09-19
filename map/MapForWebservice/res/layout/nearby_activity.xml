@@ -124,6 +124,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/foodLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_margin="3dp"
@@ -146,6 +147,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/carLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_margin="3dp"
@@ -168,6 +170,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/otherLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_margin="3dp"
@@ -202,12 +205,13 @@
                 android:background="@color/bgcolor" />
 
             <TextView
+                android:id="@+id/processText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center"
                 android:text="附近商家"
-                android:textColor="@color/secondtext"/>
+                android:textColor="@color/secondtext" />
 
             <ListView
                 android:id="@+id/nearList"

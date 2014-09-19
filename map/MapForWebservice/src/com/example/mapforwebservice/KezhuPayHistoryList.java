@@ -23,6 +23,7 @@ public class KezhuPayHistoryList extends Activity {
 	private List<Map<String, Object>> list;
 	private List<String> orderlist;
 	private List<String> hotellist;
+	private String hotelid = "";
 
 	private MapData mapdata;
 	private String UserName = "";
@@ -42,9 +43,9 @@ public class KezhuPayHistoryList extends Activity {
 		listview = (ListView) findViewById(R.id.kezhuPayHistorylist);
 		SimpleAdapter adapter = new SimpleAdapter(this, getData(),
 				R.layout.kezhu_pay_history_item, new String[] {
-						"kezhuHotelName", "kezhuHotelAddress",
+						"kezhuHotelName", "orderid",
 						"kezhuHotelDate", "kezhuHotelNumber" }, new int[] {
-						R.id.kezhuHotelName, R.id.kezhuHotelAddress,
+						R.id.kezhuHotelName, R.id.orderid,
 						R.id.kezhuHotelDate, R.id.kezhuHotelNumber });
 		listview.setAdapter(adapter);
 		listview.setDividerHeight(0);
@@ -67,35 +68,26 @@ public class KezhuPayHistoryList extends Activity {
 
 	private List<Map<String, Object>> getData() {
 		// TODO Auto-generated method stub
-		int m = orderlist.size() / 5;
+		int m = orderlist.size() / 6;
 		list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
-
 		double kezhuNum;
+		String typeStr = "";
+		mapdata = new MapData();
 		for (int i = 0; i < m; i++) {
-			kezhuNum = Double.valueOf(orderlist.get(i * 5 + 3).toString());
+			kezhuNum = Double.valueOf(orderlist.get(i * 6 + 3).toString());
+			hotelid = orderlist.get(i * 6 + 1).toString();
+			
 			if (kezhuNum < 0) {
-				
-				hotellist = mapdata.getHotelInfoById(orderlist.get(i * 5 + 0)
-						.toString());
+				hotellist = mapdata.hotelshopInfo(hotelid);
 				if(!hotellist.isEmpty()){
 					map = new HashMap<String, Object>();
-					map.put("kezhuHotelName", hotellist.get(1).toString());
-					map.put("kezhuHotelAddress", hotellist.get(6).toString());
-					map.put("kezhuHotelDate", orderlist.get(i * 5 + 4).toString());
-					map.put("kezhuHotelNumber", orderlist.get(i * 5 + 3).toString());
-					list.add(map);
-				}else{
-					hotellist = mapdata.getShopInfoById(orderlist.get(i * 5 + 0)
-							.toString());
-					map = new HashMap<String, Object>();
-					map.put("kezhuHotelName", hotellist.get(1).toString());
-					map.put("kezhuHotelAddress", hotellist.get(7).toString());
-					map.put("kezhuHotelDate", orderlist.get(i * 5 + 4).toString());
-					map.put("kezhuHotelNumber", orderlist.get(i * 5 + 3).toString());
+					map.put("kezhuHotelName", hotellist.get(0).toString());
+					map.put("orderid", orderlist.get(i * 6 + 0).toString());
+					map.put("kezhuHotelDate", orderlist.get(i * 6 + 4).toString());
+					map.put("kezhuHotelNumber",  orderlist.get(i * 6 + 3).toString());
 					list.add(map);
 				}
-				
 			}
 
 		}

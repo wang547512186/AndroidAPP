@@ -156,7 +156,6 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 				// TODO Auto-generated method stub
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(arg0.getWindowToken(), 0);
-
 				search();
 			}
 
@@ -1021,76 +1020,41 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		}
 	}
 
-	// Handler handler = new Handler() {
-	// public void handleMessage(Message msg) {
-	// PointXValue = ((PointValue) getApplicationContext())
-	// .getPointXValue();
-	// PointYValue = ((PointValue) getApplicationContext())
-	// .getPointYValue();
-	// MapController mMapController = mMapView.getController();
-	// // 得到mMapView的控制权,可以用它控制和驱动平移和缩放
-	// GeoPoint point = new GeoPoint(PointXValue, PointYValue);
-	// // GeoPoint point =new GeoPoint((int)(39.910683*
-	// // 1E6),(int)(116.411348* 1E6));
-	// // 用给定的经纬度构造一个GeoPoint，单位是微度 (度 * 1E6)
-	// mMapController.setCenter(point);// 设置地图中心点
-	// // mMapController.setZoom(17);//设置地图zoom级别
-	// super.handleMessage(msg);
-	// }
-	// };
 
-	// public class MyThread implements Runnable {
-	// @Override
-	// public void run() {
-	// // TODO Auto-generated method stub
-	// while (true) {
-	// try {
-	// Thread.sleep(10000);// 线程暂停10秒，单位毫秒
-	// Message message = new Message();
-	// message.what = 1;
-	// handler.sendMessage(message);// 发送消息
-	// } catch (InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// }
-
-	private void initmPopupWindowView() {
-		// TODO Auto-generated method stub
-		// // 获取自定义布局文件pop.xml的视图
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		// dm.widthPixels
-		System.out.println(dm.widthPixels);
-		System.out.println(dm.heightPixels);
-		double yvlaue = dm.heightPixels / 3.5;
-		View customView = getLayoutInflater().inflate(R.layout.other_item,
-				null, false);
-		customView.setBackgroundColor(Color.BLACK);
-		// 设置边框
-		Resources res = getBaseContext().getResources();
-		Drawable draw = res.getDrawable(R.drawable.view_yuan_morelist);
-		customView.setBackgroundDrawable(draw);
-		// 创建PopupWindow实例,200,150分别是宽度和高度
-		popupwindow = new PopupWindow(customView, dm.widthPixels / 3,
-				(int) yvlaue);
-		// 设置动画效果 [R.style.AnimationFade 是自己事先定义好的]
-		// 自定义view添加触摸事件
-		popupwindow.setFocusable(true);
-		// 设置允许在外点击消失
-		popupwindow.setOutsideTouchable(true);
-		popupwindow.setBackgroundDrawable(new BitmapDrawable());
-		ListView secondlist = (ListView) customView
-				.findViewById(R.id.secondmenu);
-		SimpleAdapter adapter = new SimpleAdapter(this, getData(),
-				R.layout.other_infor_item, new String[] { "title", "value" },
-				new int[] { R.id.title, R.id.values });
-		secondlist.setAdapter(adapter);
-		secondlist.setOnItemClickListener(new seconlistClick());
-		/** 在这里可以实现自定义视图的功能 */
-	}
+//	private void initmPopupWindowView() {
+//		// TODO Auto-generated method stub
+//		// // 获取自定义布局文件pop.xml的视图
+//		DisplayMetrics dm = new DisplayMetrics();
+//		getWindowManager().getDefaultDisplay().getMetrics(dm);
+//		// dm.widthPixels
+//		System.out.println(dm.widthPixels);
+//		System.out.println(dm.heightPixels);
+//		double yvlaue = dm.heightPixels / 3.5;
+//		View customView = getLayoutInflater().inflate(R.layout.other_item,
+//				null, false);
+//		customView.setBackgroundColor(Color.BLACK);
+//		// 设置边框
+//		Resources res = getBaseContext().getResources();
+//		Drawable draw = res.getDrawable(R.drawable.view_yuan_morelist);
+//		customView.setBackgroundDrawable(draw);
+//		// 创建PopupWindow实例,200,150分别是宽度和高度
+//		popupwindow = new PopupWindow(customView, dm.widthPixels / 3,
+//				(int) yvlaue);
+//		// 设置动画效果 [R.style.AnimationFade 是自己事先定义好的]
+//		// 自定义view添加触摸事件
+//		popupwindow.setFocusable(true);
+//		// 设置允许在外点击消失
+//		popupwindow.setOutsideTouchable(true);
+//		popupwindow.setBackgroundDrawable(new BitmapDrawable());
+//		ListView secondlist = (ListView) customView
+//				.findViewById(R.id.secondmenu);
+//		SimpleAdapter adapter = new SimpleAdapter(this, getData(),
+//				R.layout.other_infor_item, new String[] { "title", "value" },
+//				new int[] { R.id.title, R.id.values });
+//		secondlist.setAdapter(adapter);
+//		secondlist.setOnItemClickListener(new seconlistClick());
+//		/** 在这里可以实现自定义视图的功能 */
+//	}
 
 	private List<String> getName() {
 		// TODO Auto-generated method stub
@@ -1102,11 +1066,11 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		try {
 			searchpoints = mapdata.findShops(
 					curCityString.substring(0, curCityString.length() - 1), "");
-			int m = searchpoints.size() / 5;
+			int m = searchpoints.size() / 8;
 			searchlist = new ArrayList<String>();
 
 			for (int i = 0; i < m; i++) {
-				searchlist.add(searchpoints.get(i * 5 + 1).toString().trim());
+				searchlist.add(searchpoints.get(i * 8 + 1).toString().trim());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -1194,7 +1158,10 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		String shopname = searchtext.getText().toString();
 		SelectValue = "搜索";
 		searchpoints = mapdata.findShops(cityname.substring(0, 1), shopname);
-		if (searchpoints.isEmpty() == true) {
+		if(shopname.equals("")){
+			Toast.makeText(this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
+		}
+		else if (searchpoints.isEmpty() == true) {
 			Toast.makeText(this, "无法找到该商店", Toast.LENGTH_SHORT).show();
 		} else {
 			showsearchaddress();
@@ -1212,12 +1179,12 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		Drawable mark = getResources().getDrawable(R.drawable.icon_gcoding);
 		// 创建IteminizedOverlay
 		OverlayTest itemOverlay = new OverlayTest(mark, mMapView);
-		int sums = searchpoints.size() / 5;
+		int sums = searchpoints.size() / 8;
 		try {
 			for (int i = 0; i < sums; i++) {
 				//
 
-				String LatLon = searchpoints.get(i * 5 + 4);
+				String LatLon = searchpoints.get(i * 8 + 4);
 				if (LatLon.equals("") || LatLon.equals("anyType{}")
 						|| LatLon.isEmpty()) {
 					continue;
@@ -1485,9 +1452,9 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 	}
 
 	private void showsearchtip(int location) {
-		address = searchpoints.get(location * 5 + 3).trim().toString();
-		name_address = searchpoints.get(location * 5 + 1).trim().toString();
-		hotelId = searchpoints.get(location * 5 + 0).toString().trim();
+		address = searchpoints.get(location * 8 + 3).trim().toString();
+		name_address = searchpoints.get(location * 8 + 1).trim().toString();
+		hotelId = searchpoints.get(location * 8 + 0).toString().trim();
 		final int num = location;
 		// shopStyle=detail.get(1).toString();
 		// 创建pop对象，注册点击事件监听接口
@@ -1497,7 +1464,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 				// 在此处理pop点击事件，index为点击区域索引,点击区域最多可有三个
 				Intent intent = new Intent();
 				Bundle bundle = new Bundle();
-				if (searchpoints.get(num * 5 + 2).trim().toString().equals("1")) {
+				if (searchpoints.get(num * 8 + 2).trim().toString().equals("1")) {
 					intent.setClass(MainActivity.this, detail_information.class);
 					bundle.putString("hotelId", hotelId);
 				} else {
@@ -1542,7 +1509,7 @@ public class MainActivity extends Activity implements OnTabChangeListener {
 		};
 		// 弹窗弹出位置
 
-		String LatLon = searchpoints.get(location * 5 + 4);
+		String LatLon = searchpoints.get(location * 8 + 4);
 		double mLat = Double.valueOf(LatLon.split(",")[0].toString());
 		double mLon = Double.valueOf(LatLon.split(",")[1].toString());
 		GeoPoint ptTAM = new GeoPoint((int) (mLat * 1E6), (int) (mLon * 1E6));

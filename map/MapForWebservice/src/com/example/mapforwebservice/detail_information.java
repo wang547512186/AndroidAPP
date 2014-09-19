@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -98,6 +99,12 @@ public class detail_information extends Activity {
 	private int endMonth = 0;
 	private int endDay = 0;
 	private int dayNum = 0;
+	private String hotelState;
+	private String picUrl = "http://www.kezhu.com/hotelpic/b/";
+	private String pic1 = "";
+	private String pic2 = "";
+	private String pic3 = "";
+	private Bitmap bitmap;
 
 	//
 	public void onCreate(Bundle savedInstanceState) {
@@ -173,7 +180,7 @@ public class detail_information extends Activity {
 		returnbutton = (ImageView) findViewById(R.id.Hotelreturn);
 		listview = (ListView) findViewById(R.id.hoteldetail);
 		// introduce = (TextView) findViewById(R.id.Introducedetail);
-		initViewPager();
+		
 
 		// introduce.setText(introducetext);
 		mapdata = new MapData();
@@ -240,18 +247,27 @@ public class detail_information extends Activity {
 			addressText.setText(hotelDetail.get(6).toString().trim());
 			phoneText.setText(hotelDetail.get(5).toString().trim());
 			hotelInfo.setText(hotelDetail.get(7).toString().trim());
-			hotelFood.setText(hotelDetail.get(12).toString().trim());
-			hotelMeeting.setText(hotelDetail.get(13).toString().trim());
-			hotelLeisure.setText(hotelDetail.get(14).toString().trim());
-			hotelService.setText(hotelDetail.get(15).toString().trim());
-			hotelSight.setText(hotelDetail.get(16).toString().trim());
-			hotelNet.setText(hotelDetail.get(17).toString().trim());
-			hotelCreditCard.setText(hotelDetail.get(18).toString().trim());
-			hotelTraffic.setText(hotelDetail.get(19).toString().trim());
-			hotelDiscount.setText(hotelDetail.get(20).toString().trim());
-			hotelPer.setText(hotelDetail.get(21).toString().trim());
-			hotelSales.setText(hotelDetail.get(23).toString().trim());
-			hotelPrice.setText(hotelDetail.get(24).toString().trim());
+			pic1 = hotelDetail.get(9).toString().trim();
+			pic2 = hotelDetail.get(10).toString().trim();
+			pic3 = hotelDetail.get(11).toString().trim();
+			hotelState= hotelDetail.get(12).toString().trim();
+			if(!hotelState.equals("1")){
+				reserveBtn.setText("该店暂不可预定");
+				reserveBtn.setEnabled(false);
+				reserveBtn.setBackgroundResource(R.color.unclick);
+			}
+			// hotelFood.setText(hotelDetail.get(12).toString().trim());
+			// hotelMeeting.setText(hotelDetail.get(13).toString().trim());
+			// hotelLeisure.setText(hotelDetail.get(14).toString().trim());
+			// hotelService.setText(hotelDetail.get(15).toString().trim());
+			// hotelSight.setText(hotelDetail.get(16).toString().trim());
+			// hotelNet.setText(hotelDetail.get(17).toString().trim());
+			// hotelCreditCard.setText(hotelDetail.get(18).toString().trim());
+			// hotelTraffic.setText(hotelDetail.get(19).toString().trim());
+			// hotelDiscount.setText(hotelDetail.get(20).toString().trim());
+			// hotelPer.setText(hotelDetail.get(21).toString().trim());
+			// hotelSales.setText(hotelDetail.get(23).toString().trim());
+			// hotelPrice.setText(hotelDetail.get(24).toString().trim());
 
 			hotelName = nameText.getText().toString();
 			hotelAddress = addressText.getText().toString();
@@ -328,6 +344,8 @@ public class detail_information extends Activity {
 		} catch (Exception e) {
 
 		}
+		
+		initViewPager();
 
 	}
 
@@ -425,18 +443,30 @@ public class detail_information extends Activity {
 	private void initPageAdapter() {
 		pageViews = new ArrayList<View>();
 
-		ImageView img1 = new ImageView(this);
-		img1.setImageResource(R.drawable.hotel1);
-
-		pageViews.add(img1);
-
-		ImageView img2 = new ImageView(this);
-		img2.setImageResource(R.drawable.hotel2);
-		pageViews.add(img2);
-
-		ImageView img3 = new ImageView(this);
-		img3.setImageResource(R.drawable.hotel3);
-		pageViews.add(img3);
+		if (!pic1.equals("") && !pic1.equals("anyType{}")) {
+			bitmap = HotelList.getPic(picUrl + pic1);
+			ImageView img1 = new ImageView(this);
+			img1.setImageBitmap(bitmap);
+			pageViews.add(img1);
+		}
+		if (!pic2.equals("") && !pic2.equals("anyType{}")) {
+			bitmap = HotelList.getPic(picUrl + pic2);
+			ImageView img2 = new ImageView(this);
+			img2.setImageBitmap(bitmap);
+			pageViews.add(img2);
+		}
+		if (!pic3.equals("") && !pic3.equals("anyType{}")) {
+			bitmap = HotelList.getPic(picUrl + pic3);
+			ImageView img3 = new ImageView(this);
+			img3.setImageBitmap(bitmap);
+			pageViews.add(img3);
+		}
+		
+		if(pageViews.size()==0){
+			ImageView img4 = new ImageView(this);
+			img4.setImageResource(R.drawable.no_pic);
+			pageViews.add(img4);
+		}
 
 		adapter = new ImagePagerAdapter(pageViews);
 	}
