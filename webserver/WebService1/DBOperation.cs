@@ -1181,7 +1181,7 @@ namespace WebService1
         {
             List<string> list = new List<string>();
             Open();
-            string sql = "select * from hotel where city like'" + '%' + city + '%' + "' and hotelname like '" + '%' + shopname + '%' + "'";
+            string sql = "select * from hotel where city like'" + '%' + city + '%' + "' and hotelname like '" + '%' + shopname + '%' + "' and hotelkind!='1000'";
             SqlCommand cmd = new SqlCommand(sql, sqlCon);
             SqlDataReader read = cmd.ExecuteReader();
             try
@@ -2248,7 +2248,7 @@ namespace WebService1
         {
             Open();
             double cash = Convert.ToDouble(money);
-            string sql = "insert into HotelHistory values ('" + hotelhistoryid + "','" + uid + "','" + hotelid + "','"+cash+"','0','0','0','0','0','0','0','0','0','0','0','0','0','0','" + serviceuserid + "','" + DateTime.Now + "','9')";
+            string sql = "insert into hotelconsume values ('" + hotelhistoryid + "','" + uid + "','" + hotelid + "','"+cash+"','" + DateTime.Now + "')";
             SqlCommand com = new SqlCommand(sql, sqlCon);
             try
             {
